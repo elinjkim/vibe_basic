@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wizard's Chess - Harry Potter Edition</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Chessboard.js CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- jQuery (required for Chessboard.js) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- Chessboard.js JS -->
+  <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"></script>
+  <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+  <!-- Chess.js (Chess Rules Engine) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+
+  <style>
+    :root {
+      --gold-primary: #d4af37;
+      --gold-light: #f3e5ab;
+      --burgundy: #740001;
+      --dark-stone: #121016;
+      --panel-bg: rgba(20, 15, 25, 0.82);
+      --border-gold: rgba(212, 175, 55, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at center, #2b1f1d 0%, #110c11 70%, #050305 100%);
+      font-family: 'Cinzel', 'Noto Serif KR', serif;
+      color: var(--gold-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Magic Particle Background */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(212, 175, 55, 0.8), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.6), rgba(0,0,0,0)),
+        radial-gradient(1.5px 1.5px at 90px 40px, rgba(212, 175, 55, 0.6), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 160px 120px, rgba(212, 175, 55, 0.9), rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      animation: floatParticles 20s linear infinite;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    @keyframes floatParticles {
+      from { transform: translateY(0); }
+      to { transform: translateY(-200px); }
+    }
+
+    /* Outer Wrapper Container */
+    .game-container {
+      width: 92%;
+      max-width: 1050px;
+      background: var(--panel-bg);
+      border: 3px solid var(--gold-primary);
+      box-shadow: 0 0 35px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(116, 0, 1, 0.4);
+      border-radius: 16px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Title Styling */
+    h1.title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2.2rem;
+      color: var(--gold-primary);
+      text-shadow: 0 0 12px rgba(212, 175, 55, 0.6), 2px 2px 4px #000;
+      text-align: center;
+      margin-bottom: 6px;
+      letter-spacing: 2px;
+    }
+
+    p.subtitle {
+      font-size: 0.95rem;
+      color: #b8a686;
+      margin-bottom: 22px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    /* Main Content Layout */
+    .board-and-panel {
+      display: flex;
+      gap: 35px;
+      align-items: flex-start;
+      justify-content: center;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    /* Chessboard Container */
+    .board-wrapper {
+      position: relative;
+      padding: 14px;
+      background: linear-gradient(145deg, #3a2a1a, #1a1008);
+      border: 4px solid var(--gold-primary);
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.3);
+    }
+
+    #board {
+      width: 480px;
+      max-width: 80vw;
+    }
+
+    /* Custom Chess Board Cell Styles Override */
+    .white-1e170 {
+      background-color: #d1b894 !important;
+      color: #333;
+    }
+    .black-3c85d {
+      background-color: #4a3525 !important;
+      color: #ccc;
+    }
+
+    /* Highlight Move Square */
+    .highlight-move {
+      box-shadow: inset 0 0 12px 3px rgba(212, 175, 55, 0.8) !important;
+    }
+
+    /* Side Control Panel */
+    .side-panel {
+      flex: 1;
+      min-width: 280px;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Status Card */
+    .card {
+      background: rgba(15, 10, 18, 0.7);
+      border: 1px solid var(--border-gold);
+      border-radius: 10px;
+      padding: 18px 20px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .status-card h2 {
+      font-size: 1.1rem;
+      color: var(--gold-primary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .turn-indicator {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .turn-badge {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--gold-primary);
+      display: inline-block;
+    }
+
+    .turn-badge.white { background-color: #fff; }
+    .turn-badge.black { background-color: #222; }
+
+    /* Alert Banner */
+    .alert-box {
+      min-height: 52px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: #ffd700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-left: 4px solid var(--gold-primary);
+      padding: 10px;
+      background: rgba(116, 0, 1, 0.25);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .alert-box.warning {
+      color: #ff6b6b;
+      border-left-color: #ff6b6b;
+      background: rgba(255, 0, 0, 0.15);
+      animation: pulseAlert 0.4s ease-in-out 2;
+    }
+
+    @keyframes pulseAlert {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    /* Audio Control Bar */
+    .audio-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .audio-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #740001, #4a0000);
+      border: 1px solid var(--gold-primary);
+      color: var(--gold-light);
+      padding: 12px 20px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, #a30002, #740001);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: #666;
+    }
+
+    .btn-restart {
+      width: 100%;
+      font-size: 1.1rem;
+      padding: 14px;
+      background: linear-gradient(135deg, #d4af37, #997a15);
+      color: #110c11;
+      text-shadow: 0 1px 1px rgba(255,255,255,0.4);
+    }
+
+    .btn-restart:hover:not(:disabled) {
+      background: linear-gradient(135deg, #f3e5ab, #d4af37);
+      color: #000;
+    }
+
+    /* Fullscreen Checkmate Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(5, 3, 8, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: var(--panel-bg);
+      border: 3px solid var(--gold-primary);
+      box-shadow: 0 0 50px rgba(212, 175, 55, 0.5);
+      border-radius: 16px;
+      padding: 40px 50px;
+      text-align: center;
+      max-width: 500px;
+      animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes modalPop {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2.8rem;
+      color: var(--gold-primary);
+      text-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+      margin-bottom: 12px;
+    }
+
+    .modal-desc {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 25px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .game-container { padding: 18px; }
+      h1.title { font-size: 1.6rem; }
+      #board { width: 320px; }
+      .side-panel { width: 100%; max-width: 320px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-container">
+    <h1 class="title">🧙‍♂️ WIZARD'S CHESS ♟️</h1>
+    <p class="subtitle">Harry Potter & The Philosopher's Stone Edition</p>
+
+    <div class="board-and-panel">
+      <!-- 체스판 -->
+      <div class="board-wrapper">
+        <div id="board"></div>
+      </div>
+
+      <!-- 게임 진행 컨트롤 및 상태 표시 정보 -->
+      <div class="side-panel">
+        
+        <!-- 차례 카드 -->
+        <div class="card status-card">
+          <h2><span>📜</span> CURRENT TURN</h2>
+          <div class="turn-indicator" id="turn-text">
+            <span class="turn-badge white"></span> White's Turn (그리핀도르)
+          </div>
+        </div>
+
+        <!-- 실시간 안내 메시지 -->
+        <div class="card">
+          <h2><span>🪄</span> SPELL LOG</h2>
+          <div class="alert-box" id="alert-msg">
+            마법사 체스에 오신 것을 환영합니다.<br>말을 드래그하여 이동하세요.
+          </div>
+        </div>
+
+        <!-- 배경음악 및 마법 효과음 컨트롤 -->
+        <div class="card audio-card">
+          <h2><span>🔮</span> WIZARD AUDIO</h2>
+          <div class="audio-row">
+            <span>배경 음악 (BGM)</span>
+            <button class="btn" id="btn-audio" style="padding: 6px 14px; font-size: 0.8rem;">🔊 ON</button>
+          </div>
+        </div>
+
+        <!-- 재시작 버튼 -->
+        <button class="btn btn-restart" id="btn-restart" onclick="restartGame()" disabled>
+          🔄 RESTART GAME
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 승리 / 체크메이트 모달 -->
+  <div class="modal-overlay" id="victory-modal">
+    <div class="modal-content">
+      <div class="modal-title" id="modal-title">CHECKMATE!</div>
+      <div class="modal-desc" id="modal-desc">체크메이트! 전쟁에서 승리하였습니다.</div>
+      <button class="btn btn-restart" onclick="restartGame()">RESTART MATCH</button>
+    </div>
+  </div>
+
+  <script>
+    // --- Audio Web Audio API Synthetic Sound Generator ---
+    // 외부 오디오 파일 로딩 오류를 방지하기 위해 HTML5 Web Audio API 기반 오디오 믹서를 구현합니다.
+    class WizardAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.bgmOsc = null;
+        this.bgmGain = null;
+        this.isMuted = false;
+        this.isPlayingBgm = false;
+        this.bgmInterval = null;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      // 1. 해리포터 템플릿 테마 느낌의 Synth BGM (Hedwig's Theme 유사 스케일)
+      startBgm(state = 'game') {
+        this.init();
+        if (this.isMuted) return;
+        this.stopBgm();
+
+        this.isPlayingBgm = true;
+        // Hedwig's theme inspired melody notes (frequencies in Hz)
+        const notesGame = [
+          493.88, 659.25, 783.99, 739.99, 659.25, 987.77, 880.00, 739.99,
+          659.25, 783.99, 739.99, 622.25, 659.25, 493.88
+        ];
+        const notesWin = [
+          523.25, 659.25, 783.99, 1046.50, 987.77, 783.99, 1046.50, 1318.51
+        ];
+
+        const notes = (state === 'win') ? notesWin : notesGame;
+        let noteIdx = 0;
+
+        this.bgmInterval = setInterval(() => {
+          if (!this.isPlayingBgm || this.isMuted) return;
+          const freq = notes[noteIdx % notes.length];
+          this.playTone(freq, 0.4, 'sine', 0.12);
+          noteIdx++;
+        }, state === 'win' ? 280 : 450);
+      }
+
+      stopBgm() {
+        this.isPlayingBgm = false;
+        if (this.bgmInterval) clearInterval(this.bgmInterval);
+      }
+
+      playTone(freq, duration, type = 'sine', vol = 0.2) {
+        if (!this.ctx || this.isMuted) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          
+          gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch(e) {}
+      }
+
+      // 2. 효과음 (SFX)
+      playMoveSfx() {
+        this.init();
+        // 묵직한 돌 체스말 이동 소리
+        this.playTone(180, 0.15, 'triangle', 0.3);
+      }
+
+      playInvalidSfx() {
+        this.init();
+        // 마법 실패 / 거부 소리
+        if (!this.ctx || this.isMuted) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(110, this.ctx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.25);
+      }
+
+      playWinSfx() {
+        this.init();
+        // 승리 팡파레
+        const winFreqs = [523.25, 659.25, 783.99, 1046.50];
+        winFreqs.forEach((f, idx) => {
+          setTimeout(() => {
+            this.playTone(f, 0.5, 'triangle', 0.35);
+          }, idx * 120);
+        });
+      }
+    }
+
+    const audioEngine = new WizardAudioEngine();
+
+    // --- Chess Game Logic Initialization ---
+    let board = null;
+    let game = new Chess();
+    const alertMsgEl = document.getElementById('alert-msg');
+    const turnTextEl = document.getElementById('turn-text');
+    const restartBtn = document.getElementById('btn-restart');
+    const victoryModal = document.getElementById('victory-modal');
+
+    // Drag and Drop Handlers
+    function onDragStart(source, piece, position, orientation) {
+      // 오디오 초기화 (사용자 첫 클릭 반응)
+      audioEngine.init();
+      if (!audioEngine.isPlayingBgm) audioEngine.startBgm('game');
+
+      // 게임이 끝났거나 차례가 아닌 경우 드래그 불가
+      if (game.game_over()) return false;
+
+      if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+          (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+        return false;
+      }
+    }
+
+    function onDrop(source, target) {
+      // 이동 규칙 검증
+      const move = game.move({
+        from: source,
+        to: target,
+        promotion: 'q' // 간단한 퀸 승급 처리
+      });
+
+      // 규칙에 맞지 않는 경우 (Illegal Move)
+      if (move === null) {
+        audioEngine.playInvalidSfx();
+        setAlertMessage("다시 이동하세요. (규칙에 맞지 않는 이동입니다)", true);
+        return 'snapback'; // 원래 자리로 말이 돌아감
+      }
+
+      // 정상 이동 처리
+      audioEngine.playMoveSfx();
+      updateStatus();
+    }
+
+    function onSnapEnd() {
+      board.position(game.fen());
+    }
+
+    // 알림 메시지 업데이트 함수
+    function setAlertMessage(msg, isWarning = false) {
+      alertMsgEl.innerHTML = msg;
+      if (isWarning) {
+        alertMsgEl.classList.add('warning');
+        setTimeout(() => alertMsgEl.classList.remove('warning'), 800);
+      } else {
+        alertMsgEl.classList.remove('warning');
+      }
+    }
+
+    // 게임 상태 업데이트 (체크, 체크메이트, 차례 전환)
+    function updateStatus() {
+      let turnStr = game.turn() === 'w' ? "White's Turn (그리핀도르)" : "Black's Turn (슬리데린)";
+      let badgeClass = game.turn() === 'w' ? "white" : "black";
+      turnTextEl.innerHTML = `<span class="turn-badge ${badgeClass}"></span> ${turnStr}`;
+
+      // 1. 체크메이트 및 게임 종료 확인
+      if (game.in_checkmate()) {
+        const winner = game.turn() === 'w' ? "슬리데린 (Black)" : "그리핀도르 (White)";
+        triggerCheckmate(winner);
+      } 
+      // 2. 무승부/스테일메이트
+      else if (game.in_draw() || game.in_stalemate() || game.in_threefold_repetition()) {
+        setAlertMessage("무승부! 더 이상 이동할 수 있는 법사 말이 없습니다.");
+        restartBtn.disabled = false;
+      } 
+      // 3. 체크(Check) 상태 알림
+      else if (game.in_check()) {
+        setAlertMessage(`⚠️ "체크!" ${game.turn() === 'w' ? '그리핀도르' : '슬리데린'} 왕이 위험에 처했습니다!`, true);
+      } 
+      else {
+        setAlertMessage(`정상 이동 완료. ${turnStr}의 차례입니다.`);
+      }
+    }
+
+    // 체크메이트 발생 시 멋진 효과 연출
+    function triggerCheckmate(winnerName) {
+      audioEngine.playWinSfx();
+      audioEngine.startBgm('win');
+
+      setAlertMessage(`🎉 <strong>체크메이트!</strong> ${winnerName}의 승리!`);
+      restartBtn.disabled = false;
+
+      // 마법 컨페티 폭죽 효과
+      confetti({
+        particleCount: 120,
+        spread: 90,
+        origin: { y: 0.6 },
+        colors: ['#d4af37', '#740001', '#ffffff', '#1a472a']
+      });
+
+      setTimeout(() => {
+        document.getElementById('modal-title').textContent = "CHECKMATE!";
+        document.getElementById('modal-desc').innerHTML = `<strong>${winnerName}</strong> 승리!<br>마법사의 돌을 차지했습니다.`;
+        victoryModal.classList.add('active');
+      }, 700);
+    }
+
+    // 게임 재시작 (Restart)
+    function restartGame() {
+      game.reset();
+      board.start();
+      victoryModal.classList.remove('active');
+      restartBtn.disabled = true;
+      audioEngine.startBgm('game');
+      setAlertMessage("새 마법 체스 경기가 시작되었습니다.<br>말을 이동하세요.");
+      updateStatus();
+    }
+
+    // Chessboard.js 보드 생성
+    const config = {
+      draggable: true,
+      position: 'start',
+      onDragStart: onDragStart,
+      onDrop: onDrop,
+      onSnapEnd: onSnapEnd,
+      pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png'
+    };
+
+    board = Chessboard('board', config);
+
+    // Audio Mute/Unmute Toggle Button
+    const audioBtn = document.getElementById('btn-audio');
+    audioBtn.addEventListener('click', () => {
+      audioEngine.isMuted = !audioEngine.isMuted;
+      audioBtn.textContent = audioEngine.isMuted ? '🔇 OFF' : '🔊 ON';
+      if (!audioEngine.isMuted) {
+        audioEngine.startBgm('game');
+      } else {
+        audioEngine.stopBgm();
+      }
+    });
+
+    // Window Resize Handler
+    window.addEventListener('resize', board.resize);
+  </script>
+</body>
+</html>
