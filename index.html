@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 바이브코딩 예제</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fb;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            text-align: center;
+            color: #777;
+            margin-bottom: 35px;
+        }
+
+        .example-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .example {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 60px 1fr 120px;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .number {
+            font-weight: bold;
+            color: #777;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .description {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .run-button {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #333;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .run-button:hover {
+            background-color: #555;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 15px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+
+            .example {
+                display: grid;
+                grid-template-columns: 45px 1fr;
+                gap: 12px;
+                padding: 18px;
+            }
+
+            .run-button {
+                grid-column: 1 / -1;
+                width: 100%;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🧪 나의 바이브코딩 예제</h1>
+
+        <p class="intro">
+            ChatGPT와 함께 만들어본 웹 예제 모음
+        </p>
+
+        <div class="example-list">
+
+            <!-- 예제 03 -->
+            <div class="example">
+                <div class="number">03</div>
+
+                <div>
+                    <div class="title">이름 나타내기</div>
+                    <div class="description">이름 나타내기</div>
+                </div>
+
+                <a class="run-button" href="03_name.html">
+                    ▶ 실행
+                </a>
+            </div>
+
+
+            <!-- 예제 04 -->
+            <div class="example">
+                <div class="number">04</div>
+
+                <div>
+                    <div class="title">버튼 누르기</div>
+                    <div class="description">버튼 누르기</div>
+                </div>
+
+                <a class="run-button" href="04_button.html">
+                    ▶ 실행
+                </a>
+            </div>
+
+
+            <!-- 예제 05 -->
+            <div class="example">
+                <div class="number">05</div>
+
+                <div>
+                    <div class="title">행운의 숫자</div>
+                    <div class="description">행운의 숫자</div>
+                </div>
+
+                <a class="run-button" href="05_lucky_number.html">
+                    ▶ 실행
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
