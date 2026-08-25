@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RETRO MINE SWEEPER - MILITARY EDITION</title>
+  <!-- 레트로 픽셀 폰트 -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- 컨페티 (승리 폭죽) 라이브러리 -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #1e241e;
+      --panel-bg: #2b332b;
+      --border-color: #4a5d4a;
+      --accent-green: #33ff33;
+      --accent-red: #ff3333;
+      --accent-yellow: #ffff33;
+      --btn-bg: #3d493d;
+      --btn-hover: #526352;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--accent-green);
+      font-family: 'Press Start 2P', monospace, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* Scanline 효과 */
+    body::before {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+      background-size: 100% 4px;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .container {
+      background-color: var(--panel-bg);
+      border: 4px solid var(--border-color);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      border-radius: 4px;
+      max-width: 95vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 1.2rem;
+      color: var(--accent-green);
+      text-shadow: 2px 2px #000;
+      margin-top: 0;
+      margin-bottom: 15px;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* 컨트롤 패널 */
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      background-color: var(--btn-bg);
+      color: #fff;
+      border: 2px solid var(--border-color);
+      padding: 8px 12px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.6rem;
+      cursor: pointer;
+      transition: all 0.1s;
+      box-shadow: 2px 2px 0px #000;
+    }
+
+    .btn:hover:not(:disabled) {
+      background-color: var(--btn-hover);
+      color: var(--accent-yellow);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translate(2px, 2px);
+      box-shadow: 0px 0px 0px #000;
+    }
+
+    .btn.active {
+      background-color: var(--border-color);
+      color: var(--accent-yellow);
+      border-color: var(--accent-yellow);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* 게임 정보 브리핑 패널 */
+    .dashboard {
+      width: 100%;
+      background-color: #111;
+      border: 2px solid var(--border-color);
+      padding: 12px;
+      margin-bottom: 15px;
+      font-size: 0.65rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .attempts {
+      color: var(--accent-yellow);
+    }
+
+    .log-box {
+      color: #fff;
+      min-height: 2.2em;
+      line-height: 1.4;
+      word-break: break-all;
+    }
+
+    /* 보드 격자 */
+    .board-wrapper {
+      overflow: auto;
+      max-width: 100%;
+      max-height: 60vh;
+      border: 3px solid #111;
+      background-color: #151815;
+    }
+
+    .board {
+      display: grid;
+      gap: 2px;
+      padding: 2px;
+      background-color: #151815;
+    }
+
+    .cell {
+      width: 28px;
+      height: 28px;
+      background-color: #3a443a;
+      border: 2px outset #515e51;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+
+    .cell:hover:not(.revealed) {
+      background-color: #4a574a;
+    }
+
+    .cell.revealed {
+      border: 1px solid #222;
+      background-color: #1f251f;
+      cursor: default;
+    }
+
+    .cell.mine {
+      background-color: var(--accent-red) !important;
+      animation: flash 0.3s infinite alternate;
+    }
+
+    @keyframes flash {
+      from { opacity: 1; }
+      to { opacity: 0.4; }
+    }
+
+    /* 승리/패배 메시지 팝업 Overlay */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 99;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .message-title {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 3px 3px #000;
+    }
+
+    .win .message-title {
+      color: var(--accent-yellow);
+      animation: bounce 0.6s infinite alternate;
+    }
+
+    .lose .message-title {
+      color: var(--accent-red);
+      animation: shake 0.3s infinite;
+    }
+
+    .overlay-sub {
+      font-size: 0.8rem;
+      color: #fff;
+      margin-bottom: 30px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-10px); }
+    }
+
+    @keyframes shake {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-5px, 5px); }
+      50% { transform: translate(5px, -5px); }
+      75% { transform: translate(-5px, -5px); }
+      100% { transform: translate(5px, 5px); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🪖 RETRO MINE SWEEPER 💣</h1>
+
+    <!-- 크기 선택 버튼 -->
+    <div class="controls">
+      <button class="btn active" onclick="changeSize(10)">10x10</button>
+      <button class="btn" onclick="changeSize(20)">20x20</button>
+      <button class="btn" onclick="changeSize(30)">30x30</button>
+    </div>
+
+    <!-- 대시보드 (정보 표출) -->
+    <div class="dashboard">
+      <div class="status-row">
+        <span>MISSION: FIND 1 MINE</span>
+        <span class="attempts">CHANCE: <span id="chance-count">20</span>/20</span>
+      </div>
+      <div class="log-box" id="log-text">
+        [SYSTEM] Select target block to sweep.
+      </div>
+    </div>
+
+    <!-- 게임 보드 -->
+    <div class="board-wrapper">
+      <div id="board" class="board"></div>
+    </div>
+  </div>
+
+  <!-- 결과 오버레이 화면 -->
+  <div id="result-overlay" class="overlay">
+    <div id="overlay-title" class="message-title"></div>
+    <div id="overlay-desc" class="overlay-sub"></div>
+    <button id="retry-btn" class="btn" style="font-size: 0.9rem; padding: 15px 25px;" onclick="resetGame()">TRY AGAIN?</button>
+  </div>
+
+  <script>
+    let boardSize = 10;
+    let maxAttempts = 20;
+    let remainingAttempts = maxAttempts;
+    let minePosition = { x: 0, y: 0 };
+    let isGameOver = false;
+
+    const boardEl = document.getElementById('board');
+    const chanceCountEl = document.getElementById('chance-count');
+    const logTextEl = document.getElementById('log-text');
+    const overlayEl = document.getElementById('result-overlay');
+    const overlayTitleEl = document.getElementById('overlay-title');
+    const overlayDescEl = document.getElementById('overlay-desc');
+
+    // 게임 초기화
+    function initGame() {
+      isGameOver = false;
+      remainingAttempts = maxAttempts;
+      chanceCountEl.textContent = remainingAttempts;
+      logTextEl.innerHTML = '[SYSTEM] Operation started. Mine target hidden.';
+      logTextEl.style.color = '#fff';
+      overlayEl.classList.remove('show', 'win', 'lose');
+
+      // 무작위 지뢰 1개 위치 선정 (0-indexed: 0 ~ boardSize-1)
+      minePosition = {
+        x: Math.floor(Math.random() * boardSize),
+        y: Math.floor(Math.random() * boardSize)
+      };
+
+      // 그리드 CSS 설정
+      boardEl.style.gridTemplateColumns = `repeat(${boardSize}, 28px)`;
+      boardEl.innerHTML = '';
+
+      // 셀 생성
+      for (let y = 0; y < boardSize; y++) {
+        for (let x = 0; x < boardSize; x++) {
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+          cell.dataset.x = x;
+          cell.dataset.y = y;
+          cell.addEventListener('click', () => handleCellClick(x, y, cell));
+          boardEl.appendChild(cell);
+        }
+      }
+    }
+
+    // 사이즈 변경
+    function changeSize(size) {
+      boardSize = size;
+      document.querySelectorAll('.controls .btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.includes(`${size}x${size}`));
+      });
+      initGame();
+    }
+
+    // 셀 클릭 처리
+    function handleCellClick(x, y, cellEl) {
+      if (isGameOver || cellEl.classList.contains('revealed')) return;
+
+      cellEl.classList.add('revealed');
+      remainingAttempts--;
+      chanceCountEl.textContent = remainingAttempts;
+
+      // 체비쇼프/체스판 거리 계산 (가로, 세로 대각선 포함 블록 거리)
+      const distance = Math.max(Math.abs(x - minePosition.x), Math.abs(y - minePosition.y));
+
+      // 지뢰 탐지 성공
+      if (x === minePosition.x && y === minePosition.y) {
+        cellEl.classList.add('mine');
+        cellEl.textContent = '💣';
+        gameWin(x, y);
+        return;
+      }
+
+      cellEl.textContent = '🧹'; // 수색 완료 표시
+
+      // 힌트 텍스트 생성
+      let hintText = '';
+      if (distance <= 5) {
+        hintText = `<span style="color: var(--accent-yellow);">⚠️ Warning! Within 5 blocks!</span>`;
+      } else {
+        hintText = `Clear. Nothing nearby.`;
+      }
+
+      logTextEl.innerHTML = `[SCAN] Target (${x}, ${y}) - ${hintText}`;
+
+      // 기회 소진 시 패배
+      if (remainingAttempts <= 0) {
+        gameOver();
+      }
+    }
+
+    // 승리 처리
+    function gameWin(x, y) {
+      isGameOver = true;
+      logTextEl.innerHTML = `<span style="color: var(--accent-yellow);">[TARGET FOUND] Mine located at (${x}, ${y})!</span>`;
+
+      // 승리 효과: 레트로 승리 컨페티 폭죽
+      confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.6 }
+      });
+
+      setTimeout(() => {
+        overlayEl.classList.add('win', 'show');
+        overlayTitleEl.textContent = "YOU WIN!!";
+        overlayDescEl.innerHTML = `Operation Victory!<br>Mine detected at (${x}, ${y}) with ${remainingAttempts} chances left.`;
+      }, 600);
+    }
+
+    // 패배 처리
+    function gameOver() {
+      isGameOver = true;
+      
+      // 실제 지뢰 위치 공개
+      const index = minePosition.y * boardSize + minePosition.x;
+      const mineCell = boardEl.children[index];
+      mineCell.classList.add('mine');
+      mineCell.textContent = '💥';
+
+      setTimeout(() => {
+        overlayEl.classList.add('lose', 'show');
+        overlayTitleEl.textContent = "GAME OVER";
+        overlayDescEl.innerHTML = `BOMB EXPLODED!! 💥<br>Target mine was at (${minePosition.x}, ${minePosition.y}).`;
+      }, 600);
+    }
+
+    // 재시작
+    function resetGame() {
+      initGame();
+    }
+
+    // 최초 실행
+    window.onload = () => {
+      initGame();
+    };
+  </script>
+</body>
+</html>
