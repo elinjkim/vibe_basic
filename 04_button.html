@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Jieun — A Moment of Light</title>
+
+  <style>
+
+    /* =====================================================
+       기본 설정
+    ====================================================== */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      background: #39276a;
+      color: white;
+    }
+
+
+    /* =====================================================
+       메인 화면
+    ====================================================== */
+
+    .hero {
+
+      position: relative;
+
+      width: 100vw;
+      height: 100vh;
+
+      overflow: hidden;
+
+      background:
+        radial-gradient(
+          circle at 78% 66%,
+          rgba(255, 211, 146, 0.9) 0%,
+          rgba(255, 164, 191, 0.45) 9%,
+          transparent 28%
+        ),
+        linear-gradient(
+          180deg,
+          #39276a 0%,
+          #654b92 30%,
+          #b978a7 55%,
+          #e99caa 72%,
+          #f4b988 100%
+        );
+
+      /* ★ 낮 ↔ 밤 3초 전환 */
+
+      transition:
+        background 3s ease;
+    }
+
+
+    /* =====================================================
+       구름
+    ====================================================== */
+
+    .cloud {
+
+      position: absolute;
+
+      border-radius: 50%;
+
+      filter: blur(35px);
+
+      opacity: 0.18;
+
+      pointer-events: none;
+
+      transition:
+        opacity 3s ease;
+    }
+
+    .cloud.one {
+
+      width: 420px;
+      height: 120px;
+
+      top: 16%;
+      left: -80px;
+
+      background: #f7c9e6;
+
+      transform: rotate(-8deg);
+    }
+
+    .cloud.two {
+
+      width: 500px;
+      height: 130px;
+
+      top: 30%;
+      right: -130px;
+
+      background: #ffb9cf;
+
+      transform: rotate(10deg);
+    }
+
+    .cloud.three {
+
+      width: 380px;
+      height: 100px;
+
+      top: 48%;
+      left: 25%;
+
+      background: #ffd4dd;
+
+      opacity: 0.13;
+    }
+
+
+    /* =====================================================
+       산
+    ====================================================== */
+
+    .mountains {
+
+      position: absolute;
+
+      bottom: 25%;
+      left: 0;
+
+      width: 100%;
+      height: 20%;
+
+      opacity: 0.35;
+
+      transition:
+        opacity 3s ease;
+    }
+
+    .mountain {
+
+      position: absolute;
+
+      bottom: 0;
+
+      width: 0;
+      height: 0;
+
+      border-left: 180px solid transparent;
+      border-right: 180px solid transparent;
+      border-bottom: 150px solid #493a72;
+    }
+
+    .mountain:nth-child(1) {
+
+      left: 2%;
+
+      transform: scale(1.3);
+    }
+
+    .mountain:nth-child(2) {
+
+      left: 25%;
+
+      transform: scale(1.8);
+    }
+
+    .mountain:nth-child(3) {
+
+      left: 55%;
+
+      transform: scale(1.4);
+    }
+
+    .mountain:nth-child(4) {
+
+      right: -5%;
+
+      transform: scale(1.7);
+    }
+
+
+    /* =====================================================
+       태양
+    ====================================================== */
+
+    .sun {
+
+      position: absolute;
+
+      width: 105px;
+      height: 105px;
+
+      right: 12%;
+      bottom: 29%;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          #fffce9 0%,
+          #ffe8ad 28%,
+          #ffc879 55%,
+          rgba(255, 170, 100, 0.3) 70%,
+          transparent 72%
+        );
+
+      box-shadow:
+        0 0 35px #ffd28b,
+        0 0 90px rgba(255, 189, 120, 0.7),
+        0 0 180px rgba(255, 160, 110, 0.35);
+
+      /* ★ 태양 자체도 계속 움직이지 않고 고정 */
+
+      transition:
+        opacity 3s ease,
+        transform 3s ease,
+        filter 3s ease;
+    }
+
+
+    /* =====================================================
+       수영장
+    ====================================================== */
+
+    .pool {
+
+      position: absolute;
+
+      left: -5%;
+      bottom: -5%;
+
+      width: 110%;
+      height: 34%;
+
+      border-radius:
+        50% 50% 0 0 /
+        15% 15% 0 0;
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(102, 87, 150, 0.8),
+          rgba(54, 54, 103, 0.95)
+        );
+
+      box-shadow:
+        inset 0 20px 40px
+        rgba(255, 190, 210, 0.15);
+
+      transition:
+        background 3s ease;
+    }
+
+
+    /* =====================================================
+       물결
+    ====================================================== */
+
+    .water-lines {
+
+      position: absolute;
+
+      inset: 0;
+
+      overflow: hidden;
+
+      opacity: 0.3;
+
+      transition:
+        opacity 3s ease;
+    }
+
+    .wave {
+
+      position: absolute;
+
+      height: 1px;
+
+      width: 180px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 218, 230, 0.8),
+          transparent
+        );
+
+      /* ★ 물결도 계속 움직이지 않도록 제거 */
+
+      opacity: 0.5;
+    }
+
+
+    /* =====================================================
+       햇빛 반사
+    ====================================================== */
+
+    .sun-reflection {
+
+      position: absolute;
+
+      right: 8%;
+      bottom: 4%;
+
+      width: 160px;
+      height: 300px;
+
+      background:
+        linear-gradient(
+          180deg,
+          transparent,
+          rgba(255, 220, 151, 0.25),
+          rgba(255, 220, 151, 0.08),
+          transparent
+        );
+
+      filter: blur(8px);
+
+      transform:
+        perspective(300px)
+        rotateX(55deg);
+
+      opacity: 0.7;
+
+      transition:
+        opacity 3s ease;
+    }
+
+
+    /* =====================================================
+       ★ 클릭했을 때만 나타나는 반짝임
+    ====================================================== */
+
+    .sparkle {
+
+      position: absolute;
+
+      width: 5px;
+      height: 5px;
+
+      border-radius: 50%;
+
+      background: white;
+
+      box-shadow:
+        0 0 8px white,
+        0 0 20px
+        rgba(255, 232, 183, 0.9);
+
+      pointer-events: none;
+
+      animation:
+        sparkleOnce 1.4s ease-out forwards;
+    }
+
+
+    @keyframes sparkleOnce {
+
+      0% {
+
+        opacity: 0;
+
+        transform:
+          scale(0.1);
+      }
+
+      30% {
+
+        opacity: 1;
+
+        transform:
+          scale(1.8);
+      }
+
+      60% {
+
+        opacity: 0.8;
+
+        transform:
+          scale(0.8);
+      }
+
+      100% {
+
+        opacity: 0;
+
+        transform:
+          scale(0);
+      }
+    }
+
+
+    /* =====================================================
+       중앙 콘텐츠
+    ====================================================== */
+
+    .content {
+
+      position: absolute;
+
+      z-index: 10;
+
+      top: 50%;
+      left: 50%;
+
+      transform:
+        translate(-50%, -50%);
+
+      width: 90%;
+
+      text-align: center;
+    }
+
+
+    /* =====================================================
+       이름 버튼
+    ====================================================== */
+
+    .name {
+
+      border: none;
+
+      background: transparent;
+
+      cursor: pointer;
+
+      padding: 20px 40px;
+
+      font-family:
+        "Brush Script MT",
+        "Segoe Script",
+        cursive;
+
+      font-size:
+        clamp(80px, 14vw, 190px);
+
+      font-weight: 400;
+
+      font-style: italic;
+
+      letter-spacing: -8px;
+
+      color:
+        rgba(255, 248, 255, 0.95);
+
+      text-shadow:
+        0 0 10px
+        rgba(255,255,255,0.8),
+
+        0 0 35px
+        rgba(255, 211, 239, 0.5),
+
+        0 8px 40px
+        rgba(54, 25, 80, 0.25);
+
+      outline: none;
+
+      transition:
+        color 3s ease,
+        text-shadow 3s ease;
+    }
+
+
+    /* =====================================================
+       ★ 버튼을 눌렀을 때 딱 한 번 두근
+    ====================================================== */
+
+    .name.heartbeat {
+
+      animation:
+        heartbeatOnce 1.2s ease-in-out 1;
+    }
+
+
+    @keyframes heartbeatOnce {
+
+      0% {
+
+        transform:
+          scale(1);
+      }
+
+      15% {
+
+        transform:
+          scale(1.08);
+      }
+
+      28% {
+
+        transform:
+          scale(0.98);
+      }
+
+      42% {
+
+        transform:
+          scale(1.13);
+      }
+
+      60% {
+
+        transform:
+          scale(1);
+      }
+
+      100% {
+
+        transform:
+          scale(1);
+      }
+    }
+
+
+    /* =====================================================
+       이름에 마우스를 올렸을 때
+    ====================================================== */
+
+    .name:hover {
+
+      text-shadow:
+        0 0 15px white,
+        0 0 45px
+        rgba(255, 220, 245, 0.8),
+        0 0 90px
+        rgba(255, 200, 230, 0.4);
+    }
+
+
+    /* =====================================================
+       문장
+    ====================================================== */
+
+    .quote {
+
+      margin-top: 20px;
+
+      font-family:
+        "Noto Serif KR",
+        "Batang",
+        "Times New Roman",
+        serif;
+
+      font-size:
+        clamp(14px, 1.8vw, 22px);
+
+      font-weight: 300;
+
+      letter-spacing: 0.25em;
+
+      color:
+        rgba(255, 248, 248, 0.9);
+
+      text-shadow:
+        0 1px 15px
+        rgba(60, 30, 80, 0.35);
+
+      transition:
+        color 3s ease;
+    }
+
+
+    /* =====================================================
+       구분선
+    ====================================================== */
+
+    .line {
+
+      width: 100px;
+
+      height: 1px;
+
+      margin: 28px auto;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255,255,255,0.8),
+          transparent
+        );
+    }
+
+
+    /* =====================================================
+       Scroll
+    ====================================================== */
+
+    .scroll {
+
+      position: absolute;
+
+      z-index: 20;
+
+      bottom: 35px;
+      left: 50%;
+
+      transform:
+        translateX(-50%);
+
+      font-size: 11px;
+
+      letter-spacing: 0.4em;
+
+      color:
+        rgba(255,255,255,0.75);
+    }
+
+    .scroll::after {
+
+      content: "";
+
+      display: block;
+
+      width: 1px;
+      height: 45px;
+
+      margin: 13px auto 0;
+
+      background:
+        linear-gradient(
+          rgba(255,255,255,0.8),
+          transparent
+        );
+    }
+
+
+    /* =====================================================
+       ★ 밤 모드
+    ====================================================== */
+
+    .hero.night {
+
+      background:
+        radial-gradient(
+          circle at 75% 65%,
+          rgba(117, 105, 180, 0.22) 0%,
+          transparent 25%
+        ),
+        linear-gradient(
+          180deg,
+          #08091f 0%,
+          #15143d 30%,
+          #29245b 55%,
+          #38306d 75%,
+          #1b1b3d 100%
+        );
+    }
+
+
+    .hero.night .sun {
+
+      opacity: 0;
+
+      transform:
+        scale(0.5);
+
+      filter:
+        blur(10px);
+    }
+
+
+    .hero.night .cloud {
+
+      opacity: 0.08;
+    }
+
+
+    .hero.night .mountains {
+
+      opacity: 0.7;
+    }
+
+
+    .hero.night .pool {
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(45, 43, 91, 0.9),
+          rgba(10, 15, 45, 0.98)
+        );
+    }
+
+
+    .hero.night .water-lines {
+
+      opacity: 0.12;
+    }
+
+
+    .hero.night .sun-reflection {
+
+      opacity: 0.12;
+    }
+
+
+    .hero.night .name {
+
+      color:
+        rgba(235, 231, 255, 0.95);
+
+      text-shadow:
+        0 0 10px
+        rgba(210, 205, 255, 0.8),
+
+        0 0 35px
+        rgba(150, 145, 255, 0.5),
+
+        0 0 70px
+        rgba(120, 110, 255, 0.25);
+    }
+
+
+    .hero.night .quote {
+
+      color:
+        rgba(225, 222, 250, 0.75);
+    }
+
+
+    /* =====================================================
+       ★ 별
+       계속 깜빡이지 않고 한 번 나타난 후 유지
+    ====================================================== */
+
+    .night-star {
+
+      position: absolute;
+
+      width: 3px;
+      height: 3px;
+
+      border-radius: 50%;
+
+      background: white;
+
+      box-shadow:
+        0 0 5px white,
+        0 0 12px
+        rgba(190, 190, 255, 0.9);
+
+      opacity: 0;
+
+      animation:
+        starAppearOnce 1.8s ease forwards;
+
+      pointer-events: none;
+    }
+
+
+    @keyframes starAppearOnce {
+
+      0% {
+
+        opacity: 0;
+
+        transform:
+          scale(0);
+      }
+
+      60% {
+
+        opacity: 1;
+
+        transform:
+          scale(1.5);
+      }
+
+      100% {
+
+        opacity: 0.8;
+
+        transform:
+          scale(1);
+      }
+    }
+
+
+    /* =====================================================
+       달
+    ====================================================== */
+
+    .moon {
+
+      position: absolute;
+
+      width: 75px;
+      height: 75px;
+
+      top: 12%;
+      right: 14%;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle at 35% 35%,
+          #ffffff,
+          #dddafa 55%,
+          #aaa7d5
+        );
+
+      box-shadow:
+        0 0 25px
+        rgba(220, 220, 255, 0.6),
+
+        0 0 80px
+        rgba(180, 180, 255, 0.25);
+
+      opacity: 0;
+
+      transform:
+        translateY(-20px)
+        scale(0.7);
+
+      transition:
+        opacity 3s ease,
+        transform 3s ease;
+
+      pointer-events: none;
+    }
+
+
+    .hero.night .moon {
+
+      opacity: 0.9;
+
+      transform:
+        translateY(0)
+        scale(1);
+    }
+
+
+    /* =====================================================
+       모바일
+    ====================================================== */
+
+    @media (max-width: 600px) {
+
+      .sun {
+
+        right: 8%;
+        bottom: 30%;
+
+        width: 75px;
+        height: 75px;
+      }
+
+
+      .pool {
+
+        height: 32%;
+      }
+
+
+      .name {
+
+        letter-spacing: -4px;
+      }
+
+
+      .quote {
+
+        letter-spacing: 0.12em;
+
+        line-height: 1.8;
+      }
+
+
+      .moon {
+
+        width: 55px;
+        height: 55px;
+
+        right: 10%;
+      }
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+  <!-- ===================================================
+       메인
+  ==================================================== -->
+
+  <main
+    class="hero"
+    id="hero"
+  >
+
+
+    <!-- 구름 -->
+
+    <div class="cloud one"></div>
+
+    <div class="cloud two"></div>
+
+    <div class="cloud three"></div>
+
+
+    <!-- 산 -->
+
+    <div class="mountains">
+
+      <div class="mountain"></div>
+
+      <div class="mountain"></div>
+
+      <div class="mountain"></div>
+
+      <div class="mountain"></div>
+
+    </div>
+
+
+    <!-- 태양 -->
+
+    <div class="sun"></div>
+
+
+    <!-- 수영장 -->
+
+    <div class="pool">
+
+      <div class="sun-reflection"></div>
+
+      <div
+        class="water-lines"
+        id="waterLines"
+      ></div>
+
+    </div>
+
+
+    <!-- =================================================
+         중앙
+    ================================================== -->
+
+    <section class="content">
+
+
+      <!--
+        ★ 이름 자체가 버튼
+      -->
+
+      <button
+        class="name"
+        id="nightButton"
+        aria-label="밤으로 전환하기"
+      >
+        Jieun
+      </button>
+
+
+      <div class="line"></div>
+
+
+      <p class="quote">
+        나는 오늘, 가장 빛나는 순간을 살아가고 있어
+      </p>
+
+
+    </section>
+
+
+    <!-- Scroll -->
+
+    <div class="scroll">
+      SCROLL
+    </div>
+
+
+  </main>
+
+
+  <script>
+
+
+    /* =====================================================
+       기본 요소
+    ====================================================== */
+
+    const hero =
+      document.getElementById("hero");
+
+    const nightButton =
+      document.getElementById("nightButton");
+
+    const waterLines =
+      document.getElementById("waterLines");
+
+
+    let isNight = false;
+
+    let audioContext = null;
+
+
+    /* =====================================================
+       물결 생성
+       
+       ★ 더 이상 움직이지 않음
+    ====================================================== */
+
+    for (let i = 0; i < 22; i++) {
+
+      const wave =
+        document.createElement("div");
+
+
+      wave.classList.add("wave");
+
+
+      wave.style.top =
+        Math.random() * 100 + "%";
+
+
+      wave.style.left =
+        Math.random() * 100 + "%";
+
+
+      wave.style.width =
+        80 + Math.random() * 200 + "px";
+
+
+      waterLines.appendChild(wave);
+
+    }
+
+
+    /* =====================================================
+       오디오 초기화
+    ====================================================== */
+
+    function initAudio() {
+
+      if (!audioContext) {
+
+        audioContext =
+          new (
+            window.AudioContext ||
+            window.webkitAudioContext
+          )();
+
+      }
+
+
+      if (
+        audioContext.state === "suspended"
+      ) {
+
+        audioContext.resume();
+
+      }
+
+    }
+
+
+    /* =====================================================
+       반짝이는 효과음
+       
+       ★ 버튼 클릭 시 한 번만 실행
+    ====================================================== */
+
+    function playSparkleSound() {
+
+      if (!audioContext) return;
+
+
+      const now =
+        audioContext.currentTime;
+
+
+      /*
+        첫 번째 반짝임
+      */
+
+      const oscillator1 =
+        audioContext.createOscillator();
+
+
+      const gain1 =
+        audioContext.createGain();
+
+
+      oscillator1.type =
+        "sine";
+
+
+      oscillator1.frequency.setValueAtTime(
+        1400,
+        now
+      );
+
+
+      oscillator1.frequency.exponentialRampToValueAtTime(
+        2300,
+        now + 0.35
+      );
+
+
+      gain1.gain.setValueAtTime(
+        0.0001,
+        now
+      );
+
+
+      gain1.gain.exponentialRampToValueAtTime(
+        0.06,
+        now + 0.02
+      );
+
+
+      gain1.gain.exponentialRampToValueAtTime(
+        0.0001,
+        now + 0.7
+      );
+
+
+      oscillator1.connect(gain1);
+
+      gain1.connect(
+        audioContext.destination
+      );
+
+
+      oscillator1.start(now);
+
+      oscillator1.stop(
+        now + 0.7
+      );
+
+
+      /*
+        두 번째 아주 작은 반짝임
+      */
+
+      const oscillator2 =
+        audioContext.createOscillator();
+
+
+      const gain2 =
+        audioContext.createGain();
+
+
+      oscillator2.type =
+        "sine";
+
+
+      oscillator2.frequency.value =
+        2700;
+
+
+      gain2.gain.setValueAtTime(
+        0.0001,
+        now + 0.18
+      );
+
+
+      gain2.gain.exponentialRampToValueAtTime(
+        0.035,
+        now + 0.2
+      );
+
+
+      gain2.gain.exponentialRampToValueAtTime(
+        0.0001,
+        now + 0.65
+      );
+
+
+      oscillator2.connect(gain2);
+
+      gain2.connect(
+        audioContext.destination
+      );
+
+
+      oscillator2.start(
+        now + 0.18
+      );
+
+      oscillator2.stop(
+        now + 0.65
+      );
+
+    }
+
+
+    /* =====================================================
+       클릭 순간 반짝임
+       
+       ★ 1회만 실행
+    ====================================================== */
+
+    function createClickSparkles() {
+
+      for (let i = 0; i < 18; i++) {
+
+        const sparkle =
+          document.createElement("div");
+
+
+        sparkle.classList.add(
+          "sparkle"
+        );
+
+
+        /*
+          이름 주변에서 시작
+        */
+
+        sparkle.style.left =
+          (
+            50 +
+            (Math.random() - 0.5) * 35
+          ) + "%";
+
+
+        sparkle.style.top =
+          (
+            48 +
+            (Math.random() - 0.5) * 25
+          ) + "%";
+
+
+        const size =
+          2 + Math.random() * 5;
+
+
+        sparkle.style.width =
+          size + "px";
+
+
+        sparkle.style.height =
+          size + "px";
+
+
+        /*
+          각각 약간 다른 타이밍
+        */
+
+        sparkle.style.animationDelay =
+          Math.random() * 0.5 + "s";
+
+
+        hero.appendChild(
+          sparkle
+        );
+
+
+        /*
+          애니메이션이 끝나면 삭제
+        */
+
+        setTimeout(() => {
+
+          sparkle.remove();
+
+        }, 2200);
+
+      }
+
+    }
+
+
+    /* =====================================================
+       달 만들기
+    ====================================================== */
+
+    function createMoon() {
+
+      if (
+        document.querySelector(".moon")
+      ) {
+
+        return;
+
+      }
+
+
+      const moon =
+        document.createElement("div");
+
+
+      moon.classList.add("moon");
+
+
+      hero.appendChild(moon);
+
+    }
+
+
+    /* =====================================================
+       별 만들기
+       
+       ★ 한 번 나타난 후 유지
+    ====================================================== */
+
+    function createStars() {
+
+      if (
+        document.querySelector(".night-star")
+      ) {
+
+        return;
+
+      }
+
+
+      for (let i = 0; i < 70; i++) {
+
+        const star =
+          document.createElement("div");
+
+
+        star.classList.add(
+          "night-star"
+        );
+
+
+        star.style.left =
+          Math.random() * 100 + "%";
+
+
+        star.style.top =
+          Math.random() * 65 + "%";
+
+
+        const size =
+          1 + Math.random() * 3;
+
+
+        star.style.width =
+          size + "px";
+
+
+        star.style.height =
+          size + "px";
+
+
+        /*
+          별이 동시에 나타나지 않도록
+          조금씩 시간차를 줌
+        */
+
+        star.style.animationDelay =
+          Math.random() * 1.5 + "s";
+
+
+        hero.appendChild(
+          star
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       별 제거
+    ====================================================== */
+
+    function removeStars() {
+
+      const stars =
+        document.querySelectorAll(
+          ".night-star"
+        );
+
+
+      stars.forEach(star => {
+
+        star.style.transition =
+          "opacity 1.5s ease";
+
+        star.style.opacity =
+          "0";
+
+
+        setTimeout(() => {
+
+          star.remove();
+
+        }, 1600);
+
+      });
+
+    }
+
+
+    /* =====================================================
+       달 제거
+    ====================================================== */
+
+    function removeMoon() {
+
+      const moon =
+        document.querySelector(".moon");
+
+
+      if (!moon) return;
+
+
+      moon.style.opacity =
+        "0";
+
+
+      moon.style.transform =
+        "translateY(-20px) scale(0.7)";
+
+
+      setTimeout(() => {
+
+        moon.remove();
+
+      }, 3000);
+
+    }
+
+
+    /* =====================================================
+       ★ 이름 버튼 클릭
+       
+       모든 인터랙션은 여기서 딱 한 번 실행
+    ====================================================== */
+
+    nightButton.addEventListener(
+      "click",
+      () => {
+
+
+        /*
+          브라우저에서 소리를 허용
+        */
+
+        initAudio();
+
+
+        /*
+          낮 ↔ 밤 상태 변경
+        */
+
+        isNight =
+          !isNight;
+
+
+        /* ---------------------------------------------
+           버튼 두근거림
+           
+           animation을 매번 새로 시작하기 위해
+           클래스를 제거했다가 다시 추가
+        ---------------------------------------------- */
+
+        nightButton.classList.remove(
+          "heartbeat"
+        );
+
+
+        /*
+          브라우저가 animation을
+          다시 시작하도록 강제
+        */
+
+        void nightButton.offsetWidth;
+
+
+        nightButton.classList.add(
+          "heartbeat"
+        );
+
+
+        /*
+          두근거림이 끝나면 클래스 제거
+        */
+
+        setTimeout(() => {
+
+          nightButton.classList.remove(
+            "heartbeat"
+          );
+
+        }, 1300);
+
+
+        /* ---------------------------------------------
+           반짝임
+        ---------------------------------------------- */
+
+        createClickSparkles();
+
+
+        /* ---------------------------------------------
+           효과음
+           
+           ★ 딱 한 번
+        ---------------------------------------------- */
+
+        playSparkleSound();
+
+
+        /* ---------------------------------------------
+           밤으로 전환
+        ---------------------------------------------- */
+
+        if (isNight) {
+
+
+          /*
+            별과 달 생성
+          */
+
+          createStars();
+
+          createMoon();
+
+
+          /*
+            CSS의 transition 3초가
+            자동으로 적용됨
+          */
+
+          hero.classList.add(
+            "night"
+          );
+
+
+          nightButton.setAttribute(
+            "aria-label",
+            "노을로 돌아가기"
+          );
+
+        }
+
+
+        /* ---------------------------------------------
+           다시 낮으로
+        ---------------------------------------------- */
+
+        else {
+
+
+          hero.classList.remove(
+            "night"
+          );
+
+
+          removeStars();
+
+          removeMoon();
+
+
+          nightButton.setAttribute(
+            "aria-label",
+            "밤으로 전환하기"
+          );
+
+        }
+
+      }
+    );
+
+
+  </script>
+
+</body>
+</html>
