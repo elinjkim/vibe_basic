@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Solar System Simulation - Planet Trails & Interactive Effects</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- OrbitControls -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #03050a;
+      --panel-bg: rgba(10, 15, 28, 0.75);
+      --panel-border: rgba(0, 210, 255, 0.3);
+      --accent-cyan: #00f0ff;
+      --accent-gold: #ffd700;
+      --text-main: #e2f1ff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-color);
+      font-family: 'Orbitron', 'Noto Sans KR', sans-serif;
+      color: var(--text-main);
+    }
+
+    #webgl-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    /* Top HUD Display */
+    .hud-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .time-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 16px 22px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px 0 rgba(0, 240, 255, 0.15), inset 0 0 15px rgba(0, 210, 255, 0.05);
+      min-width: 280px;
+    }
+
+    .time-card h2 {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .time-card h2::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-cyan);
+    }
+
+    .timer-display {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+      letter-spacing: 1px;
+    }
+
+    .timer-sub {
+      font-size: 0.75rem;
+      color: #8da4c4;
+      margin-top: 4px;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    /* Controls Panel */
+    .controls-card {
+      position: absolute;
+      bottom: 25px;
+      left: 20px;
+      z-index: 10;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      backdrop-filter: blur(12px);
+      padding: 16px 20px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    .ctrl-btn {
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid var(--accent-cyan);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ctrl-btn:hover {
+      background: rgba(0, 240, 255, 0.3);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .ctrl-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Tooltip / Info Card */
+    .info-card {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 10;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      backdrop-filter: blur(12px);
+      padding: 18px 22px;
+      border-radius: 12px;
+      max-width: 320px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .info-card.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .info-card h3 {
+      font-size: 1.2rem;
+      color: var(--accent-gold);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .info-card p {
+      font-size: 0.85rem;
+      color: #c0d4ed;
+      line-height: 1.5;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .info-card .data-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.75rem;
+    }
+
+    .data-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .data-label {
+      color: #6d8ba8;
+    }
+
+    .data-value {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    /* Helper guide */
+    .guide-box {
+      position: absolute;
+      bottom: 25px;
+      right: 20px;
+      z-index: 10;
+      background: rgba(5, 8, 15, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: #8da4c4;
+      font-family: 'Noto Sans KR', sans-serif;
+      pointer-events: none;
+    }
+
+    /* Canvas Confetti Layer Overlay */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="webgl-container"></div>
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- HUD: 시뮬레이션 시간 -->
+  <div class="hud-container">
+    <div class="time-card">
+      <h2>SIMULATION TIME</h2>
+      <div class="timer-display" id="time-display">00 YRS 000 DAYS</div>
+      <div class="timer-sub">⚡ Earth Orbit Speed: 1 Year = 10 Sec</div>
+    </div>
+  </div>
+
+  <!-- 행성 정보 카드 -->
+  <div class="info-card" id="planet-info">
+    <h3 id="info-name">Earth</h3>
+    <p id="info-desc">지구는 태양계의 세 번째 행성으로, 생명체가 살고 있는 유일한 천체입니다.</p>
+    <div class="data-grid">
+      <div class="data-item">
+        <span class="data-label">공전 주기</span>
+        <span class="data-value" id="info-orbit">365.25일</span>
+      </div>
+      <div class="data-item">
+        <span class="data-label">자전 주기</span>
+        <span class="data-value" id="info-rotation">24시간</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 컨트롤 바 -->
+  <div class="controls-card">
+    <button class="ctrl-btn" id="btn-pause">⏸️ PAUSE</button>
+    <button class="ctrl-btn" id="btn-reset">🔄 RESET CAMERA</button>
+  </div>
+
+  <div class="guide-box">
+    🖱️ 행성을 클릭하면 축하 컨페티가 터집니다! (드래그: 카메라 회전 / 휠: 확대·축소)
+  </div>
+
+  <script>
+    // --- 1. Texture Creator Helpers (Procedural Canvas Textures) ---
+    function createSunTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512; canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+      const grad = ctx.createRadialGradient(256, 256, 0, 256, 256, 256);
+      grad.addColorStop(0, '#ffffff');
+      grad.addColorStop(0.2, '#fff176');
+      grad.addColorStop(0.5, '#ff9800');
+      grad.addColorStop(0.8, '#f4511e');
+      grad.addColorStop(1, '#b71c1c');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 512);
+
+      // Sunspots / Flares pattern
+      for(let i=0; i<800; i++) {
+        const x = Math.random() * 512;
+        const y = Math.random() * 512;
+        const r = Math.random() * 12 + 2;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+      }
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    function createPlanetTexture(colorBase, colorSecondary, noiseDensity=500) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512; canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+      
+      ctx.fillStyle = colorBase;
+      ctx.fillRect(0, 0, 512, 256);
+
+      // Surface noise / bands
+      ctx.fillStyle = colorSecondary;
+      for(let i=0; i<noiseDensity; i++) {
+        const y = Math.random() * 256;
+        const h = Math.random() * 20 + 2;
+        const w = Math.random() * 150 + 20;
+        const x = Math.random() * 512;
+        ctx.globalAlpha = Math.random() * 0.4 + 0.1;
+        ctx.fillRect(x, y, w, h);
+      }
+      ctx.globalAlpha = 1.0;
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    function createEarthTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512; canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+      // Ocean
+      ctx.fillStyle = '#1b4d89';
+      ctx.fillRect(0, 0, 512, 256);
+      // Continents
+      ctx.fillStyle = '#2d8a4e';
+      for(let i=0; i<40; i++) {
+        const x = Math.random() * 512;
+        const y = Math.random() * 200 + 28;
+        const r = Math.random() * 45 + 15;
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+      }
+      // Clouds
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+      for(let i=0; i<60; i++) {
+        const x = Math.random() * 512;
+        const y = Math.random() * 256;
+        const w = Math.random() * 80 + 30;
+        const h = Math.random() * 12 + 4;
+        ctx.fillRect(x, y, w, h);
+      }
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    function createSaturnRingTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512; canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+      const grad = ctx.createLinearGradient(0, 0, 512, 0);
+      grad.addColorStop(0, 'rgba(0,0,0,0)');
+      grad.addColorStop(0.2, 'rgba(210, 180, 140, 0.8)');
+      grad.addColorStop(0.5, 'rgba(160, 130, 90, 0.9)');
+      grad.addColorStop(0.7, 'rgba(210, 180, 140, 0.5)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 64);
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    // --- 2. Simulation Configuration ---
+    // 지구 1년 = 10초
+    // 1초 = 36.525일
+    const EARTH_YEAR_SECONDS = 10.0;
+    let isPaused = false;
+    let simTimeDays = 0;
+
+    const planetsData = [
+      { name: "수성 (Mercury)", radius: 1.2, dist: 22, orbitDays: 88, rotSpeed: 0.01, color: "#a6a6a6", desc: "태양에서 가장 가까운 행성으로 낮과 밤의 온도 차이가 매우 큽니다." },
+      { name: "금성 (Venus)", radius: 1.8, dist: 32, orbitDays: 225, rotSpeed: -0.005, color: "#e3bb76", desc: "두꺼운 이산화탄소 대기로 싸여 있어 태양계에서 가장 뜨겁습니다." },
+      { name: "지구 (Earth)", radius: 2.0, dist: 46, orbitDays: 365.25, rotSpeed: 0.05, isEarth: true, desc: "우리가 살고 있는 푸른 행성으로 물과 생명체가 존재합니다." },
+      { name: "화성 (Mars)", radius: 1.5, dist: 60, orbitDays: 687, rotSpeed: 0.045, color: "#c1440e", desc: "붉은 산화철 먼지로 뒤덮여 있으며 극관에 얼음이 존재합니다." },
+      { name: "목성 (Jupiter)", radius: 4.5, dist: 85, orbitDays: 4333, rotSpeed: 0.1, color: "#d8ca9d", color2: "#a5723d", desc: "태양계에서 가장 큰 기체 거대 행성으로 대적점이 특징입니다." },
+      { name: "토성 (Saturn)", radius: 3.8, dist: 115, orbitDays: 10759, rotSpeed: 0.09, hasRings: true, color: "#ead6b8", color2: "#b59b73", desc: "화려하고 거대한 얼음 고리를 가지고 있는 아름다운 행성입니다." },
+      { name: "천왕성 (Uranus)", radius: 2.8, dist: 145, orbitDays: 30687, rotSpeed: -0.06, color: "#4b70dd", color2: "#7be5ff", desc: "자전축이 거의 누워있는 상태로 태양 주변을 도는 청록색 행성입니다." },
+      { name: "해왕성 (Neptune)", radius: 2.7, dist: 172, orbitDays: 60190, rotSpeed: 0.07, color: "#274687", color2: "#4169e1", desc: "태양계의 가장 바깥쪽에 위치한 푸른빛의 강력한 풍속을 가진 행성입니다." }
+    ];
+
+    // 항성 (Extrasolar Stars / Nearby Stars)
+    const starsData = [
+      { name: "시리우스 (Sirius)", radius: 3.5, pos: new THREE.Vector3(260, 40, -220), color: 0x9bb5ff, intensity: 2.5 },
+      { name: "알파 센타우리 (Alpha Centauri)", radius: 3.0, pos: new THREE.Vector3(-280, -30, 200), color: 0xfff4ea, intensity: 2.0 }
+    ];
+
+    // --- 3. Scene, Camera, Renderer Setup ---
+    const container = document.getElementById('webgl-container');
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x03050a, 0.0008);
+
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
+    camera.position.set(0, 120, 220);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, preserveDrawingBuffer: false });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(renderer.domElement);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.maxDistance = 600;
+    controls.minDistance = 15;
+
+    // --- 4. Lighting ---
+    // Ambient Light (은은한 우주 배경광)
+    const ambientLight = new THREE.AmbientLight(0x222838, 0.8);
+    scene.add(ambientLight);
+
+    // Sun Point Light (태양에서 방사되는 중앙 빛)
+    const sunLight = new THREE.PointLight(0xffffff, 2.2, 1200, 0.5);
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.width = 2048;
+    sunLight.shadow.mapSize.height = 2048;
+    scene.add(sunLight);
+
+    // --- 5. Starfield Background ---
+    function buildStarfield() {
+      const count = 4000;
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(count * 3);
+      const colors = new Float32Array(count * 3);
+
+      for(let i = 0; i < count; i++) {
+        const r = 400 + Math.random() * 800;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos((Math.random() * 2) - 1);
+
+        positions[i*3] = r * Math.sin(phi) * Math.cos(theta);
+        positions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+        positions[i*3+2] = r * Math.cos(phi);
+
+        const c = new THREE.Color().setHSL(Math.random() * 0.2 + 0.55, 0.6, Math.random() * 0.5 + 0.5);
+        colors[i*3] = c.r;
+        colors[i*3+1] = c.g;
+        colors[i*3+2] = c.b;
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const material = new THREE.PointsMaterial({
+        size: 1.5,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.85
+      });
+
+      scene.add(new THREE.Points(geometry, material));
+    }
+    buildStarfield();
+
+    // --- 6. Create Sun ---
+    const sunGeo = new THREE.SphereGeometry(12, 64, 64);
+    const sunMat = new THREE.MeshBasicMaterial({
+      map: createSunTexture()
+    });
+    const sunMesh = new THREE.Mesh(sunGeo, sunMat);
+    scene.add(sunMesh);
+
+    // Sun Glow Effect
+    const glowGeo = new THREE.SphereGeometry(13.8, 32, 32);
+    const glowMat = new THREE.MeshBasicMaterial({
+      color: 0xffaa00,
+      transparent: true,
+      opacity: 0.25,
+      side: THREE.BackSide
+    });
+    scene.add(new THREE.Mesh(glowGeo, glowMat));
+
+    // --- 7. Create Nearby Stars (항성 2개) ---
+    starsData.forEach(s => {
+      const starGeo = new THREE.SphereGeometry(s.radius, 32, 32);
+      const starMat = new THREE.MeshBasicMaterial({ color: s.color });
+      const starMesh = new THREE.Mesh(starGeo, starMat);
+      starMesh.position.copy(s.pos);
+      scene.add(starMesh);
+
+      // Star point light
+      const pLight = new THREE.PointLight(s.color, s.intensity, 500);
+      pLight.position.copy(s.pos);
+      scene.add(pLight);
+
+      // Star Glow
+      const sGlowMat = new THREE.MeshBasicMaterial({
+        color: s.color,
+        transparent: true,
+        opacity: 0.3,
+        side: THREE.BackSide
+      });
+      const sGlow = new THREE.Mesh(new THREE.SphereGeometry(s.radius * 1.4, 16, 16), sGlowMat);
+      sGlow.position.copy(s.pos);
+      scene.add(sGlow);
+    });
+
+    // --- 8. Create Planets & Trails ---
+    const planetObjects = [];
+
+    planetsData.forEach((pData) => {
+      // Orbit Line (원형 궤도선)
+      const orbitGeo = new THREE.BufferGeometry();
+      const points = [];
+      const segments = 128;
+      for(let i=0; i<=segments; i++) {
+        const theta = (i / segments) * Math.PI * 2;
+        points.push(new THREE.Vector3(Math.cos(theta) * pData.dist, 0, Math.sin(theta) * pData.dist));
+      }
+      orbitGeo.setFromPoints(points);
+      const orbitMat = new THREE.LineBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.08
+      });
+      const orbitLine = new THREE.Line(orbitGeo, orbitMat);
+      scene.add(orbitLine);
+
+      // Planet Mesh
+      const geo = new THREE.SphereGeometry(pData.radius, 32, 32);
+      let mat;
+      if (pData.isEarth) {
+        mat = new THREE.MeshStandardMaterial({
+          map: createEarthTexture(),
+          roughness: 0.6,
+          metalness: 0.1
+        });
+      } else {
+        mat = new THREE.MeshStandardMaterial({
+          map: createPlanetTexture(pData.color, pData.color2 || '#111111'),
+          roughness: 0.7,
+          metalness: 0.1
+        });
+      }
+
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      mesh.userData = { ...pData };
+      scene.add(mesh);
+
+      // Saturn Rings
+      if (pData.hasRings) {
+        const ringGeo = new THREE.RingGeometry(pData.radius * 1.4, pData.radius * 2.5, 64);
+        // Rotate ring geometry UVs properly for radial texture
+        const pos = ringGeo.attributes.position;
+        const uv = ringGeo.attributes.uv;
+        for (let i = 0; i < pos.count; i++) {
+          const x = pos.getX(i);
+          const y = pos.getY(i);
+          const len = Math.sqrt(x * x + y * y);
+          uv.setXY(i, (len - pData.radius * 1.4) / (pData.radius * 1.1), 0.5);
+        }
+        const ringMat = new THREE.MeshStandardMaterial({
+          map: createSaturnRingTexture(),
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0.85
+        });
+        const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+        ringMesh.rotation.x = Math.PI / 2 + 0.2;
+        mesh.add(ringMesh);
+      }
+
+      // --- Planet Motion Trail (움직임 자국 / 잔상 리본) ---
+      // 마우스가 천천히 따라오는 듯 부드럽게 뒤처지는 리본 꼬리
+      const TRAIL_MAX = 60;
+      const trailPositions = new Float32Array(TRAIL_MAX * 3);
+      // Initialize points at current position
+      for(let i=0; i<TRAIL_MAX; i++) {
+        trailPositions[i*3] = pData.dist;
+        trailPositions[i*3+1] = 0;
+        trailPositions[i*3+2] = 0;
+      }
+
+      const trailGeo = new THREE.BufferGeometry();
+      trailGeo.setAttribute('position', new THREE.BufferAttribute(trailPositions, 3));
+
+      // Gradient color for trail
+      const pColor = new THREE.Color(pData.color || '#4b70dd');
+      const trailMat = new THREE.LineBasicMaterial({
+        color: pColor,
+        transparent: true,
+        opacity: 0.45,
+        linewidth: 2
+      });
+      const trailLine = new THREE.Line(trailGeo, trailMat);
+      scene.add(trailLine);
+
+      planetObjects.push({
+        mesh: mesh,
+        data: pData,
+        trailLine: trailLine,
+        trailHistory: Array(TRAIL_MAX).fill(null).map(() => new THREE.Vector3(pData.dist, 0, 0)),
+        angle: Math.random() * Math.PI * 2
+      });
+    });
+
+    // --- 9. Animation Loop ---
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const delta = clock.getDelta();
+
+      if (!isPaused) {
+        // 시간 카운트 (지구 1년 = 10초 기준)
+        const daysPassed = (delta / EARTH_YEAR_SECONDS) * 365.25;
+        simTimeDays += daysPassed;
+
+        // UI 시간 업데이트
+        const yrs = Math.floor(simTimeDays / 365.25);
+        const days = Math.floor(simTimeDays % 365.25);
+        document.getElementById('time-display').textContent = 
+          `${String(yrs).padStart(2, '0')} YRS ${String(days).padStart(3, '0')} DAYS`;
+
+        // Sun self-rotation
+        sunMesh.rotation.y += delta * 0.05;
+
+        // Update Planets
+        planetObjects.forEach(obj => {
+          const { mesh, data, trailHistory, trailLine } = obj;
+
+          // 1. 공전 (Orbit)
+          // 궤도 각속도: 2PI * (daysPassed / orbitDays)
+          obj.angle += (Math.PI * 2) * (daysPassed / data.orbitDays);
+          
+          const targetX = Math.cos(obj.angle) * data.dist;
+          const targetZ = Math.sin(obj.angle) * data.dist;
+          mesh.position.set(targetX, 0, targetZ);
+
+          // 2. 자전 (Rotation)
+          mesh.rotation.y += data.rotSpeed;
+
+          // 3. 자국(Trail) 업데이트 - 부드러운 잔상 효과
+          trailHistory.unshift(mesh.position.clone());
+          if (trailHistory.length > trailHistory.parentElement) {
+            trailHistory.pop();
+          }
+
+          const positions = trailLine.geometry.attributes.position.array;
+          for(let i = 0; i < trailHistory.length; i++) {
+            const pt = trailHistory[i];
+            positions[i*3] = pt.x;
+            positions[i*3+1] = pt.y;
+            positions[i*3+2] = pt.z;
+          }
+          trailLine.geometry.attributes.position.needsUpdate = true;
+        });
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // --- 10. Raycasting & Confetti Interactions ---
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    const infoCard = document.getElementById('planet-info');
+
+    function fireConfetti(screenX, screenY) {
+      // Canvas-confetti 라이브러리를 활용한 살짝 퍼지는 귀여운 폭축 효과
+      const xNorm = screenX / window.innerWidth;
+      const yNorm = screenY / window.innerHeight;
+
+      confetti({
+        particleCount: 70,
+        spread: 60,
+        origin: { x: xNorm, y: yNorm },
+        colors: ['#00f0ff', '#ffd700', '#ff007f', '#ffffff', '#7b2cbf'],
+        disableForReducedMotion: true,
+        scalar: 0.8,
+        ticks: 150
+      });
+    }
+
+    window.addEventListener('pointerdown', (event) => {
+      // UI 요소 클릭은 무시
+      if (event.target.closest('.hud-container') || 
+          event.target.closest('.controls-card') || 
+          event.target.closest('.info-card')) return;
+
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+
+      const meshesToIntersect = planetObjects.map(o => o.mesh);
+      const intersects = raycaster.intersectObjects(meshesToIntersect);
+
+      if (intersects.length > 0) {
+        const hitPlanet = intersects[0].object;
+        const pData = hitPlanet.userData;
+
+        // 1. 귀여운 컨페티 터뜨리기
+        fireConfetti(event.clientX, event.clientY);
+
+        // 2. 정보 카드 업데이트 및 노출
+        document.getElementById('info-name').textContent = pData.name;
+        document.getElementById('info-desc').textContent = pData.desc;
+        document.getElementById('info-orbit').textContent = `${pData.orbitDays}일`;
+        document.getElementById('info-rotation').textContent = `${Math.abs(Math.round(24 / (pData.rotSpeed * 20)))}시간`;
+        infoCard.classList.add('active');
+
+      } else {
+        infoCard.classList.remove('active');
+      }
+    });
+
+    // --- 11. UI Event Listeners ---
+    const pauseBtn = document.getElementById('btn-pause');
+    pauseBtn.addEventListener('click', () => {
+      isPaused = !isPaused;
+      pauseBtn.textContent = isPaused ? '▶️ RESUME' : '⏸️ PAUSE';
+      pauseBtn.style.borderColor = isPaused ? '#ffd700' : '#00f0ff';
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      camera.position.set(0, 120, 220);
+      controls.target.set(0, 0, 0);
+      controls.update();
+      infoCard.classList.remove('active');
+    });
+
+    // --- 12. Window Resize Handler ---
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
