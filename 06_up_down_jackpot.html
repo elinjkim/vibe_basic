@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UP & DOWN JACKPOT</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, "Noto Sans KR", sans-serif;
+    background:
+      radial-gradient(circle at 50% 15%, #3d3d3d 0, #171717 35%, #050505 75%);
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+  .machine {
+    width: min(92vw, 560px);
+    padding: 24px;
+    border: 5px solid #8b8b8b;
+    border-radius: 28px;
+    background: linear-gradient(145deg, #262626, #0d0d0d);
+    box-shadow:
+      0 0 0 4px #1a1a1a,
+      0 20px 60px rgba(0,0,0,.75),
+      inset 0 0 30px rgba(255,255,255,.06);
+    position: relative;
+  }
+
+  .lights {
+    display: flex;
+    justify-content: center;
+    gap: 9px;
+    margin-bottom: 15px;
+  }
+  .light {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #555;
+    box-shadow: inset 0 0 5px #000;
+  }
+  .jackpot-mode .light {
+    animation: blink .18s infinite alternate;
+  }
+
+  .title {
+    text-align: center;
+    font-weight: 900;
+    letter-spacing: 4px;
+    font-size: clamp(25px, 7vw, 42px);
+    color: #ffd54a;
+    text-shadow: 0 0 10px #ff9d00, 0 3px 0 #7a4300;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #cfcfcf;
+    margin: 6px 0 20px;
+    font-size: 14px;
+  }
+
+  .display {
+    border: 4px solid #777;
+    border-radius: 16px;
+    background: #080808;
+    padding: 20px 15px;
+    text-align: center;
+    box-shadow: inset 0 0 25px rgba(255,190,0,.08);
+  }
+
+  .range {
+    color: #aaa;
+    font-size: 13px;
+    letter-spacing: 2px;
+  }
+
+  .message {
+    min-height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(35px, 11vw, 62px);
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #fff;
+    text-shadow: 0 0 15px rgba(255,255,255,.5);
+  }
+
+  .message.up { color: #39d9ff; text-shadow: 0 0 18px #009dff; }
+  .message.down { color: #ff5c6c; text-shadow: 0 0 18px #ff1730; }
+  .message.win { color: #ffd83d; text-shadow: 0 0 20px #ff9d00; }
+  .message.lose { color: #ccc; }
+
+  .info {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 18px 0;
+  }
+
+  .badge {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    background: #181818;
+    border: 1px solid #444;
+    text-align: center;
+  }
+  .badge strong {
+    display: block;
+    color: #ffd54a;
+    font-size: 22px;
+    margin-top: 3px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #777;
+    background: #111;
+    color: #fff;
+    font-size: 22px;
+    text-align: center;
+    outline: none;
+  }
+  input:focus { border-color: #ffd54a; }
+
+  button {
+    border: 0;
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: transform .12s, filter .12s;
+  }
+  button:active { transform: scale(.96); }
+
+  .guess-btn {
+    background: linear-gradient(#ffd95a, #d58b00);
+    color: #241600;
+    box-shadow: 0 4px 0 #805300;
+  }
+
+  .action {
+    width: 100%;
+    margin-top: 16px;
+    background: linear-gradient(#ffef8a, #f0a500);
+    color: #251700;
+    display: none;
+  }
+
+  .hint {
+    margin-top: 16px;
+    text-align: center;
+    color: #999;
+    font-size: 12px;
+  }
+
+  .jackpot {
+    position: fixed;
+    inset: 0;
+    display: none;
+    pointer-events: none;
+    z-index: 10;
+    overflow: hidden;
+  }
+  .jackpot.show { display: block; }
+
+  .jackpot-text {
+    position: absolute;
+    top: 38%;
+    width: 100%;
+    text-align: center;
+    font-size: clamp(48px, 15vw, 100px);
+    font-weight: 1000;
+    color: #ffe45c;
+    text-shadow:
+      0 0 10px #fff,
+      0 0 25px #ffae00,
+      0 0 50px #ff6a00;
+    animation: jackpot .8s ease-out both;
+  }
+
+  .coin {
+    position: absolute;
+    top: -50px;
+    font-size: 28px;
+    animation: fall linear forwards;
+  }
+
+  .flash {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,215,50,.35);
+    z-index: 9;
+    pointer-events: none;
+    animation: flash .5s ease-out forwards;
+  }
+
+  @keyframes blink {
+    from { opacity: .3; box-shadow: 0 0 4px #ffd54a; }
+    to { opacity: 1; box-shadow: 0 0 18px #ffd54a; }
+  }
+  @keyframes jackpot {
+    0% { transform: scale(.2) rotate(-8deg); opacity: 0; }
+    55% { transform: scale(1.18) rotate(4deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  @keyframes fall {
+    to { transform: translateY(115vh) rotate(720deg); }
+  }
+  @keyframes flash {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @media (max-width: 430px) {
+    .machine { padding: 18px; }
+    .input-row { flex-direction: column; }
+    .guess-btn { width: 100%; }
+    .info { flex-direction: row; }
+  }
+</style>
+</head>
+<body>
+
+<div class="machine" id="machine">
+  <div class="lights">
+    <span class="light"></span><span class="light"></span><span class="light"></span>
+    <span class="light"></span><span class="light"></span><span class="light"></span>
+    <span class="light"></span><span class="light"></span><span class="light"></span>
+  </div>
+
+  <div class="title">UP & DOWN</div>
+  <div class="subtitle">★ JACKPOT NUMBER CHALLENGE ★</div>
+
+  <div class="display">
+    <div class="range">GUESS THE NUMBER · 1 — 50</div>
+    <div class="message" id="message">START!</div>
+  </div>
+
+  <div class="info">
+    <div class="badge">
+      남은 기회
+      <strong id="chances">7</strong>
+    </div>
+    <div class="badge">
+      도전 횟수
+      <strong id="attempts">0</strong>
+    </div>
+  </div>
+
+  <div class="input-row">
+    <input id="guess" type="number" min="1" max="50" placeholder="1~50">
+    <button class="guess-btn" id="guessBtn">GO!</button>
+  </div>
+
+  <button class="action" id="restartBtn">↻ 다시 시작하기</button>
+  <button class="action" id="nextBtn">★ 다음 기회에</button>
+
+  <div class="hint">1부터 50 사이의 숫자를 맞혀보세요!</div>
+</div>
+
+<div class="jackpot" id="jackpot">
+  <div class="jackpot-text">JACKPOT!</div>
+</div>
+
+<script>
+  let answer;
+  let chances = 7;
+  let attempts = 0;
+  let finished = false;
+
+  const message = document.getElementById("message");
+  const chancesEl = document.getElementById("chances");
+  const attemptsEl = document.getElementById("attempts");
+  const guessInput = document.getElementById("guess");
+  const guessBtn = document.getElementById("guessBtn");
+  const restartBtn = document.getElementById("restartBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const jackpot = document.getElementById("jackpot");
+  const machine = document.getElementById("machine");
+
+  function startGame() {
+    answer = Math.floor(Math.random() * 50) + 1;
+    chances = 7;
+    attempts = 0;
+    finished = false;
+
+    message.textContent = "START!";
+    message.className = "message";
+    chancesEl.textContent = chances;
+    attemptsEl.textContent = attempts;
+
+    guessInput.value = "";
+    guessInput.disabled = false;
+    guessBtn.disabled = false;
+    restartBtn.style.display = "none";
+    nextBtn.style.display = "none";
+    machine.classList.remove("jackpot-mode");
+    guessInput.focus();
+  }
+
+  function showJackpot() {
+    finished = true;
+    message.textContent = "WIN!";
+    message.className = "message win";
+    guessInput.disabled = true;
+    guessBtn.disabled = true;
+    restartBtn.style.display = "block";
+    machine.classList.add("jackpot-mode");
+    jackpot.classList.add("show");
+
+    document.body.insertAdjacentHTML("beforeend", '<div class="flash"></div>');
+
+    for (let i = 0; i < 35; i++) {
+      const coin = document.createElement("div");
+      coin.className = "coin";
+      coin.textContent = Math.random() > .5 ? "🪙" : "✨";
+      coin.style.left = Math.random() * 100 + "vw";
+      coin.style.animationDuration = (1.2 + Math.random() * 2.2) + "s";
+      coin.style.animationDelay = Math.random() * .5 + "s";
+      jackpot.appendChild(coin);
+    }
+
+    setTimeout(() => {
+      jackpot.classList.remove("show");
+      jackpot.querySelectorAll(".coin").forEach(c => c.remove());
+    }, 3200);
+  }
+
+  function finishLose() {
+    finished = true;
+    message.textContent = "GAME OVER";
+    message.className = "message lose";
+    guessInput.disabled = true;
+    guessBtn.disabled = true;
+    nextBtn.style.display = "block";
+  }
+
+  function guess() {
+    if (finished) return;
+
+    const guess = Number(guessInput.value);
+
+    if (!Number.isInteger(guess) || guess < 1 || guess > 50) {
+      message.textContent = "1~50!";
+      message.className = "message";
+      guessInput.focus();
+      return;
+    }
+
+    attempts++;
+    chances--;
+    attemptsEl.textContent = attempts;
+    chancesEl.textContent = chances;
+
+    if (guess === answer) {
+      showJackpot();
+      return;
+    }
+
+    if (guess < answer) {
+      message.textContent = "UP!";
+      message.className = "message up";
+    } else {
+      message.textContent = "DOWN!";
+      message.className = "message down";
+    }
+
+    guessInput.value = "";
+    guessInput.focus();
+
+    if (chances === 0) {
+      setTimeout(finishLose, 450);
+    }
+  }
+
+  guessBtn.addEventListener("click", guess);
+
+  guessInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") guess();
+  });
+
+  restartBtn.addEventListener("click", startGame);
+  nextBtn.addEventListener("click", startGame);
+
+  startGame();
+</script>
+
+</body>
+</html>
