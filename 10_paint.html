@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10 Paint - My Colorful Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:#fff;font-family:"Trebuchet MS","Arial Rounded MT Bold",Arial,sans-serif;color:#24324a}
+.app{width:min(1100px,100%);margin:auto;padding:16px}
+header{text-align:center;padding:8px 0 16px}
+.logo{display:inline-block;color:#ff5c8a;font-size:clamp(30px,7vw,52px);font-weight:900;transform:rotate(-2deg);text-shadow:3px 3px #ffe45e}
+.tagline{margin:5px 0 0;color:#6b7890;font-weight:700}
+.toolbar{background:#fff;border:3px solid #dfe7f5;border-radius:22px;padding:14px;box-shadow:0 8px 22px rgba(54,78,110,.09)}
+.tools-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.tool{border:3px solid #e1e7f2;background:#fff;color:#33415c;border-radius:14px;min-height:48px;padding:9px 14px;font-weight:900;cursor:pointer}
+.tool.active{border-color:#ffca3a;background:#fff7d6;box-shadow:0 3px #ffca3a}
+.brush-size{display:flex;align-items:center;gap:8px;margin-left:auto;font-weight:900}
+input[type=range]{accent-color:#ff5c8a;width:110px}
+.colors{margin-top:13px;display:grid;grid-template-columns:repeat(15,1fr);gap:7px}
+.color{width:100%;aspect-ratio:1;border-radius:50%;border:3px solid #fff;box-shadow:0 1px 4px #999;cursor:pointer}
+.color.active{outline:3px solid #24324a;transform:scale(1.13)}
+.canvas-wrap{margin-top:16px;padding:10px;border:4px solid #dfe7f5;border-radius:22px;background:radial-gradient(#e8edf7 1px,transparent 1px);background-size:12px 12px}
+canvas{display:block;width:100%;height:min(62vh,620px);background:#fff;border-radius:13px;cursor:crosshair;touch-action:none}
+.bottom{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:16px}
+.done,.redraw{border:0;border-radius:16px;padding:14px 28px;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 5px rgba(0,0,0,.12)}
+.done{background:#ff5c8a;color:#fff}.redraw{background:#45d7a5;color:#fff;display:none}
+.feedback{display:none;margin:16px auto 0;width:min(700px,100%);text-align:center;background:#fff8c9;border:3px dashed #ffca3a;border-radius:20px;padding:18px;font-size:clamp(19px,4vw,27px);font-weight:900}
+.feedback.show{display:block;animation:pop .45s}
+.spark{position:fixed;pointer-events:none;z-index:50;font-size:24px;animation:sparkle 1.3s ease-out forwards}
+@keyframes pop{0%{transform:scale(.65);opacity:0}75%{transform:scale(1.05);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes sparkle{0%{transform:translate(0,0) scale(.4);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1.2) rotate(360deg);opacity:0}}
+@media(max-width:700px){.app{padding:10px}.brush-size{width:100%;margin-left:0}.colors{grid-template-columns:repeat(10,1fr)}canvas{height:58vh}}
+@media(max-width:430px){.tool{flex:1;padding:8px 9px;font-size:13px}.colors{grid-template-columns:repeat(10,1fr);gap:6px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">🎨 MY COLOR STUDIO</div><p class="tagline">Create something awesome!</p></header>
+<section class="toolbar">
+<div class="tools-row">
+<button class="tool active" id="brushBtn">🖌️ Brush</button>
+<button class="tool" id="eraserBtn">🧽 Eraser</button>
+<button class="tool" id="fillBtn">🪣 Paint Bucket</button>
+<div class="brush-size">Brush Size <input id="size" type="range" min="3" max="45" value="10"><span id="sizeValue">10</span></div>
+</div>
+<div class="colors" id="colors"></div>
+</section>
+<div class="canvas-wrap"><canvas id="canvas"></canvas></div>
+<div class="bottom">
+<button class="done" id="doneBtn">✨ I'm done!</button>
+<button class="redraw" id="redrawBtn">🎨 Re-draw</button>
+</div>
+<div class="feedback" id="feedback"></div>
+</div>
+<script>
+const canvas=document.getElementById("canvas"),ctx=canvas.getContext("2d");
+const colors=["#ff3b30","#ff6b35","#ff9500","#ffcc00","#ffe66d","#8bd450","#34c759","#00c7be","#00bcd4","#2196f3","#3f51b5","#5856d6","#af52de","#ff2d55","#ff69b4","#ff8a65","#a0522d","#795548","#9c6ade","#5ac8fa","#64d2ff","#30d158","#ffd60a","#ff9f0a","#bf5af2","#ff375f","#636366","#8e8e93","#000","#fff"];
+let selectedColor=colors[0],tool="brush",drawing=false,lastX=0,lastY=0,brushSize=10;
+
+function resizeCanvas(){
+ const old=document.createElement("canvas");
+ if(canvas.width&&canvas.height){old.width=canvas.width;old.height=canvas.height;old.getContext("2d").drawImage(canvas,0,0)}
+ const r=canvas.getBoundingClientRect(),dpr=Math.max(1,devicePixelRatio||1);
+ canvas.width=Math.round(r.width*dpr);canvas.height=Math.round(r.height*dpr);
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle="#fff";ctx.fillRect(0,0,r.width,r.height);
+ if(old.width)ctx.drawImage(old,0,0,old.width,old.height,0,0,r.width,r.height);
+}
+function pos(e){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+function line(x1,y1,x2,y2){
+ ctx.lineCap="round";ctx.lineJoin="round";ctx.lineWidth=brushSize;
+ if(tool==="eraser"){ctx.globalCompositeOperation="destination-out"}else{ctx.globalCompositeOperation="source-over";ctx.strokeStyle=selectedColor}
+ ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.globalCompositeOperation="source-over";
+}
+canvas.addEventListener("pointerdown",e=>{if(tool==="fill"){fill(pos(e).x,pos(e).y,selectedColor);return}drawing=true;const p=pos(e);lastX=p.x;lastY=p.y;line(lastX,lastY,lastX+.01,lastY+.01)});
+canvas.addEventListener("pointermove",e=>{if(!drawing)return;const p=pos(e);line(lastX,lastY,p.x,p.y);lastX=p.x;lastY=p.y});
+["pointerup","pointercancel","pointerleave"].forEach(x=>canvas.addEventListener(x,()=>drawing=false));
+
+function rgb(hex){return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)]}
+function fill(x,y,color){
+ const dpr=Math.max(1,devicePixelRatio||1),px=Math.floor(x*dpr),py=Math.floor(y*dpr),img=ctx.getImageData(0,0,canvas.width,canvas.height),d=img.data,i=(py*canvas.width+px)*4;
+ const target=[d[i],d[i+1],d[i+2],d[i+3]],c=rgb(color);
+ if(target[0]===c[0]&&target[1]===c[1]&&target[2]===c[2])return;
+ const stack=[[px,py]];
+ function match(k){return Math.abs(d[k]-target[0])<20&&Math.abs(d[k+1]-target[1])<20&&Math.abs(d[k+2]-target[2])<20&&Math.abs(d[k+3]-target[3])<20}
+ while(stack.length){const [cx,cy]=stack.pop();if(cx<0||cy<0||cx>=canvas.width||cy>=canvas.height)continue;const k=(cy*canvas.width+cx)*4;if(!match(k))continue;d[k]=c[0];d[k+1]=c[1];d[k+2]=c[2];d[k+3]=255;stack.push([cx+1,cy],[cx-1,cy],[cx,cy+1],[cx,cy-1])}
+ ctx.putImageData(img,0,0);
+}
+const colorsBox=document.getElementById("colors");
+colors.forEach((color,i)=>{const b=document.createElement("button");b.className="color"+(i===0?" active":"");b.style.background=color;b.addEventListener("click",()=>{selectedColor=color;document.querySelectorAll(".color").forEach(x=>x.classList.remove("active"));b.classList.add("active");setTool("brush")});colorsBox.appendChild(b)});
+function setTool(t){tool=t;document.querySelectorAll(".tool").forEach(x=>x.classList.remove("active"));document.getElementById(t==="brush"?"brushBtn":t==="eraser"?"eraserBtn":"fillBtn").classList.add("active")}
+brushBtn.onclick=()=>setTool("brush");eraserBtn.onclick=()=>setTool("eraser");fillBtn.onclick=()=>setTool("fill");
+size.oninput=e=>{brushSize=+e.target.value;sizeValue.textContent=brushSize};
+
+function fireworks(){
+ const symbols=["🎉","✨","⭐","🌈","🎊","💫","🎈"];
+ for(let b=0;b<8;b++){const x=10+Math.random()*80,y=12+Math.random()*55;
+  for(let i=0;i<14;i++){const s=document.createElement("div");s.className="spark";s.textContent=symbols[Math.floor(Math.random()*symbols.length)];s.style.left=x+"vw";s.style.top=y+"vh";s.style.setProperty("--dx",Math.random()*260-130+"px");s.style.setProperty("--dy",Math.random()*260-130+"px");document.body.appendChild(s);setTimeout(()=>s.remove(),1700)}
+ }
+}
+doneBtn.onclick=()=>{
+ const m=["WOW! Your imagination is awesome! 🌟","Amazing! You made something super colorful! 🎨","Great job! This looks totally fantastic! 🌈","I LOVE IT! Your creativity is shining! ✨","WOW! What a cool masterpiece! 🖼️"];
+ feedback.textContent=m[Math.floor(Math.random()*m.length)];feedback.classList.add("show");redrawBtn.style.display="inline-block";doneBtn.disabled=true;fireworks()
+};
+redrawBtn.onclick=()=>{const r=canvas.getBoundingClientRect(),dpr=Math.max(1,devicePixelRatio||1);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle="#fff";ctx.fillRect(0,0,r.width,r.height);feedback.classList.remove("show");redrawBtn.style.display="none";doneBtn.disabled=false;setTool("brush")};
+window.addEventListener("resize",resizeCanvas);requestAnimationFrame(resizeCanvas);
+</script>
+</body>
+</html>
