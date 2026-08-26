@@ -1,0 +1,2933 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🐹 두더지 잡기 게임</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family:
+        Arial,
+        "Noto Sans KR",
+        sans-serif;
+
+    background:
+        linear-gradient(
+            #8ed6ff 0%,
+            #d9f5ff 55%,
+            #78c850 55%,
+            #4b9b35 100%
+        );
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.game {
+    width: 100%;
+    max-width: 900px;
+
+    height: 100vh;
+    max-height: 800px;
+
+    position: relative;
+
+    padding: 15px;
+
+    text-align: center;
+}
+
+
+/* =========================
+   제목
+========================= */
+
+h1 {
+    margin: 5px 0 3px;
+
+    font-size: 34px;
+
+    color: white;
+
+    text-shadow:
+        3px 3px 0 #315b27;
+}
+
+.subtitle {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+
+/* =========================
+   상단 버튼
+========================= */
+
+.top-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 8px;
+}
+
+.difficulty {
+    display: flex;
+    justify-content: center;
+
+    gap: 7px;
+}
+
+.difficulty button,
+.control-btn {
+
+    border: 3px solid #315b27;
+
+    border-radius: 12px;
+
+    padding: 8px 14px;
+
+    background: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.difficulty button.active {
+    background: #ffd84d;
+}
+
+.control-btn.start {
+    background: #78d35a;
+}
+
+.control-btn.pause {
+    background: #ffb0b0;
+}
+
+.control-btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   정보
+========================= */
+
+.info {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-bottom: 8px;
+
+    flex-wrap: wrap;
+}
+
+.info-box {
+
+    background: white;
+
+    border: 3px solid #315b27;
+
+    border-radius: 12px;
+
+    padding: 5px 13px;
+
+    min-width: 105px;
+
+    font-weight: bold;
+}
+
+#time {
+    color: #e53935;
+    font-size: 19px;
+}
+
+#score {
+    color: #1976d2;
+    font-size: 19px;
+}
+
+
+/* =========================
+   게임판
+========================= */
+
+.field {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 500px;
+
+    background:
+        radial-gradient(
+            ellipse,
+            #9c6638 0%,
+            #704522 65%,
+            #573719 100%
+        );
+
+    border: 8px solid #3e2a1a;
+
+    border-radius: 30px;
+
+    overflow: hidden;
+
+    box-shadow:
+        inset 0 0 30px
+        rgba(0,0,0,.4);
+}
+
+.field::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+
+        radial-gradient(
+            ellipse at 10% 20%,
+            #5aa83c 0 6px,
+            transparent 7px
+        ),
+
+        radial-gradient(
+            ellipse at 80% 30%,
+            #5aa83c 0 5px,
+            transparent 6px
+        ),
+
+        radial-gradient(
+            ellipse at 30% 80%,
+            #5aa83c 0 5px,
+            transparent 6px
+        );
+
+    opacity: .8;
+}
+
+
+/* =========================
+   구멍
+========================= */
+
+.hole {
+
+    position: absolute;
+
+    width: 125px;
+    height: 65px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            ellipse,
+            #17110d,
+            #332015 65%,
+            #53341d
+        );
+
+    box-shadow:
+        0 8px 0
+        rgba(0,0,0,.25);
+}
+
+
+/* =========================
+   두더지
+========================= */
+
+.mole {
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom: -8px;
+
+    transform:
+        translateX(-50%);
+
+    width: 82px;
+    height: 90px;
+
+    border-radius:
+        45px 45px 25px 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #9a6848,
+            #563526
+        );
+
+    border: 4px solid #3a2419;
+
+    cursor: pointer;
+
+    z-index: 5;
+
+    animation:
+        popUp
+        .18s
+        ease-out;
+}
+
+.mole::before {
+
+    content: "👀";
+
+    position: absolute;
+
+    left: 13px;
+    top: 20px;
+
+    font-size: 32px;
+}
+
+.mole::after {
+
+    content: "🐽";
+
+    position: absolute;
+
+    left: 22px;
+    top: 48px;
+
+    font-size: 26px;
+}
+
+
+/* 못생긴 두더지 */
+
+.mole.bad {
+
+    background:
+        linear-gradient(
+            135deg,
+            #5d5d63,
+            #24242a
+        );
+
+    border-color: #111;
+
+    box-shadow:
+        0 0 15px
+        rgba(190,100,255,.8);
+}
+
+.mole.bad::before {
+
+    content: "😵";
+
+    left: 12px;
+    top: 17px;
+}
+
+.mole.bad::after {
+
+    content: "👃";
+
+    left: 25px;
+    top: 50px;
+}
+
+
+/* =========================
+   애니메이션
+========================= */
+
+@keyframes popUp {
+
+    from {
+
+        transform:
+            translateX(-50%)
+            translateY(70px);
+
+        opacity: 0;
+    }
+
+    to {
+
+        transform:
+            translateX(-50%)
+            translateY(0);
+
+        opacity: 1;
+    }
+}
+
+.mole.hit {
+
+    animation:
+        hit
+        .3s
+        ease-out
+        forwards;
+}
+
+@keyframes hit {
+
+    0% {
+
+        transform:
+            translateX(-50%)
+            scale(1);
+    }
+
+    30% {
+
+        transform:
+            translateX(-50%)
+            scale(1.25)
+            rotate(-12deg);
+    }
+
+    55% {
+
+        transform:
+            translateX(-50%)
+            scale(.9)
+            rotate(12deg);
+    }
+
+    100% {
+
+        transform:
+            translateX(-50%)
+            translateY(80px)
+            scale(.5);
+
+        opacity: 0;
+    }
+}
+
+
+/* =========================
+   아야 말풍선
+========================= */
+
+.ouch {
+
+    position: absolute;
+
+    z-index: 30;
+
+    background: white;
+
+    border: 4px solid #49334f;
+
+    border-radius: 18px;
+
+    padding: 7px 12px;
+
+    font-size: 22px;
+
+    font-weight: 900;
+
+    color: #e44b61;
+
+    pointer-events: none;
+
+    animation:
+        ouch
+        .65s
+        ease-out
+        forwards;
+}
+
+@keyframes ouch {
+
+    0% {
+
+        transform:
+            translate(-50%,10px)
+            scale(.5);
+
+        opacity: 0;
+    }
+
+    25% {
+
+        transform:
+            translate(-50%,-15px)
+            scale(1.1);
+
+        opacity: 1;
+    }
+
+    100% {
+
+        transform:
+            translate(-50%,-65px)
+            scale(1);
+
+        opacity: 0;
+    }
+}
+
+
+/* =========================
+   점수 팝업
+========================= */
+
+.score-pop {
+
+    position: absolute;
+
+    color: white;
+
+    font-size: 28px;
+
+    font-weight: 900;
+
+    text-shadow:
+        2px 2px 0 #333;
+
+    pointer-events: none;
+
+    z-index: 20;
+
+    animation:
+        scoreUp
+        .7s
+        forwards;
+}
+
+@keyframes scoreUp {
+
+    from {
+
+        transform:
+            translateY(0)
+            scale(.8);
+
+        opacity: 1;
+    }
+
+    to {
+
+        transform:
+            translateY(-70px)
+            scale(1.2);
+
+        opacity: 0;
+    }
+}
+
+
+/* =========================
+   일시정지
+========================= */
+
+#pauseScreen {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        rgba(30,20,30,.62);
+
+    display: none;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 80;
+
+    color: white;
+}
+
+.pause-message {
+
+    background: white;
+
+    color: #49334f;
+
+    border: 6px solid #49334f;
+
+    border-radius: 22px;
+
+    padding: 25px 40px;
+
+    font-size: 30px;
+
+    font-weight: 900;
+}
+
+
+/* =========================
+   결과
+========================= */
+
+#result {
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(20,30,20,.7);
+
+    display: none;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 100;
+}
+
+.result-box {
+
+    width:
+        min(500px,90vw);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: white;
+
+    border: 7px solid #315b27;
+
+    border-radius: 25px;
+
+    padding: 25px;
+
+    text-align: center;
+
+    box-shadow:
+        0 12px 0 #1c3217;
+
+    animation:
+        resultBoom
+        .5s
+        ease-out;
+}
+
+@keyframes resultBoom {
+
+    0% {
+
+        transform:
+            scale(.1)
+            rotate(-8deg);
+
+        opacity: 0;
+    }
+
+    70% {
+
+        transform:
+            scale(1.1)
+            rotate(3deg);
+    }
+
+    100% {
+
+        transform:
+            scale(1)
+            rotate(0);
+    }
+}
+
+.result-title {
+
+    font-size: 38px;
+
+    font-weight: 900;
+
+    margin-bottom: 12px;
+}
+
+.result-stats {
+
+    font-size: 20px;
+
+    line-height: 1.8;
+
+    margin-bottom: 15px;
+}
+
+
+/* =========================
+   순위표
+========================= */
+
+.rank-title {
+
+    font-size: 25px;
+
+    font-weight: 900;
+
+    margin-top: 15px;
+
+    margin-bottom: 8px;
+
+    color: #315b27;
+}
+
+.rank-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-bottom: 15px;
+
+    font-size: 16px;
+}
+
+.rank-table th {
+
+    background: #315b27;
+
+    color: white;
+
+    padding: 7px;
+}
+
+.rank-table td {
+
+    border-bottom:
+        2px solid #ddd;
+
+    padding: 7px;
+
+    font-weight: bold;
+}
+
+.rank-table tr:nth-child(2) td {
+    background: #fff8d8;
+}
+
+.rank-table tr:nth-child(3) td {
+    background: #f2f2f2;
+}
+
+.rank-table tr:nth-child(4) td {
+    background: #fff0df;
+}
+
+
+/* 이름 입력 */
+
+.name-area {
+
+    display: none;
+
+    margin: 10px 0;
+
+}
+
+.name-area input {
+
+    width: 170px;
+
+    padding: 9px;
+
+    border:
+        3px solid #315b27;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+
+    text-align: center;
+}
+
+.name-area button {
+
+    padding: 9px 13px;
+
+    border:
+        3px solid #315b27;
+
+    border-radius: 10px;
+
+    background: #ffd84d;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* 버튼 */
+
+#restart {
+
+    padding: 11px 20px;
+
+    background: #78d35a;
+
+    border: 4px solid #315b27;
+
+    border-radius: 14px;
+
+    font-weight: 900;
+
+    font-size: 17px;
+
+    cursor: pointer;
+}
+
+#clearRecords {
+
+    padding: 9px 14px;
+
+    margin-left: 5px;
+
+    background: #eee;
+
+    border: 3px solid #777;
+
+    border-radius: 10px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   컨페티
+========================= */
+
+.confetti {
+
+    position: fixed;
+
+    top: -20px;
+
+    width: 10px;
+
+    height: 18px;
+
+    z-index: 200;
+
+    pointer-events: none;
+
+    animation:
+        confettiFall
+        linear
+        forwards;
+}
+
+@keyframes confettiFall {
+
+    from {
+
+        transform:
+            translateY(-20px)
+            rotate(0);
+    }
+
+    to {
+
+        transform:
+            translateY(110vh)
+            rotate(720deg);
+
+        opacity: 0;
+    }
+}
+
+
+/* =========================
+   모바일
+========================= */
+
+@media(max-width:600px){
+
+    h1 {
+        font-size: 26px;
+    }
+
+    .field {
+
+        height: 55vh;
+
+        min-height: 350px;
+    }
+
+    .hole {
+
+        width: 95px;
+
+        height: 50px;
+    }
+
+    .mole {
+
+        width: 65px;
+
+        height: 72px;
+    }
+
+    .mole::before {
+
+        font-size: 25px;
+
+        left: 9px;
+    }
+
+    .mole::after {
+
+        font-size: 20px;
+
+        left: 19px;
+
+        top: 40px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<div class="game">
+
+
+    <h1>🐹 두더지 잡기!</h1>
+
+
+    <div class="subtitle">
+        나타나는 두더지를 빠르게 잡아보세요!
+    </div>
+
+
+    <!-- 난이도 + 시작/멈춤 -->
+
+    <div class="top-controls">
+
+        <div class="difficulty">
+
+            <button
+                data-level="easy"
+                class="active">
+                🌱 초급
+            </button>
+
+            <button
+                data-level="normal">
+                🌿 중급
+            </button>
+
+            <button
+                data-level="hard">
+                🔥 고급
+            </button>
+
+        </div>
+
+
+        <button
+            id="startButton"
+            class="control-btn start">
+
+            🎮 게임 시작
+
+        </button>
+
+
+        <button
+            id="pauseButton"
+            class="control-btn pause"
+            disabled>
+
+            ⏸️ 멈춤
+
+        </button>
+
+    </div>
+
+
+    <!-- 정보 -->
+
+    <div class="info">
+
+        <div class="info-box">
+
+            ⏱️ 시간
+
+            <div id="time">
+                40
+            </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+            🏆 점수
+
+            <div id="score">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+            🎯 명중률
+
+            <div id="accuracy">
+                0%
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- 게임판 -->
+
+    <div
+        id="field"
+        class="field">
+
+
+        <div
+            class="hole"
+            style="left:5%;top:15%">
+        </div>
+
+
+        <div
+            class="hole"
+            style="left:35%;top:12%">
+        </div>
+
+
+        <div
+            class="hole"
+            style="right:5%;top:15%">
+        </div>
+
+
+        <div
+            class="hole"
+            style="left:18%;top:50%">
+        </div>
+
+
+        <div
+            class="hole"
+            style="left:60%;top:48%">
+        </div>
+
+
+        <div
+            class="hole"
+            style="right:10%;top:55%">
+        </div>
+
+
+        <div
+            class="hole"
+            style="left:40%;bottom:5%">
+        </div>
+
+
+        <!-- 일시정지 -->
+
+        <div id="pauseScreen">
+
+            <div class="pause-message">
+
+                ⏸️ 잠시 멈췄어요!
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- 결과 -->
+
+<div id="result">
+
+
+    <div class="result-box">
+
+
+        <div
+            id="resultTitle"
+            class="result-title">
+        </div>
+
+
+        <div
+            id="resultStats"
+            class="result-stats">
+        </div>
+
+
+        <!-- 기록 입력 -->
+
+        <div
+            id="nameArea"
+            class="name-area">
+
+            <input
+                id="playerName"
+                type="text"
+                maxlength="10"
+                placeholder="이름 입력">
+
+            <button id="saveRecord">
+
+                🏆 기록 저장
+
+            </button>
+
+        </div>
+
+
+        <!-- 순위표 -->
+
+        <div class="rank-title">
+
+            🏆 명예의 전당
+
+        </div>
+
+
+        <table class="rank-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>순위</th>
+
+                    <th>이름</th>
+
+                    <th>점수</th>
+
+                    <th>명중률</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="rankingBody">
+
+            </tbody>
+
+        </table>
+
+
+        <button id="restart">
+
+            🔄 다시하기
+
+        </button>
+
+
+        <button id="clearRecords">
+
+            🗑️ 기록 초기화
+
+        </button>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   게임 설정
+===================================================== */
+
+const GAME_TIME = 40;
+
+
+let difficulty = "easy";
+
+let score = 0;
+
+let totalMoles = 0;
+
+let hitMoles = 0;
+
+let timeLeft = GAME_TIME;
+
+let gameRunning = false;
+
+let gamePaused = false;
+
+let timerInterval = null;
+
+let moleTimer = null;
+
+
+/* =====================================================
+   난이도
+===================================================== */
+
+const levels = {
+
+    easy: {
+
+        interval: 1100,
+
+        duration: 900,
+
+        musicSpeed: 520
+
+    },
+
+    normal: {
+
+        interval: 750,
+
+        duration: 650,
+
+        musicSpeed: 380
+
+    },
+
+    hard: {
+
+        interval: 480,
+
+        duration: 400,
+
+        musicSpeed: 260
+
+    }
+
+};
+
+
+/* =====================================================
+   기록 저장용 KEY
+===================================================== */
+
+const RECORD_KEY =
+    "moleGameTop3";
+
+
+/* =====================================================
+   HTML 요소
+===================================================== */
+
+const field =
+    document.getElementById(
+        "field"
+    );
+
+const scoreElement =
+    document.getElementById(
+        "score"
+    );
+
+const timeElement =
+    document.getElementById(
+        "time"
+    );
+
+const accuracyElement =
+    document.getElementById(
+        "accuracy"
+    );
+
+const result =
+    document.getElementById(
+        "result"
+    );
+
+const resultTitle =
+    document.getElementById(
+        "resultTitle"
+    );
+
+const resultStats =
+    document.getElementById(
+        "resultStats"
+    );
+
+const startButton =
+    document.getElementById(
+        "startButton"
+    );
+
+const pauseButton =
+    document.getElementById(
+        "pauseButton"
+    );
+
+const pauseScreen =
+    document.getElementById(
+        "pauseScreen"
+    );
+
+const rankingBody =
+    document.getElementById(
+        "rankingBody"
+    );
+
+const nameArea =
+    document.getElementById(
+        "nameArea"
+    );
+
+const playerName =
+    document.getElementById(
+        "playerName"
+    );
+
+
+/* =====================================================
+   기록 불러오기
+===================================================== */
+
+function getRecords(){
+
+    const saved =
+        localStorage.getItem(
+            RECORD_KEY
+        );
+
+
+    if(!saved){
+
+        return [];
+
+    }
+
+
+    try{
+
+        return JSON.parse(
+            saved
+        );
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
+   기록 저장
+===================================================== */
+
+function saveRecords(records){
+
+    localStorage.setItem(
+        RECORD_KEY,
+        JSON.stringify(records)
+    );
+
+}
+
+
+/* =====================================================
+   순위표 표시
+===================================================== */
+
+function showRanking(){
+
+    const records =
+        getRecords();
+
+
+    rankingBody.innerHTML =
+        "";
+
+
+    if(records.length === 0){
+
+        rankingBody.innerHTML =
+
+            `
+            <tr>
+                <td colspan="4">
+                    아직 기록이 없어요!
+                </td>
+            </tr>
+            `;
+
+        return;
+
+    }
+
+
+    records
+    .slice(0,3)
+    .forEach(
+        (record,index)=>{
+
+            let medal = "";
+
+            if(index === 0){
+
+                medal = "🥇";
+
+            }
+
+            else if(index === 1){
+
+                medal = "🥈";
+
+            }
+
+            else {
+
+                medal = "🥉";
+
+            }
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML =
+
+                `
+                <td>
+                    ${medal}
+                    ${index + 1}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        record.name
+                    )}
+                </td>
+
+                <td>
+                    ${record.score}
+                </td>
+
+                <td>
+                    ${record.accuracy}%
+                </td>
+                `;
+
+
+            rankingBody.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   HTML 문자 보호
+===================================================== */
+
+function escapeHTML(text){
+
+    return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   기록에 들어갈 수 있는지 확인
+===================================================== */
+
+function isTopThree(newScore){
+
+    const records =
+        getRecords();
+
+
+    /*
+        3개 미만이면 무조건 가능
+    */
+
+    if(records.length < 3){
+
+        return true;
+
+    }
+
+
+    /*
+        현재 3위보다 높으면 가능
+    */
+
+    return newScore >
+        records[records.length - 1].score;
+
+}
+
+
+/* =====================================================
+   기록 저장
+===================================================== */
+
+function addRecord(){
+
+    let name =
+        playerName.value.trim();
+
+
+    if(name === ""){
+
+        name = "익명";
+
+    }
+
+
+    /*
+        기록 데이터
+    */
+
+    const newRecord = {
+
+        name: name,
+
+        score: score,
+
+        accuracy:
+            totalMoles === 0
+            ? 0
+            : Math.round(
+                (
+                    hitMoles /
+                    totalMoles
+                ) * 100
+            ),
+
+        difficulty:
+            difficulty,
+
+        date:
+            new Date().toLocaleDateString()
+
+    };
+
+
+    let records =
+        getRecords();
+
+
+    records.push(
+        newRecord
+    );
+
+
+    /*
+        점수 높은 순으로 정렬
+    */
+
+    records.sort(
+        (a,b)=>
+            b.score -
+            a.score
+    );
+
+
+    /*
+        상위 3개만 저장
+    */
+
+    records =
+        records.slice(0,3);
+
+
+    saveRecords(
+        records
+    );
+
+
+    nameArea.style.display =
+        "none";
+
+
+    playerName.value =
+        "";
+
+
+    showRanking();
+
+}
+
+
+/* =====================================================
+   난이도 선택
+===================================================== */
+
+document
+.querySelectorAll(
+    ".difficulty button"
+)
+.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            function(){
+
+                /*
+                    게임 중에는 변경 불가
+
+                    일시정지 상태에서는
+                    난이도 변경 가능
+                */
+
+                if(
+                    gameRunning &&
+                    !gamePaused
+                ){
+
+                    return;
+
+                }
+
+
+                document
+                .querySelectorAll(
+                    ".difficulty button"
+                )
+                .forEach(
+                    b =>
+                        b.classList
+                         .remove(
+                             "active"
+                         )
+                );
+
+
+                this.classList.add(
+                    "active"
+                );
+
+
+                difficulty =
+                    this.dataset.level;
+
+            }
+        );
+
+    }
+);
+
+
+/* =====================================================
+   오디오
+===================================================== */
+
+let audioContext = null;
+
+let musicTimer = null;
+
+
+function initAudio(){
+
+    if(!audioContext){
+
+        audioContext =
+            new(
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+    }
+
+
+    if(
+        audioContext.state ===
+        "suspended"
+    ){
+
+        audioContext.resume();
+
+    }
+
+}
+
+
+/* =====================================================
+   소리
+===================================================== */
+
+function playTone(
+    frequency,
+    duration,
+    type="square",
+    volume=.04
+){
+
+    if(!audioContext){
+
+        return;
+
+    }
+
+
+    const oscillator =
+        audioContext
+        .createOscillator();
+
+
+    const gain =
+        audioContext
+        .createGain();
+
+
+    oscillator.type =
+        type;
+
+
+    oscillator.frequency.value =
+        frequency;
+
+
+    gain.gain.setValueAtTime(
+        volume,
+        audioContext.currentTime
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+
+        audioContext.currentTime +
+        duration
+    );
+
+
+    oscillator.connect(
+        gain
+    );
+
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    oscillator.start();
+
+
+    oscillator.stop(
+        audioContext.currentTime +
+        duration
+    );
+
+}
+
+
+/* =====================================================
+   잡기 효과음
+===================================================== */
+
+function hitSound(){
+
+    playTone(
+        600,
+        .06,
+        "square",
+        .07
+    );
+
+
+    setTimeout(
+        ()=>{
+
+            playTone(
+                900,
+                .08,
+                "square",
+                .05
+            );
+
+        },
+        60
+    );
+
+}
+
+
+/* =====================================================
+   아야 효과음
+===================================================== */
+
+function ouchSound(){
+
+    playTone(
+        520,
+        .10,
+        "sawtooth",
+        .065
+    );
+
+
+    setTimeout(
+        ()=>{
+
+            playTone(
+                360,
+                .14,
+                "sawtooth",
+                .055
+            );
+
+        },
+        90
+    );
+
+}
+
+
+/* =====================================================
+   특수 두더지
+===================================================== */
+
+function specialSound(){
+
+    playTone(
+        300,
+        .08,
+        "sawtooth",
+        .06
+    );
+
+
+    setTimeout(
+        ()=>{
+
+            playTone(
+                700,
+                .12,
+                "square",
+                .06
+            );
+
+        },
+        80
+    );
+
+}
+
+
+/* =====================================================
+   배경음
+===================================================== */
+
+const melody = [
+
+    523,
+    659,
+    784,
+    659,
+
+    523,
+    784,
+    880,
+    784,
+
+    659,
+    784,
+    988,
+    784
+
+];
+
+
+let melodyIndex = 0;
+
+
+function startMusic(){
+
+    stopMusic();
+
+
+    const speed =
+        levels[difficulty]
+        .musicSpeed;
+
+
+    function playNext(){
+
+        if(
+            !gameRunning ||
+            gamePaused
+        ){
+
+            return;
+
+        }
+
+
+        playTone(
+            melody[melodyIndex],
+            .15,
+            "square",
+            .018
+        );
+
+
+        melodyIndex++;
+
+
+        if(
+            melodyIndex >=
+            melody.length
+        ){
+
+            melodyIndex = 0;
+
+        }
+
+    }
+
+
+    playNext();
+
+
+    musicTimer =
+        setInterval(
+            playNext,
+            speed
+        );
+
+}
+
+
+function stopMusic(){
+
+    if(musicTimer){
+
+        clearInterval(
+            musicTimer
+        );
+
+        musicTimer = null;
+
+    }
+
+}
+
+
+/* =====================================================
+   구멍
+===================================================== */
+
+function getHoles(){
+
+    return Array.from(
+        field.querySelectorAll(
+            ".hole"
+        )
+    );
+
+}
+
+
+/* =====================================================
+   두더지 생성
+===================================================== */
+
+function spawnMole(){
+
+    if(
+        !gameRunning ||
+        gamePaused
+    ){
+
+        return;
+
+    }
+
+
+    const holes =
+        getHoles();
+
+
+    const hole =
+        holes[
+            Math.floor(
+                Math.random()
+                *
+                holes.length
+            )
+        ];
+
+
+    if(
+        hole.querySelector(
+            ".mole"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    const mole =
+        document.createElement(
+            "div"
+        );
+
+
+    mole.className =
+        "mole";
+
+
+    /*
+        15% 확률로
+        못생긴 두더지
+    */
+
+    const isSpecial =
+        Math.random() < .15;
+
+
+    if(isSpecial){
+
+        mole.classList.add(
+            "bad"
+        );
+
+    }
+
+
+    hole.appendChild(
+        mole
+    );
+
+
+    totalMoles++;
+
+
+    updateAccuracy();
+
+
+    mole.addEventListener(
+        "pointerdown",
+        function(event){
+
+            event.preventDefault();
+
+
+            if(
+                !gameRunning ||
+                gamePaused ||
+                mole.classList.contains(
+                    "hit"
+                )
+            ){
+
+                return;
+
+            }
+
+
+            hitMoles++;
+
+
+            const points =
+                isSpecial
+                ? 20
+                : 10;
+
+
+            score += points;
+
+
+            scoreElement.textContent =
+                score;
+
+
+            updateAccuracy();
+
+
+            mole.classList.add(
+                "hit"
+            );
+
+
+            ouchSound();
+
+
+            if(isSpecial){
+
+                specialSound();
+
+            }else{
+
+                hitSound();
+
+            }
+
+
+            showOuch(
+                hole,
+                isSpecial
+            );
+
+
+            showScore(
+                hole,
+                points,
+                isSpecial
+            );
+
+
+            setTimeout(
+                ()=>{
+
+                    mole.remove();
+
+                },
+                300
+            );
+
+        }
+    );
+
+
+    /*
+        일정 시간이 지나면
+        자동으로 내려감
+    */
+
+    setTimeout(
+        ()=>{
+
+            if(
+                mole.parentElement &&
+                !mole.classList.contains(
+                    "hit"
+                )
+            ){
+
+                mole.remove();
+
+            }
+
+        },
+        levels[difficulty].duration
+    );
+
+}
+
+
+/* =====================================================
+   아야 말풍선
+===================================================== */
+
+function showOuch(
+    hole,
+    special
+){
+
+    const bubble =
+        document.createElement(
+            "div"
+        );
+
+
+    bubble.className =
+        "ouch";
+
+
+    bubble.textContent =
+        special
+        ? "아야!! 😵"
+        : "아야! 😭";
+
+
+    bubble.style.left =
+        (
+            hole.offsetLeft +
+            hole.offsetWidth / 2
+        ) + "px";
+
+
+    bubble.style.top =
+        (
+            hole.offsetTop -
+            5
+        ) + "px";
+
+
+    field.appendChild(
+        bubble
+    );
+
+
+    setTimeout(
+        ()=>{
+
+            bubble.remove();
+
+        },
+        650
+    );
+
+}
+
+
+/* =====================================================
+   점수 표시
+===================================================== */
+
+function showScore(
+    hole,
+    points,
+    special
+){
+
+    const pop =
+        document.createElement(
+            "div"
+        );
+
+
+    pop.className =
+        "score-pop";
+
+
+    pop.textContent =
+        special
+        ? `👹 +${points}`
+        : `+${points}`;
+
+
+    pop.style.left =
+        (
+            hole.offsetLeft +
+            hole.offsetWidth / 2 -
+            20
+        ) + "px";
+
+
+    pop.style.top =
+        (
+            hole.offsetTop -
+            20
+        ) + "px";
+
+
+    field.appendChild(
+        pop
+    );
+
+
+    setTimeout(
+        ()=>{
+
+            pop.remove();
+
+        },
+        700
+    );
+
+}
+
+
+/* =====================================================
+   명중률
+===================================================== */
+
+function updateAccuracy(){
+
+    if(
+        totalMoles === 0
+    ){
+
+        accuracyElement.textContent =
+            "0%";
+
+        return;
+
+    }
+
+
+    const accuracy =
+        Math.round(
+            (
+                hitMoles /
+                totalMoles
+            ) * 100
+        );
+
+
+    accuracyElement.textContent =
+        accuracy + "%";
+
+}
+
+
+/* =====================================================
+   타이머
+===================================================== */
+
+function startTimer(){
+
+    timeLeft =
+        GAME_TIME;
+
+
+    timeElement.textContent =
+        timeLeft;
+
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    timerInterval =
+        setInterval(
+            ()=>{
+
+                if(gamePaused){
+
+                    return;
+
+                }
+
+
+                timeLeft--;
+
+
+                timeElement.textContent =
+                    timeLeft;
+
+
+                if(
+                    timeLeft <= 10
+                ){
+
+                    timeElement.style.color =
+                        "#ff0000";
+
+                }
+
+
+                if(
+                    timeLeft <= 0
+                ){
+
+                    endGame();
+
+                }
+
+            },
+            1000
+        );
+
+}
+
+
+/* =====================================================
+   두더지 생성
+===================================================== */
+
+function startMoleSpawner(){
+
+    clearInterval(
+        moleTimer
+    );
+
+
+    spawnMole();
+
+
+    moleTimer =
+        setInterval(
+            ()=>{
+
+                if(!gamePaused){
+
+                    spawnMole();
+
+                }
+
+            },
+            levels[difficulty].interval
+        );
+
+}
+
+
+/* =====================================================
+   게임 시작
+===================================================== */
+
+function startGame(){
+
+    initAudio();
+
+
+    gameRunning =
+        true;
+
+
+    gamePaused =
+        false;
+
+
+    score =
+        0;
+
+
+    totalMoles =
+        0;
+
+
+    hitMoles =
+        0;
+
+
+    timeLeft =
+        GAME_TIME;
+
+
+    scoreElement.textContent =
+        "0";
+
+
+    accuracyElement.textContent =
+        "0%";
+
+
+    timeElement.textContent =
+        GAME_TIME;
+
+
+    timeElement.style.color =
+        "#e53935";
+
+
+    field
+    .querySelectorAll(
+        ".mole,.ouch,.score-pop"
+    )
+    .forEach(
+        el =>
+            el.remove()
+    );
+
+
+    pauseScreen.style.display =
+        "none";
+
+
+    startButton.textContent =
+        "🎮 게임 진행 중";
+
+
+    pauseButton.textContent =
+        "⏸️ 멈춤";
+
+
+    pauseButton.disabled =
+        false;
+
+
+    startMusic();
+
+
+    startTimer();
+
+
+    startMoleSpawner();
+
+}
+
+
+/* =====================================================
+   일시정지
+===================================================== */
+
+function togglePause(){
+
+    if(!gameRunning){
+
+        return;
+
+    }
+
+
+    gamePaused =
+        !gamePaused;
+
+
+    if(gamePaused){
+
+        pauseScreen.style.display =
+            "flex";
+
+
+        pauseButton.textContent =
+            "▶️ 계속하기";
+
+
+        stopMusic();
+
+    }
+
+    else{
+
+        pauseScreen.style.display =
+            "none";
+
+
+        pauseButton.textContent =
+            "⏸️ 멈춤";
+
+
+        startMusic();
+
+    }
+
+}
+
+
+/* =====================================================
+   게임 종료
+===================================================== */
+
+function endGame(){
+
+    gameRunning =
+        false;
+
+
+    gamePaused =
+        false;
+
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    clearInterval(
+        moleTimer
+    );
+
+
+    stopMusic();
+
+
+    pauseButton.disabled =
+        true;
+
+
+    pauseScreen.style.display =
+        "none";
+
+
+    field
+    .querySelectorAll(
+        ".mole,.ouch,.score-pop"
+    )
+    .forEach(
+        el =>
+            el.remove()
+    );
+
+
+    const accuracy =
+        totalMoles === 0
+        ? 0
+        : Math.round(
+            (
+                hitMoles /
+                totalMoles
+            ) * 100
+        );
+
+
+    /*
+        결과 메시지
+    */
+
+    if(
+        accuracy > 95
+    ){
+
+        resultTitle.textContent =
+            "🌟 매우 잘함! 🌟";
+
+
+        createConfetti();
+
+    }
+
+    else if(
+        accuracy >= 70
+    ){
+
+        resultTitle.textContent =
+            "👍 잘했네~";
+
+    }
+
+    else{
+
+        resultTitle.textContent =
+            "📚 더 연습하시오!";
+
+    }
+
+
+    resultStats.innerHTML =
+
+        `
+        🏆 점수 :
+        <strong>${score}점</strong>
+
+        <br>
+
+        🐹 잡은 두더지 :
+        <strong>${hitMoles}마리</strong>
+
+        <br>
+
+        🎯 명중률 :
+        <strong>${accuracy}%</strong>
+        `;
+
+
+    /*
+        기존 기록 표시
+    */
+
+    showRanking();
+
+
+    /*
+        TOP 3에 들어갈 경우
+        이름 입력창 표시
+    */
+
+    if(
+        isTopThree(score)
+    ){
+
+        nameArea.style.display =
+            "block";
+
+        playerName.value =
+            "";
+
+        setTimeout(
+            ()=>{
+                playerName.focus();
+            },
+            200
+        );
+
+    }
+
+    else{
+
+        nameArea.style.display =
+            "none";
+
+    }
+
+
+    result.style.display =
+        "flex";
+
+
+    startButton.textContent =
+        "🎮 게임 시작";
+
+}
+
+
+/* =====================================================
+   기록 저장 버튼
+===================================================== */
+
+document
+.getElementById(
+    "saveRecord"
+)
+.addEventListener(
+    "click",
+    addRecord
+);
+
+
+/* 엔터키로 기록 저장 */
+
+playerName.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key ===
+            "Enter"
+        ){
+
+            addRecord();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   기록 초기화
+===================================================== */
+
+document
+.getElementById(
+    "clearRecords"
+)
+.addEventListener(
+    "click",
+    function(){
+
+        const confirmDelete =
+            confirm(
+                "정말 모든 기록을 삭제할까요?"
+            );
+
+
+        if(
+            confirmDelete
+        ){
+
+            localStorage.removeItem(
+                RECORD_KEY
+            );
+
+
+            showRanking();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   다시하기
+===================================================== */
+
+document
+.getElementById(
+    "restart"
+)
+.addEventListener(
+    "click",
+    function(){
+
+        result.style.display =
+            "none";
+
+
+        startGame();
+
+    }
+);
+
+
+/* =====================================================
+   시작
+===================================================== */
+
+startButton.addEventListener(
+    "click",
+    function(){
+
+        if(gameRunning){
+
+            return;
+
+        }
+
+
+        startGame();
+
+    }
+);
+
+
+/* =====================================================
+   멈춤
+===================================================== */
+
+pauseButton.addEventListener(
+    "click",
+    togglePause
+);
+
+
+/* =====================================================
+   컨페티
+===================================================== */
+
+function createConfetti(){
+
+    const colors = [
+
+        "#ff595e",
+        "#ffca3a",
+        "#8ac926",
+        "#1982c4",
+        "#6a4c93",
+        "#ff70a6"
+
+    ];
+
+
+    for(
+        let i = 0;
+        i < 150;
+        i++
+    ){
+
+        const confetti =
+            document.createElement(
+                "div"
+            );
+
+
+        confetti.className =
+            "confetti";
+
+
+        confetti.style.left =
+            Math.random()
+            * 100
+            +
+            "vw";
+
+
+        confetti.style.background =
+            colors[
+                Math.floor(
+                    Math.random()
+                    *
+                    colors.length
+                )
+            ];
+
+
+        confetti.style.width =
+            (
+                6 +
+                Math.random() * 8
+            )
+            +
+            "px";
+
+
+        confetti.style.height =
+            (
+                8 +
+                Math.random() * 12
+            )
+            +
+            "px";
+
+
+        confetti.style.animationDuration =
+            (
+                1.5 +
+                Math.random() * 2
+            )
+            +
+            "s";
+
+
+        document.body.appendChild(
+            confetti
+        );
+
+
+        setTimeout(
+            ()=>{
+                confetti.remove();
+            },
+            4000
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   처음 화면에서도 기존 기록 표시 가능
+===================================================== */
+
+showRanking();
+
+</script>
+
+</body>
+</html>
