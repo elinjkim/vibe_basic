@@ -1,0 +1,1846 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🧩 랜덤 미로 탈출</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #51457a,
+            #17152b 75%
+        );
+
+    font-family:
+        Arial,
+        "Noto Sans KR",
+        sans-serif;
+
+    color: white;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================
+   게임 전체
+========================= */
+
+.game {
+    width: 100%;
+    max-width: 700px;
+
+    padding: 18px;
+
+    text-align: center;
+}
+
+h1 {
+    margin: 5px 0;
+
+    font-size: 30px;
+
+    text-shadow:
+        3px 3px 0 #000;
+}
+
+.subtitle {
+    margin-bottom: 10px;
+
+    color: #ddd;
+}
+
+
+/* =========================
+   상단 정보
+========================= */
+
+.status {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    margin: 12px 0;
+}
+
+.info-box {
+    min-width: 110px;
+
+    padding: 8px 12px;
+
+    background: #24213c;
+
+    border: 2px solid #514b72;
+
+    border-radius: 10px;
+
+    font-weight: bold;
+}
+
+#timer {
+    color: #ffdd57;
+
+    font-size: 20px;
+}
+
+
+/* =========================
+   게임 영역
+========================= */
+
+.game-area {
+    position: relative;
+
+    display: inline-block;
+}
+
+
+/* =========================
+   미로
+========================= */
+
+#maze {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(21, 28px);
+
+    grid-template-rows:
+        repeat(21, 28px);
+
+    gap: 2px;
+
+    padding: 8px;
+
+    background: #0d0d18;
+
+    border: 4px solid #000;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 8px 0 #000,
+        0 0 30px rgba(0,0,0,0.5);
+}
+
+
+.cell {
+
+    width: 28px;
+    height: 28px;
+
+    background: #fff4d6;
+
+    border-radius: 3px;
+}
+
+
+/* 벽 */
+
+.wall {
+
+    background:
+        linear-gradient(
+            135deg,
+            #40364f,
+            #241e2e
+        );
+
+    box-shadow:
+        inset 2px 2px 0
+        rgba(255,255,255,0.08);
+}
+
+
+/* 플레이어 */
+
+.player {
+
+    position: relative;
+
+    background: #5ec8ff;
+
+    box-shadow:
+        inset 0 0 0 3px #2185b8;
+}
+
+.player::after {
+
+    content: "😺";
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 21px;
+}
+
+
+/* 출구 */
+
+.exit {
+
+    position: relative;
+
+    background: #79e36f;
+
+    animation:
+        exitGlow
+        0.8s
+        infinite
+        alternate;
+}
+
+.exit::after {
+
+    content: "🚪";
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 20px;
+}
+
+
+@keyframes exitGlow {
+
+    from {
+        box-shadow:
+            0 0 2px #79e36f;
+    }
+
+    to {
+        box-shadow:
+            0 0 15px #79e36f;
+    }
+}
+
+
+/* =========================
+   아야 말풍선
+========================= */
+
+#ouch {
+
+    position: absolute;
+
+    display: none;
+
+    z-index: 10;
+
+    padding: 7px 12px;
+
+    background: white;
+
+    color: #222;
+
+    font-weight: bold;
+
+    font-size: 18px;
+
+    border: 3px solid #222;
+
+    border-radius: 14px;
+
+    white-space: nowrap;
+
+    transform:
+        translate(-50%, -115%);
+
+    animation:
+        ouchAnimation
+        0.8s
+        ease-out;
+}
+
+
+#ouch::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom: -10px;
+
+    transform:
+        translateX(-50%);
+
+    border-left:
+        8px solid transparent;
+
+    border-right:
+        8px solid transparent;
+
+    border-top:
+        10px solid #222;
+}
+
+
+@keyframes ouchAnimation {
+
+    0% {
+        opacity: 0;
+
+        transform:
+            translate(-50%, -80%)
+            scale(0.7);
+    }
+
+    25% {
+        opacity: 1;
+
+        transform:
+            translate(-50%, -115%)
+            scale(1.1);
+    }
+
+    70% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate(-50%, -145%)
+            scale(1);
+    }
+}
+
+
+/* =========================
+   메시지
+========================= */
+
+#message {
+
+    min-height: 35px;
+
+    margin-top: 14px;
+
+    font-size: 21px;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   버튼
+========================= */
+
+button {
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 10px 18px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    background: #ffcc4d;
+
+    color: #332500;
+
+    box-shadow:
+        0 4px 0 #b88a15;
+}
+
+button:active {
+
+    transform:
+        translateY(3px);
+
+    box-shadow:
+        0 1px 0 #b88a15;
+}
+
+
+#startButton {
+
+    margin-bottom: 10px;
+
+    font-size: 18px;
+
+    background: #ff7eb6;
+
+    color: white;
+
+    box-shadow:
+        0 4px 0 #b33f75;
+}
+
+
+/* =========================
+   방향키
+========================= */
+
+.controls {
+
+    margin-top: 18px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 60px);
+
+    gap: 7px;
+
+    justify-content: center;
+}
+
+
+.controls button {
+
+    width: 60px;
+    height: 50px;
+
+    padding: 0;
+
+    font-size: 23px;
+}
+
+
+.empty {
+    visibility: hidden;
+}
+
+
+/* =========================
+   팝업
+========================= */
+
+#popup {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 100;
+}
+
+
+.popup-box {
+
+    position: relative;
+
+    padding: 35px 45px;
+
+    background: white;
+
+    color: #25213b;
+
+    border: 6px solid #25213b;
+
+    border-radius: 25px;
+
+    font-size: 32px;
+
+    font-weight: 900;
+
+    text-align: center;
+
+    box-shadow:
+        0 12px 0 #000;
+
+    animation:
+        popupBoom
+        0.45s
+        ease-out;
+}
+
+
+.popup-sub {
+
+    margin-top: 8px;
+
+    font-size: 16px;
+
+    font-weight: normal;
+}
+
+
+@keyframes popupBoom {
+
+    0% {
+
+        transform:
+            scale(0.1)
+            rotate(-10deg);
+
+        opacity: 0;
+    }
+
+    60% {
+
+        transform:
+            scale(1.15)
+            rotate(4deg);
+
+        opacity: 1;
+    }
+
+    100% {
+
+        transform:
+            scale(1)
+            rotate(0);
+    }
+}
+
+
+/* =========================
+   컨페티
+========================= */
+
+.confetti {
+
+    position: fixed;
+
+    top: -20px;
+
+    width: 10px;
+    height: 16px;
+
+    z-index: 200;
+
+    animation:
+        confettiFall
+        linear
+        forwards;
+
+    pointer-events: none;
+}
+
+
+@keyframes confettiFall {
+
+    0% {
+
+        transform:
+            translateY(-20px)
+            rotate(0deg);
+
+        opacity: 1;
+    }
+
+    100% {
+
+        transform:
+            translateY(110vh)
+            rotate(720deg);
+
+        opacity: 0;
+    }
+}
+
+
+/* =========================
+   모바일
+========================= */
+
+@media (max-width: 650px) {
+
+    #maze {
+
+        grid-template-columns:
+            repeat(21, 18px);
+
+        grid-template-rows:
+            repeat(21, 18px);
+
+        gap: 1px;
+
+        padding: 5px;
+    }
+
+    .cell {
+
+        width: 18px;
+        height: 18px;
+    }
+
+    .player::after {
+
+        font-size: 13px;
+    }
+
+    .exit::after {
+
+        font-size: 13px;
+    }
+
+    h1 {
+
+        font-size: 25px;
+    }
+
+    .popup-box {
+
+        padding: 28px 25px;
+
+        font-size: 25px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<div class="game">
+
+    <h1>🧩 꼬불꼬불 미로 탈출</h1>
+
+    <div class="subtitle">
+        😺 매번 새로운 미로가 나타나요!
+    </div>
+
+
+    <!-- 상태 -->
+
+    <div class="status">
+
+        <div class="info-box">
+
+            ⏱️ 남은 시간
+
+            <div id="timer">
+                60
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <button id="startButton">
+        🎮 새 미로 시작!
+    </button>
+
+
+    <div class="game-area">
+
+        <div id="maze"></div>
+
+        <div id="ouch">
+            아야! 😵
+        </div>
+
+    </div>
+
+
+    <div id="message">
+        새 미로를 시작해보세요!
+    </div>
+
+
+    <button onclick="newGame()">
+        🔄 새 미로
+    </button>
+
+
+    <!-- 방향키 -->
+
+    <div class="controls">
+
+        <button class="empty"></button>
+
+        <button onclick="movePlayer(0,-1)">
+            ⬆️
+        </button>
+
+        <button class="empty"></button>
+
+
+        <button onclick="movePlayer(-1,0)">
+            ⬅️
+        </button>
+
+        <button onclick="movePlayer(0,1)">
+            ⬇️
+        </button>
+
+        <button onclick="movePlayer(1,0)">
+            ➡️
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- 팝업 -->
+
+<div id="popup">
+
+    <div class="popup-box">
+
+        <div id="popupText"></div>
+
+        <div class="popup-sub">
+            아래 버튼을 눌러 다시 도전해보세요!
+        </div>
+
+        <br>
+
+        <button onclick="closePopupAndRestart()">
+            🔄 다시하기
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   기본 설정
+===================================================== */
+
+const SIZE = 21;
+
+const TIME_LIMIT = 60;
+
+
+let maze = [];
+
+let player = {
+    x: 1,
+    y: 1
+};
+
+let exit = {
+    x: SIZE - 2,
+    y: SIZE - 2
+};
+
+
+let gameStarted = false;
+
+let gameClear = false;
+
+let timeLeft = TIME_LIMIT;
+
+let timerInterval = null;
+
+
+/* =====================================================
+   화면 요소
+===================================================== */
+
+const mazeElement =
+    document.getElementById("maze");
+
+const messageElement =
+    document.getElementById("message");
+
+const timerElement =
+    document.getElementById("timer");
+
+const popup =
+    document.getElementById("popup");
+
+const popupText =
+    document.getElementById("popupText");
+
+const ouch =
+    document.getElementById("ouch");
+
+
+/* =====================================================
+   랜덤 미로 생성
+===================================================== */
+
+/*
+
+    DFS 미로 생성 알고리즘
+
+    매번 새로운 길을 만들어줍니다.
+
+*/
+
+function generateMaze() {
+
+    maze = [];
+
+
+    /* 전부 벽으로 만들기 */
+
+    for (let y = 0; y < SIZE; y++) {
+
+        maze[y] = [];
+
+        for (let x = 0; x < SIZE; x++) {
+
+            maze[y][x] = 1;
+
+        }
+    }
+
+
+    /* 시작점 */
+
+    const startX = 1;
+
+    const startY = 1;
+
+
+    maze[startY][startX] = 0;
+
+
+    const stack = [
+        [startX, startY]
+    ];
+
+
+    const directions = [
+        [0,-2],
+        [0,2],
+        [-2,0],
+        [2,0]
+    ];
+
+
+    while (stack.length > 0) {
+
+        const current =
+            stack[
+                stack.length - 1
+            ];
+
+
+        const x = current[0];
+
+        const y = current[1];
+
+
+        /* 이동 가능한 방향 */
+
+        const possible = [];
+
+
+        for (
+            const direction
+            of directions
+        ) {
+
+            const nx =
+                x + direction[0];
+
+            const ny =
+                y + direction[1];
+
+
+            if (
+                nx > 0 &&
+                nx < SIZE - 1 &&
+                ny > 0 &&
+                ny < SIZE - 1 &&
+                maze[ny][nx] === 1
+            ) {
+
+                possible.push(
+                    direction
+                );
+
+            }
+        }
+
+
+        /* 갈 곳이 없으면 뒤로 */
+
+        if (
+            possible.length === 0
+        ) {
+
+            stack.pop();
+
+            continue;
+        }
+
+
+        /* 랜덤 방향 */
+
+        const direction =
+            possible[
+                Math.floor(
+                    Math.random()
+                    *
+                    possible.length
+                )
+            ];
+
+
+        const nx =
+            x + direction[0];
+
+        const ny =
+            y + direction[1];
+
+
+        /* 벽을 뚫어서 길 연결 */
+
+        maze[
+            y + direction[1] / 2
+        ][
+            x + direction[0] / 2
+        ] = 0;
+
+
+        maze[ny][nx] = 0;
+
+
+        stack.push([
+            nx,
+            ny
+        ]);
+    }
+
+
+    /*
+        출구를 랜덤하게 선택합니다.
+
+        단, 가장자리 안쪽의 길 중에서
+        출발점과 충분히 떨어진 곳을 찾습니다.
+    */
+
+    const candidates = [];
+
+
+    for (
+        let y = 1;
+        y < SIZE - 1;
+        y += 2
+    ) {
+
+        for (
+            let x = 1;
+            x < SIZE - 1;
+            x += 2
+        ) {
+
+            if (
+                maze[y][x] === 0 &&
+                (
+                    Math.abs(x - 1) +
+                    Math.abs(y - 1)
+                ) > 15
+            ) {
+
+                candidates.push({
+                    x: x,
+                    y: y
+                });
+
+            }
+        }
+    }
+
+
+    exit =
+        candidates[
+            Math.floor(
+                Math.random()
+                *
+                candidates.length
+            )
+        ];
+
+
+    /* 시작 위치 */
+
+    player = {
+        x: startX,
+        y: startY
+    };
+}
+
+
+/* =====================================================
+   미로 그리기
+===================================================== */
+
+function drawMaze() {
+
+    mazeElement.innerHTML = "";
+
+
+    for (
+        let y = 0;
+        y < SIZE;
+        y++
+    ) {
+
+        for (
+            let x = 0;
+            x < SIZE;
+            x++
+        ) {
+
+            const cell =
+                document.createElement("div");
+
+
+            cell.classList.add("cell");
+
+
+            if (
+                maze[y][x] === 1
+            ) {
+
+                cell.classList.add("wall");
+
+            }
+
+
+            if (
+                x === exit.x &&
+                y === exit.y
+            ) {
+
+                cell.classList.add("exit");
+
+            }
+
+
+            if (
+                x === player.x &&
+                y === player.y
+            ) {
+
+                cell.classList.add("player");
+
+            }
+
+
+            mazeElement.appendChild(
+                cell
+            );
+        }
+    }
+}
+
+
+/* =====================================================
+   오디오
+===================================================== */
+
+let audioContext = null;
+
+let musicTimer = null;
+
+let musicPlaying = false;
+
+
+function startAudio() {
+
+    if (!audioContext) {
+
+        audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+    }
+
+
+    if (
+        audioContext.state === "suspended"
+    ) {
+
+        audioContext.resume();
+
+    }
+
+
+    if (!musicPlaying) {
+
+        musicPlaying = true;
+
+        startRetroMusic();
+
+    }
+}
+
+
+function playTone(
+    frequency,
+    duration = 0.08,
+    type = "square",
+    volume = 0.04
+) {
+
+    if (!audioContext) return;
+
+
+    const oscillator =
+        audioContext.createOscillator();
+
+    const gain =
+        audioContext.createGain();
+
+
+    oscillator.type =
+        type;
+
+    oscillator.frequency.value =
+        frequency;
+
+
+    gain.gain.setValueAtTime(
+        volume,
+        audioContext.currentTime
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        audioContext.currentTime
+        +
+        duration
+    );
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    oscillator.start();
+
+    oscillator.stop(
+        audioContext.currentTime
+        +
+        duration
+    );
+}
+
+
+/* 이동 효과음 */
+
+function playMoveSound() {
+
+    playTone(
+        650,
+        0.055,
+        "square",
+        0.045
+    );
+
+    setTimeout(() => {
+
+        playTone(
+            850,
+            0.055,
+            "square",
+            0.035
+        );
+
+    },45);
+}
+
+
+/* 벽 효과음 */
+
+function playWallSound() {
+
+    playTone(
+        180,
+        0.12,
+        "square",
+        0.06
+    );
+
+    setTimeout(() => {
+
+        playTone(
+            100,
+            0.12,
+            "square",
+            0.04
+        );
+
+    },80);
+}
+
+
+/* 성공 효과음 */
+
+function playSuccessSound() {
+
+    const notes = [
+        523,
+        659,
+        784,
+        1046
+    ];
+
+
+    notes.forEach(
+        (note,index) => {
+
+            setTimeout(() => {
+
+                playTone(
+                    note,
+                    0.18,
+                    "square",
+                    0.06
+                );
+
+            },index * 120);
+
+        }
+    );
+}
+
+
+/* 실패 효과음 */
+
+function playFailSound() {
+
+    playTone(
+        350,
+        0.2,
+        "square",
+        0.06
+    );
+
+
+    setTimeout(() => {
+
+        playTone(
+            220,
+            0.3,
+            "square",
+            0.05
+        );
+
+    },180);
+}
+
+
+/* =====================================================
+   레트로 음악
+===================================================== */
+
+const melody = [
+
+    523,659,784,659,
+    523,659,880,784,
+
+    659,784,988,784,
+    659,523,440,523,
+
+    523,659,784,1046,
+    988,784,659,523,
+
+    440,523,659,784,
+    659,523,440,392
+];
+
+
+let melodyIndex = 0;
+
+
+function startRetroMusic() {
+
+    if (musicTimer) return;
+
+
+    function playNextNote() {
+
+        if (!audioContext) return;
+
+
+        playTone(
+            melody[melodyIndex],
+            0.14,
+            "square",
+            0.018
+        );
+
+
+        melodyIndex++;
+
+
+        if (
+            melodyIndex >=
+            melody.length
+        ) {
+
+            melodyIndex = 0;
+
+        }
+    }
+
+
+    playNextNote();
+
+
+    musicTimer =
+        setInterval(
+            playNextNote,
+            170
+        );
+}
+
+
+/* =====================================================
+   아야 말풍선
+===================================================== */
+
+let ouchTimer;
+
+
+function showOuch() {
+
+    const cellSize =
+        window.innerWidth <= 650
+            ? 19
+            : 30;
+
+
+    ouch.style.left =
+        (
+            (player.x + 0.5)
+            *
+            cellSize
+            +
+            5
+        )
+        + "px";
+
+
+    ouch.style.top =
+        (
+            (player.y + 0.1)
+            *
+            cellSize
+            +
+            5
+        )
+        + "px";
+
+
+    ouch.style.display =
+        "block";
+
+
+    ouch.style.animation =
+        "none";
+
+
+    void ouch.offsetWidth;
+
+
+    ouch.style.animation =
+        "ouchAnimation 0.8s ease-out";
+
+
+    clearTimeout(ouchTimer);
+
+
+    ouchTimer =
+        setTimeout(() => {
+
+            ouch.style.display =
+                "none";
+
+        },800);
+}
+
+
+/* =====================================================
+   플레이어 이동
+===================================================== */
+
+function movePlayer(dx,dy) {
+
+    if (
+        !gameStarted ||
+        gameClear
+    ) {
+        return;
+    }
+
+
+    startAudio();
+
+
+    const newX =
+        player.x + dx;
+
+    const newY =
+        player.y + dy;
+
+
+    /* 벽 */
+
+    if (
+        newX < 0 ||
+        newX >= SIZE ||
+        newY < 0 ||
+        newY >= SIZE ||
+        maze[newY][newX] === 1
+    ) {
+
+        playWallSound();
+
+        showOuch();
+
+        return;
+    }
+
+
+    /* 이동 */
+
+    player.x = newX;
+
+    player.y = newY;
+
+
+    playMoveSound();
+
+
+    drawMaze();
+
+
+    /* 출구 */
+
+    if (
+        player.x === exit.x &&
+        player.y === exit.y
+    ) {
+
+        successGame();
+
+    }
+}
+
+
+/* =====================================================
+   키보드
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            [
+                "ArrowUp",
+                "ArrowDown",
+                "ArrowLeft",
+                "ArrowRight"
+            ].includes(event.key)
+        ) {
+
+            event.preventDefault();
+
+        }
+
+
+        if (
+            event.key === "ArrowUp"
+        ) {
+
+            movePlayer(0,-1);
+
+        }
+
+        else if (
+            event.key === "ArrowDown"
+        ) {
+
+            movePlayer(0,1);
+
+        }
+
+        else if (
+            event.key === "ArrowLeft"
+        ) {
+
+            movePlayer(-1,0);
+
+        }
+
+        else if (
+            event.key === "ArrowRight"
+        ) {
+
+            movePlayer(1,0);
+
+        }
+    }
+);
+
+
+/* =====================================================
+   타이머
+===================================================== */
+
+function startTimer() {
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    timeLeft =
+        TIME_LIMIT;
+
+
+    timerElement.textContent =
+        timeLeft;
+
+
+    timerInterval =
+        setInterval(() => {
+
+            timeLeft--;
+
+
+            timerElement.textContent =
+                timeLeft;
+
+
+            if (
+                timeLeft <= 10
+            ) {
+
+                timerElement.style.color =
+                    "#ff6b6b";
+
+            }
+
+
+            if (
+                timeLeft <= 0
+            ) {
+
+                timeOver();
+
+            }
+
+        },1000);
+}
+
+
+/* =====================================================
+   시간 초과
+===================================================== */
+
+function timeOver() {
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    gameStarted = false;
+
+    gameClear = true;
+
+
+    playFailSound();
+
+
+    showPopup(
+        "아쉽지만 다시~! 😭",
+        false
+    );
+}
+
+
+/* =====================================================
+   성공
+===================================================== */
+
+function successGame() {
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    gameStarted = false;
+
+    gameClear = true;
+
+
+    playSuccessSound();
+
+
+    showPopup(
+        "탈출에 성공!! 🎉",
+        true
+    );
+}
+
+
+/* =====================================================
+   팝업
+===================================================== */
+
+function showPopup(
+    text,
+    success
+) {
+
+    popupText.textContent =
+        text;
+
+
+    popup.style.display =
+        "flex";
+
+
+    if (success) {
+
+        createConfetti();
+
+    }
+}
+
+
+/* =====================================================
+   컨페티
+===================================================== */
+
+function createConfetti() {
+
+    const count = 130;
+
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
+
+        const confetti =
+            document.createElement(
+                "div"
+            );
+
+
+        confetti.className =
+            "confetti";
+
+
+        confetti.style.left =
+            Math.random() * 100
+            + "vw";
+
+
+        confetti.style.width =
+            (
+                6 +
+                Math.random() * 8
+            )
+            + "px";
+
+
+        confetti.style.height =
+            (
+                8 +
+                Math.random() * 12
+            )
+            + "px";
+
+
+        confetti.style.background =
+            [
+                "#ff6b6b",
+                "#ffd43b",
+                "#69db7c",
+                "#74c0fc",
+                "#da77f2",
+                "#ff922b"
+            ][
+                Math.floor(
+                    Math.random() * 6
+                )
+            ];
+
+
+        confetti.style.animationDuration =
+            (
+                1.5 +
+                Math.random() * 2
+            )
+            + "s";
+
+
+        confetti.style.animationDelay =
+            (
+                Math.random() * 0.4
+            )
+            + "s";
+
+
+        document.body.appendChild(
+            confetti
+        );
+
+
+        setTimeout(() => {
+
+            confetti.remove();
+
+        },4000);
+    }
+}
+
+
+/* =====================================================
+   새 게임
+===================================================== */
+
+function newGame() {
+
+    startAudio();
+
+
+    popup.style.display =
+        "none";
+
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    timerElement.style.color =
+        "#ffdd57";
+
+
+    gameStarted = true;
+
+    gameClear = false;
+
+
+    /*
+        ⭐ 핵심 ⭐
+
+        새 게임을 누를 때마다
+        새로운 미로를 생성합니다.
+    */
+
+    generateMaze();
+
+
+    drawMaze();
+
+
+    startTimer();
+
+
+    messageElement.textContent =
+        "🏃 빨리 출구를 찾아보세요!";
+
+
+    document.getElementById(
+        "startButton"
+    ).textContent =
+        "🎵 게임 진행 중!";
+}
+
+
+/* =====================================================
+   팝업에서 다시하기
+===================================================== */
+
+function closePopupAndRestart() {
+
+    popup.style.display =
+        "none";
+
+
+    newGame();
+}
+
+
+/* =====================================================
+   시작 버튼
+===================================================== */
+
+document
+    .getElementById("startButton")
+    .addEventListener(
+        "click",
+        function() {
+
+            newGame();
+
+        }
+    );
+
+
+/* =====================================================
+   처음 화면
+===================================================== */
+
+generateMaze();
+
+drawMaze();
+
+</script>
+
+</body>
+</html>
+```
