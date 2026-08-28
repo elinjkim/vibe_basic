@@ -1,0 +1,2988 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+  name="theme-color"
+  content="#ffffff"
+>
+
+<title>오늘의 습관</title>
+
+
+<style>
+
+/* =================================================
+   기본
+================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+
+body {
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Noto Sans KR",
+    sans-serif;
+
+  background: #ffffff;
+
+  color: #222;
+
+  min-height: 100vh;
+
+}
+
+
+/* =================================================
+   APP
+================================================= */
+
+.app {
+
+  width: min(100%, 680px);
+
+  margin: 0 auto;
+
+  padding:
+    42px
+    20px
+    70px;
+
+}
+
+
+/* =================================================
+   HEADER
+================================================= */
+
+header {
+
+  margin-bottom: 30px;
+
+}
+
+
+.eyebrow {
+
+  font-size: 13px;
+
+  color: #999;
+
+  letter-spacing: .08em;
+
+  margin-bottom: 8px;
+
+}
+
+
+h1 {
+
+  margin: 0;
+
+  font-size:
+    clamp(28px, 7vw, 40px);
+
+  font-weight: 700;
+
+  letter-spacing: -0.04em;
+
+}
+
+
+.date {
+
+  margin-top: 10px;
+
+  color: #777;
+
+  font-size: 15px;
+
+}
+
+
+/* =================================================
+   TODAY SUMMARY
+================================================= */
+
+.summary {
+
+  border:
+    1px solid #e9e9e9;
+
+  border-radius: 18px;
+
+  padding: 20px;
+
+  margin-bottom: 28px;
+
+  background: #fff;
+
+}
+
+
+.summary-top {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 13px;
+
+}
+
+
+.summary-label {
+
+  font-size: 14px;
+
+  color: #777;
+
+}
+
+
+.summary-percent {
+
+  font-size: 22px;
+
+  font-weight: 700;
+
+}
+
+
+.progress {
+
+  height: 8px;
+
+  background: #f0f0f0;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+
+}
+
+
+.progress-bar {
+
+  height: 100%;
+
+  width: 0%;
+
+  background: #222;
+
+  border-radius: inherit;
+
+  transition:
+    width .35s ease;
+
+}
+
+
+.summary-count {
+
+  margin-top: 10px;
+
+  color: #999;
+
+  font-size: 13px;
+
+}
+
+
+/* =================================================
+   SECTION TITLE
+================================================= */
+
+.section-title {
+
+  display: flex;
+
+  justify-content:
+    space-between;
+
+  align-items: center;
+
+  margin:
+    0 2px
+    12px;
+
+}
+
+
+.section-title h2 {
+
+  font-size: 17px;
+
+  margin: 0;
+
+  letter-spacing: -0.02em;
+
+}
+
+
+.section-title span {
+
+  color: #aaa;
+
+  font-size: 13px;
+
+}
+
+
+/* =================================================
+   HABIT LIST
+================================================= */
+
+.habit-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 9px;
+
+}
+
+
+.habit {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  min-height: 64px;
+
+  padding:
+    10px
+    12px;
+
+  border:
+    1px solid #e8e8e8;
+
+  border-radius: 15px;
+
+  background: #fff;
+
+  transition:
+    opacity .25s ease,
+    transform .3s ease,
+    background .25s ease;
+
+}
+
+
+.habit.completed {
+
+  background: #fafafa;
+
+  border-color: #f0f0f0;
+
+}
+
+
+/* =================================================
+   CHECKBOX
+================================================= */
+
+.checkbox-wrap {
+
+  position: relative;
+
+  flex: 0 0 auto;
+
+  width: 28px;
+
+  height: 28px;
+
+}
+
+
+.checkbox-wrap input {
+
+  position: absolute;
+
+  opacity: 0;
+
+  width: 1px;
+
+  height: 1px;
+
+}
+
+
+.checkmark {
+
+  width: 28px;
+
+  height: 28px;
+
+  display: grid;
+
+  place-items: center;
+
+  border:
+    1.5px solid #bdbdbd;
+
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  transition:
+    all .2s ease;
+
+}
+
+
+.checkmark::after {
+
+  content: "✓";
+
+  color: #fff;
+
+  font-size: 17px;
+
+  font-weight: 700;
+
+  transform:
+    scale(0);
+
+  transition:
+    transform .15s ease;
+
+}
+
+
+.checkbox-wrap input:checked
++ .checkmark {
+
+  background: #222;
+
+  border-color: #222;
+
+}
+
+
+.checkbox-wrap input:checked
++ .checkmark::after {
+
+  transform:
+    scale(1);
+
+}
+
+
+/* =================================================
+   HABIT NAME
+================================================= */
+
+.habit-name {
+
+  flex: 1;
+
+  min-width: 0;
+
+  font-size: 16px;
+
+  line-height: 1.35;
+
+  cursor: pointer;
+
+  word-break: keep-all;
+
+}
+
+
+.habit.completed
+.habit-name {
+
+  color: #aaa;
+
+  text-decoration:
+    line-through;
+
+}
+
+
+/* =================================================
+   DELETE
+================================================= */
+
+.delete-btn {
+
+  border: 0;
+
+  background:
+    transparent;
+
+  color: #c5c5c5;
+
+  font-size: 18px;
+
+  width: 32px;
+
+  height: 32px;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  flex: 0 0 auto;
+
+}
+
+
+.delete-btn:hover {
+
+  background: #f5f5f5;
+
+  color: #777;
+
+}
+
+
+/* =================================================
+   EMPTY
+================================================= */
+
+.empty {
+
+  border:
+    1px dashed #ddd;
+
+  border-radius: 15px;
+
+  padding:
+    28px
+    15px;
+
+  text-align: center;
+
+  color: #aaa;
+
+  font-size: 14px;
+
+}
+
+
+/* =================================================
+   LOADING
+================================================= */
+
+.loading {
+
+  text-align: center;
+
+  color: #aaa;
+
+  padding:
+    35px
+    0;
+
+  font-size: 14px;
+
+}
+
+
+/* =================================================
+   ADD HABIT
+================================================= */
+
+.add-area {
+
+  margin-top: 18px;
+
+  display: flex;
+
+  gap: 8px;
+
+}
+
+
+.add-input {
+
+  flex: 1;
+
+  min-width: 0;
+
+  border:
+    1px solid #ddd;
+
+  border-radius: 13px;
+
+  padding:
+    14px
+    15px;
+
+  font-size: 15px;
+
+  outline: none;
+
+  color: #222;
+
+}
+
+
+.add-input:focus {
+
+  border-color: #222;
+
+}
+
+
+.add-btn {
+
+  border: 0;
+
+  border-radius: 13px;
+
+  background: #222;
+
+  color: #fff;
+
+  padding:
+    0
+    18px;
+
+  font-size: 15px;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+}
+
+
+/* =================================================
+   WEEKLY GOAL
+================================================= */
+
+.week-section {
+
+  margin-top: 42px;
+
+}
+
+
+.week-card {
+
+  border:
+    1px solid #e9e9e9;
+
+  border-radius: 18px;
+
+  padding:
+    22px
+    16px;
+
+  background: #fff;
+
+}
+
+
+.week-days {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(7, 1fr);
+
+  gap: 8px;
+
+}
+
+
+.week-day {
+
+  text-align: center;
+
+}
+
+
+.week-day-name {
+
+  font-size: 12px;
+
+  color: #999;
+
+  margin-bottom: 8px;
+
+}
+
+
+.week-day-number {
+
+  font-size: 11px;
+
+  color: #bbb;
+
+  margin-bottom: 7px;
+
+}
+
+
+.week-status {
+
+  width: 34px;
+
+  height: 34px;
+
+  margin: 0 auto;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+}
+
+
+.week-status.success {
+
+  background: #d7ff00;
+
+  color: #222;
+
+  box-shadow:
+    0 0 12px
+    rgba(
+      215,
+      255,
+      0,
+      0.45
+    );
+
+}
+
+
+.week-status.fail {
+
+  border:
+    1px solid #ddd;
+
+  color: #ccc;
+
+}
+
+
+.week-status.future {
+
+  color: #ddd;
+
+}
+
+
+.week-day.today
+.week-day-name {
+
+  color: #222;
+
+  font-weight: 700;
+
+}
+
+
+.week-day.today
+.week-day-number {
+
+  color: #222;
+
+  font-weight: 700;
+
+}
+
+
+.week-help {
+
+  margin-top: 15px;
+
+  text-align: center;
+
+  color: #aaa;
+
+  font-size: 12px;
+
+}
+
+
+/* =================================================
+   TIP
+================================================= */
+
+.tip {
+
+  text-align: center;
+
+  margin-top: 28px;
+
+  color: #aaa;
+
+  font-size: 12px;
+
+}
+
+
+/* =================================================
+   CELEBRATION
+================================================= */
+
+.celebration {
+
+  position: fixed;
+
+  inset: 0;
+
+  display: none;
+
+  align-items: center;
+
+  justify-content: center;
+
+  z-index: 1000;
+
+  pointer-events: none;
+
+}
+
+
+.celebration.show {
+
+  display: flex;
+
+}
+
+
+.celebration-card {
+
+  position: relative;
+
+  z-index: 2;
+
+  background: #fff;
+
+  border:
+    1px solid #eee;
+
+  border-radius: 22px;
+
+  padding:
+    30px
+    34px;
+
+  text-align: center;
+
+  box-shadow:
+    0 18px 60px
+    rgba(
+      0,
+      0,
+      0,
+      .13
+    );
+
+  animation:
+    pop .5s
+    cubic-bezier(
+      .2,
+      1.4,
+      .4,
+      1
+    );
+
+}
+
+
+.celebration-emoji {
+
+  font-size: 42px;
+
+  margin-bottom: 8px;
+
+}
+
+
+.celebration-card h3 {
+
+  margin: 0;
+
+  font-size: 25px;
+
+  letter-spacing: -0.04em;
+
+}
+
+
+.celebration-card p {
+
+  margin:
+    8px 0 0;
+
+  color: #888;
+
+  font-size: 14px;
+
+}
+
+
+.confetti {
+
+  position: absolute;
+
+  top: -20px;
+
+  width: 9px;
+
+  height: 14px;
+
+  opacity: 0;
+
+  animation:
+    fall 2.5s
+    linear
+    forwards;
+
+}
+
+
+/* =================================================
+   ANIMATION
+================================================= */
+
+@keyframes pop {
+
+  from {
+
+    transform:
+      scale(.7);
+
+    opacity: 0;
+
+  }
+
+  to {
+
+    transform:
+      scale(1);
+
+    opacity: 1;
+
+  }
+
+}
+
+
+@keyframes fall {
+
+  0% {
+
+    transform:
+      translate3d(
+        0,
+        -20px,
+        0
+      )
+      rotate(0deg);
+
+    opacity: 1;
+
+  }
+
+  100% {
+
+    transform:
+      translate3d(
+        var(--drift),
+        110vh,
+        0
+      )
+      rotate(720deg);
+
+    opacity: 0;
+
+  }
+
+}
+
+
+/* =================================================
+   MOBILE
+================================================= */
+
+@media (
+  max-width: 480px
+) {
+
+  .app {
+
+    padding:
+      30px
+      15px
+      45px;
+
+  }
+
+
+  .habit {
+
+    min-height: 60px;
+
+  }
+
+
+  .add-btn {
+
+    padding:
+      0
+      15px;
+
+  }
+
+
+  .week-days {
+
+    gap: 4px;
+
+  }
+
+
+  .week-status {
+
+    width: 31px;
+
+    height: 31px;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<header>
+
+  <div class="eyebrow">
+    MY HABIT
+  </div>
+
+  <h1>
+    오늘의 습관
+  </h1>
+
+  <div
+    class="date"
+    id="todayDate">
+  </div>
+
+</header>
+
+
+<section class="summary">
+
+  <div class="summary-top">
+
+    <span class="summary-label">
+      오늘의 달성률
+    </span>
+
+    <strong
+      class="summary-percent"
+      id="percent">
+      0%
+    </strong>
+
+  </div>
+
+
+  <div class="progress">
+
+    <div
+      class="progress-bar"
+      id="progressBar">
+    </div>
+
+  </div>
+
+
+  <div
+    class="summary-count"
+    id="count">
+
+    0 / 0 완료
+
+  </div>
+
+</section>
+
+
+<div class="section-title">
+
+  <h2>
+    오늘 할 일
+  </h2>
+
+  <span>
+    체크하면 아래로 이동해요
+  </span>
+
+</div>
+
+
+<main
+  class="habit-list"
+  id="habitList">
+
+  <div class="loading">
+    데이터를 불러오는 중...
+  </div>
+
+</main>
+
+
+<form
+  class="add-area"
+  id="addForm">
+
+  <input
+    class="add-input"
+    id="habitInput"
+    type="text"
+    maxlength="40"
+    placeholder="새로운 습관을 입력하세요"
+    autocomplete="off"
+  >
+
+  <button
+    class="add-btn"
+    type="submit">
+
+    ＋ 추가
+
+  </button>
+
+</form>
+
+
+<section
+  class="week-section">
+
+
+  <div class="section-title">
+
+    <h2>
+      이번 주 목표 달성
+    </h2>
+
+    <span
+      id="weekRate">
+
+      0 / 7일
+
+    </span>
+
+  </div>
+
+
+  <div class="week-card">
+
+    <div
+      class="week-days"
+      id="weekDays">
+    </div>
+
+
+    <div class="week-help">
+
+      ✓ 하루의 습관을
+      모두 완료한 날
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<div class="tip">
+
+  현재 습관과 기록은
+  Google Sheets에 자동 저장됩니다.
+
+</div>
+
+
+</div>
+
+
+<!-- =================================================
+     CELEBRATION
+================================================= -->
+
+<div
+  class="celebration"
+  id="celebration"
+  aria-hidden="true">
+
+
+  <div class="celebration-card">
+
+    <div class="celebration-emoji">
+      🎉
+    </div>
+
+    <h3>
+      오늘도 잘했어요^^
+    </h3>
+
+    <p>
+      오늘의 습관을 모두 완성했어요!
+    </p>
+
+  </div>
+
+</div>
+
+
+<script>
+
+
+/* =================================================
+   ⭐⭐⭐ GAS URL ⭐⭐⭐
+   
+   아래 주소만 네 GAS 웹앱 주소로 변경하세요.
+================================================= */
+
+const GAS_URL =
+  "https://script.google.com/macros/s/AKfycbzOtkGon_UOqcCnP01dBavoiMmyuNxuoQ5Vcmxxfxscl_WH88kdzWy8xN28NfjOXe4zAA/exec";
+
+
+/* =================================================
+   DATA
+================================================= */
+
+let habits = [];
+
+let logs = {};
+
+const today =
+  new Date();
+
+const todayKey =
+  getDateKey(
+    today
+  );
+
+
+/* =================================================
+   ELEMENTS
+================================================= */
+
+const listEl =
+  document.getElementById(
+    "habitList"
+  );
+
+
+const dateEl =
+  document.getElementById(
+    "todayDate"
+  );
+
+
+const percentEl =
+  document.getElementById(
+    "percent"
+  );
+
+
+const progressEl =
+  document.getElementById(
+    "progressBar"
+  );
+
+
+const countEl =
+  document.getElementById(
+    "count"
+  );
+
+
+const form =
+  document.getElementById(
+    "addForm"
+  );
+
+
+const input =
+  document.getElementById(
+    "habitInput"
+  );
+
+
+const celebration =
+  document.getElementById(
+    "celebration"
+  );
+
+
+const weekDays =
+  document.getElementById(
+    "weekDays"
+  );
+
+
+const weekRate =
+  document.getElementById(
+    "weekRate"
+  );
+
+
+/* =================================================
+   DATE
+================================================= */
+
+dateEl.textContent =
+  new Intl.DateTimeFormat(
+    "ko-KR",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "short"
+    }
+  ).format(
+    today
+  );
+
+
+/* =================================================
+   START
+================================================= */
+
+loadData();
+
+
+/* =================================================
+   GAS 호출
+================================================= */
+
+function callGAS(
+  params,
+  callback
+) {
+
+
+  /*
+    GAS URL이 아직 입력되지 않은 경우
+  */
+
+  if (
+    GAS_URL.includes(
+      "여기에_GAS"
+    )
+  ) {
+
+    listEl.innerHTML = `
+
+      <div class="empty">
+
+        GAS 웹앱 주소를
+        입력해주세요.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const callbackName =
+    "gasCallback_" +
+    Date.now() +
+    "_" +
+    Math.floor(
+      Math.random() *
+      100000
+    );
+
+
+  let script;
+
+
+  window[
+    callbackName
+  ] =
+    function(data) {
+
+      delete window[
+        callbackName
+      ];
+
+
+      if (script) {
+
+        script.remove();
+
+      }
+
+
+      callback(data);
+
+    };
+
+
+  const query =
+    new URLSearchParams({
+
+      ...params,
+
+      callback:
+        callbackName
+
+    });
+
+
+  script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.src =
+    GAS_URL +
+    "?" +
+    query.toString();
+
+
+  script.onerror =
+    function() {
+
+      delete window[
+        callbackName
+      ];
+
+
+      script.remove();
+
+
+      alert(
+        "Google Sheets와 연결하지 못했어요.\n\n" +
+        "GAS 웹앱 주소와 배포 설정을 확인해주세요."
+      );
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+
+}
+
+
+/* =================================================
+   데이터 불러오기
+================================================= */
+
+function loadData() {
+
+
+  listEl.innerHTML = `
+
+    <div class="loading">
+
+      Google Sheets에서
+      데이터를 불러오는 중...
+
+    </div>
+
+  `;
+
+
+  callGAS(
+    {
+      action: "get"
+    },
+
+    function(data) {
+
+
+      if (
+        !data ||
+        !data.success
+      ) {
+
+        listEl.innerHTML = `
+
+          <div class="empty">
+
+            데이터를 불러오지 못했어요.<br><br>
+
+            ${
+              data &&
+              data.message
+                ? escapeHTML(
+                    data.message
+                  )
+                : "알 수 없는 오류"
+            }
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      habits =
+        data.habits || [];
+
+
+      logs =
+        data.logs || {};
+
+
+      /*
+        습관이 하나도 없으면
+        기본 습관 생성
+      */
+
+      if (
+        habits.length === 0
+      ) {
+
+        createDefaultHabits();
+
+        return;
+
+      }
+
+
+      render();
+
+    }
+
+  );
+
+}
+
+
+/* =================================================
+   기본 습관 생성
+================================================= */
+
+function createDefaultHabits() {
+
+
+  const defaults = [
+
+    "물 2L 마시기",
+
+    "영어 공부하기",
+
+    "책 20분 읽기",
+
+    "스트레칭 10분 하기"
+
+  ];
+
+
+  let index = 0;
+
+
+  function addNext() {
+
+
+    if (
+      index >=
+      defaults.length
+    ) {
+
+      loadData();
+
+      return;
+
+    }
+
+
+    const name =
+      defaults[index];
+
+
+    index++;
+
+
+    callGAS(
+      {
+        action: "add",
+        name: name
+      },
+
+      function(data) {
+
+        if (
+          data &&
+          data.success
+        ) {
+
+          addNext();
+
+        }
+
+        else {
+
+          alert(
+            data &&
+            data.message
+              ? data.message
+              : "기본 습관을 저장하지 못했어요."
+          );
+
+        }
+
+      }
+
+    );
+
+  }
+
+
+  addNext();
+
+}
+
+
+/* =================================================
+   CHECK
+================================================= */
+
+function isCompleted(
+  habitId,
+  dateKey =
+    todayKey
+) {
+
+  return Boolean(
+
+    logs[
+      dateKey
+    ] &&
+
+    logs[
+      dateKey
+    ][
+      habitId
+    ]
+
+  );
+
+}
+
+
+/* =================================================
+   RENDER
+================================================= */
+
+function render() {
+
+  renderHabits();
+
+  updateSummary();
+
+  renderWeeklyGoal();
+
+}
+
+
+/* =================================================
+   HABIT RENDER
+================================================= */
+
+function renderHabits() {
+
+
+  listEl.innerHTML = "";
+
+
+  if (
+    habits.length === 0
+  ) {
+
+    listEl.innerHTML = `
+
+      <div class="empty">
+
+        아직 등록된 습관이 없어요.<br><br>
+
+        아래에서 나만의 습관을
+        추가해보세요.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  /*
+    미완료 → 완료
+  */
+
+  const sorted =
+    [...habits].sort(
+      function(a, b) {
+
+        return (
+
+          Number(
+            isCompleted(
+              a.id
+            )
+          )
+
+          -
+
+          Number(
+            isCompleted(
+              b.id
+            )
+          )
+
+        );
+
+      }
+    );
+
+
+  sorted.forEach(
+    function(habit) {
+
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+
+      const completed =
+        isCompleted(
+          habit.id
+        );
+
+
+      item.className =
+        "habit" +
+        (
+          completed
+            ? " completed"
+            : ""
+        );
+
+
+      /*
+        CHECKBOX
+      */
+
+      const wrap =
+        document.createElement(
+          "label"
+        );
+
+
+      wrap.className =
+        "checkbox-wrap";
+
+
+      const checkbox =
+        document.createElement(
+          "input"
+        );
+
+
+      checkbox.type =
+        "checkbox";
+
+
+      checkbox.checked =
+        completed;
+
+
+      checkbox.setAttribute(
+        "aria-label",
+        habit.name +
+        " 완료"
+      );
+
+
+      checkbox.addEventListener(
+        "change",
+        function() {
+
+          toggleHabit(
+            habit.id,
+            checkbox.checked
+          );
+
+        }
+      );
+
+
+      const checkmark =
+        document.createElement(
+          "span"
+        );
+
+
+      checkmark.className =
+        "checkmark";
+
+
+      wrap.appendChild(
+        checkbox
+      );
+
+
+      wrap.appendChild(
+        checkmark
+      );
+
+
+      /*
+        HABIT NAME
+      */
+
+      const name =
+        document.createElement(
+          "label"
+        );
+
+
+      name.className =
+        "habit-name";
+
+
+      name.textContent =
+        habit.name;
+
+
+      name.addEventListener(
+        "click",
+        function(event) {
+
+          event.preventDefault();
+
+          checkbox.click();
+
+        }
+      );
+
+
+      /*
+        DELETE
+      */
+
+      const deleteBtn =
+        document.createElement(
+          "button"
+        );
+
+
+      deleteBtn.className =
+        "delete-btn";
+
+
+      deleteBtn.type =
+        "button";
+
+
+      deleteBtn.textContent =
+        "×";
+
+
+      deleteBtn.title =
+        "습관 삭제";
+
+
+      deleteBtn.addEventListener(
+        "click",
+        function() {
+
+          deleteHabit(
+            habit.id
+          );
+
+        }
+      );
+
+
+      item.appendChild(
+        wrap
+      );
+
+
+      item.appendChild(
+        name
+      );
+
+
+      item.appendChild(
+        deleteBtn
+      );
+
+
+      listEl.appendChild(
+        item
+      );
+
+    }
+  );
+
+}
+
+
+/* =================================================
+   TOGGLE HABIT
+================================================= */
+
+function toggleHabit(
+  id,
+  checked
+) {
+
+
+  /*
+    화면을 먼저 변경
+  */
+
+  if (
+    !logs[todayKey]
+  ) {
+
+    logs[todayKey] = {};
+
+  }
+
+
+  if (checked) {
+
+    logs[
+      todayKey
+    ][
+      id
+    ] = true;
+
+
+    playCheckSound();
+
+  }
+
+  else {
+
+    delete logs[
+      todayKey
+    ][
+      id
+    ];
+
+
+    playUncheckSound();
+
+  }
+
+
+  render();
+
+
+  /*
+    GAS 저장
+  */
+
+  callGAS(
+
+    {
+
+      action:
+        "toggle",
+
+      date:
+        todayKey,
+
+      id:
+        id,
+
+      completed:
+        checked
+          ? "true"
+          : "false"
+
+    },
+
+    function(data) {
+
+
+      if (
+        !data ||
+        !data.success
+      ) {
+
+        alert(
+          data &&
+          data.message
+            ? data.message
+            : "Google Sheets에 저장하지 못했어요."
+        );
+
+
+        /*
+          실패하면 다시 불러오기
+        */
+
+        loadData();
+
+        return;
+
+      }
+
+
+      /*
+        오늘의 모든 습관 완료
+      */
+
+      if (
+        checked &&
+        habits.length > 0 &&
+        habits.every(
+          function(habit) {
+
+            return isCompleted(
+              habit.id
+            );
+
+          }
+        )
+      ) {
+
+        celebrate();
+
+      }
+
+    }
+
+  );
+
+}
+
+
+/* =================================================
+   DELETE HABIT
+================================================= */
+
+function deleteHabit(
+  id
+) {
+
+
+  const habit =
+    habits.find(
+      function(h) {
+
+        return h.id === id;
+
+      }
+    );
+
+
+  if (!habit)
+    return;
+
+
+  const ok =
+    confirm(
+
+      '"' +
+      habit.name +
+      '" 습관을 삭제할까요?\n\n' +
+      "삭제하면 이 습관의 과거 기록도 함께 삭제됩니다."
+
+    );
+
+
+  if (!ok)
+    return;
+
+
+  /*
+    화면에서 먼저 제거
+  */
+
+  habits =
+    habits.filter(
+      function(h) {
+
+        return h.id !== id;
+
+      }
+    );
+
+
+  Object.keys(
+    logs
+  ).forEach(
+    function(date) {
+
+      if (
+        logs[date]
+      ) {
+
+        delete logs[
+          date
+        ][
+          id
+        ];
+
+      }
+
+    }
+  );
+
+
+  render();
+
+
+  /*
+    GAS 삭제
+  */
+
+  callGAS(
+
+    {
+
+      action:
+        "delete",
+
+      id:
+        id
+
+    },
+
+    function(data) {
+
+
+      if (
+        !data ||
+        !data.success
+      ) {
+
+        alert(
+          data &&
+          data.message
+            ? data.message
+            : "Google Sheets에서 삭제하지 못했어요."
+        );
+
+
+        loadData();
+
+      }
+
+    }
+
+  );
+
+}
+
+
+/* =================================================
+   ADD HABIT
+================================================= */
+
+form.addEventListener(
+  "submit",
+  function(event) {
+
+
+    event.preventDefault();
+
+
+    const name =
+      input.value.trim();
+
+
+    if (!name) {
+
+      input.focus();
+
+      return;
+
+    }
+
+
+    /*
+      화면에서 중복 확인
+    */
+
+    const exists =
+      habits.some(
+        function(habit) {
+
+          return (
+
+            habit.name
+              .toLowerCase() ===
+
+            name
+              .toLowerCase()
+
+          );
+
+        }
+      );
+
+
+    if (exists) {
+
+      alert(
+        "이미 같은 습관이 있어요."
+      );
+
+
+      input.focus();
+
+      return;
+
+    }
+
+
+    /*
+      입력창 비우기
+    */
+
+    input.value = "";
+
+
+    /*
+      GAS에 저장
+    */
+
+    callGAS(
+
+      {
+
+        action:
+          "add",
+
+        name:
+          name
+
+      },
+
+      function(data) {
+
+
+        if (
+          !data ||
+          !data.success
+        ) {
+
+          alert(
+            data &&
+            data.message
+              ? data.message
+              : "습관을 저장하지 못했어요."
+          );
+
+          return;
+
+        }
+
+
+        /*
+          저장 후
+          Google Sheets에서 다시 읽기
+        */
+
+        loadData();
+
+
+        input.focus();
+
+      }
+
+    );
+
+  }
+);
+
+
+/* =================================================
+   SUMMARY
+================================================= */
+
+function updateSummary() {
+
+
+  const total =
+    habits.length;
+
+
+  const completed =
+    habits.filter(
+      function(habit) {
+
+        return isCompleted(
+          habit.id
+        );
+
+      }
+    ).length;
+
+
+  const percent =
+    total
+      ? Math.round(
+          completed /
+          total *
+          100
+        )
+      : 0;
+
+
+  percentEl.textContent =
+    percent +
+    "%";
+
+
+  progressEl.style.width =
+    percent +
+    "%";
+
+
+  countEl.textContent =
+    completed +
+    " / " +
+    total +
+    " 완료";
+
+}
+
+
+/* =================================================
+   WEEKLY GOAL
+================================================= */
+
+function renderWeeklyGoal() {
+
+
+  weekDays.innerHTML =
+    "";
+
+
+  let successCount =
+    0;
+
+
+  /*
+    최근 7일
+  */
+
+  for (
+    let i = 6;
+    i >= 0;
+    i--
+  ) {
+
+
+    const date =
+      addDays(
+        today,
+        -i
+      );
+
+
+    const dateKey =
+      getDateKey(
+        date
+      );
+
+
+    const dayName =
+      new Intl.DateTimeFormat(
+        "ko-KR",
+        {
+          weekday: "short"
+        }
+      ).format(
+        date
+      );
+
+
+    const dayNumber =
+      date.getDate();
+
+
+    const dayBox =
+      document.createElement(
+        "div"
+      );
+
+
+    dayBox.className =
+      "week-day";
+
+
+    if (
+      dateKey ===
+      todayKey
+    ) {
+
+      dayBox.classList.add(
+        "today"
+      );
+
+    }
+
+
+    /*
+      요일
+    */
+
+    const dayNameEl =
+      document.createElement(
+        "div"
+      );
+
+
+    dayNameEl.className =
+      "week-day-name";
+
+
+    dayNameEl.textContent =
+      dayName;
+
+
+    /*
+      날짜
+    */
+
+    const dayNumberEl =
+      document.createElement(
+        "div"
+      );
+
+
+    dayNumberEl.className =
+      "week-day-number";
+
+
+    dayNumberEl.textContent =
+      dayNumber;
+
+
+    /*
+      상태
+    */
+
+    const status =
+      document.createElement(
+        "div"
+      );
+
+
+    status.className =
+      "week-status";
+
+
+    /*
+      미래
+    */
+
+    if (
+      dateKey >
+      todayKey
+    ) {
+
+      status.classList.add(
+        "future"
+      );
+
+
+      status.textContent =
+        "-";
+
+    }
+
+
+    else {
+
+
+      /*
+        하루의 모든 습관 완료 여부
+      */
+
+      const allDone =
+        habits.length > 0 &&
+        habits.every(
+          function(habit) {
+
+            return isCompleted(
+              habit.id,
+              dateKey
+            );
+
+          }
+        );
+
+
+      if (allDone) {
+
+        status.classList.add(
+          "success"
+        );
+
+
+        status.textContent =
+          "✓";
+
+
+        successCount++;
+
+      }
+
+
+      else {
+
+        status.classList.add(
+          "fail"
+        );
+
+
+        status.textContent =
+          "○";
+
+      }
+
+    }
+
+
+    dayBox.appendChild(
+      dayNameEl
+    );
+
+
+    dayBox.appendChild(
+      dayNumberEl
+    );
+
+
+    dayBox.appendChild(
+      status
+    );
+
+
+    weekDays.appendChild(
+      dayBox
+    );
+
+  }
+
+
+  weekRate.textContent =
+    successCount +
+    " / 7일";
+
+}
+
+
+/* =================================================
+   DATE KEY
+================================================= */
+
+function getDateKey(
+  date
+) {
+
+
+  const year =
+    date.getFullYear();
+
+
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  return (
+
+    year +
+    "-" +
+    month +
+    "-" +
+    day
+
+  );
+
+}
+
+
+/* =================================================
+   ADD DAYS
+================================================= */
+
+function addDays(
+  date,
+  amount
+) {
+
+
+  const result =
+    new Date(
+      date
+    );
+
+
+  result.setDate(
+    result.getDate() +
+    amount
+  );
+
+
+  return result;
+
+}
+
+
+/* =================================================
+   CELEBRATION
+================================================= */
+
+function celebrate() {
+
+
+  celebration.classList.add(
+    "show"
+  );
+
+
+  celebration.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+
+  createConfetti();
+
+
+  playCompleteSound();
+
+
+  clearTimeout(
+    window.__celebrationTimer
+  );
+
+
+  window.__celebrationTimer =
+    setTimeout(
+      function() {
+
+
+        celebration.classList.remove(
+          "show"
+        );
+
+
+        celebration.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+
+      },
+      3500
+    );
+
+}
+
+
+/* =================================================
+   CONFETTI
+================================================= */
+
+function createConfetti() {
+
+
+  celebration
+    .querySelectorAll(
+      ".confetti"
+    )
+    .forEach(
+      function(element) {
+
+        element.remove();
+
+      }
+    );
+
+
+  const fragment =
+    document.createDocumentFragment();
+
+
+  for (
+    let i = 0;
+    i < 90;
+    i++
+  ) {
+
+
+    const piece =
+      document.createElement(
+        "span"
+      );
+
+
+    piece.className =
+      "confetti";
+
+
+    piece.style.left =
+      (
+        Math.random() *
+        100
+      ) +
+      "%";
+
+
+    piece.style.setProperty(
+      "--drift",
+      (
+        (
+          Math.random() -
+          .5
+        ) *
+        220
+      ) +
+      "px"
+    );
+
+
+    piece.style.animationDelay =
+      (
+        Math.random() *
+        .5
+      ) +
+      "s";
+
+
+    piece.style.animationDuration =
+      (
+        1.8 +
+        Math.random() *
+        1.4
+      ) +
+      "s";
+
+
+    const colors = [
+
+      "#222",
+
+      "#555",
+
+      "#777",
+
+      "#aaa",
+
+      "#ddd"
+
+    ];
+
+
+    piece.style.background =
+      colors[
+        Math.floor(
+          Math.random() *
+          colors.length
+        )
+      ];
+
+
+    fragment.appendChild(
+      piece
+    );
+
+  }
+
+
+  celebration.appendChild(
+    fragment
+  );
+
+}
+
+
+/* =================================================
+   SOUND
+================================================= */
+
+function playTone(
+  frequency,
+  duration,
+  type = "sine",
+  volume = 0.035,
+  delay = 0
+) {
+
+
+  try {
+
+
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+
+    if (!AudioContext)
+      return;
+
+
+    const ctx =
+      new AudioContext();
+
+
+    const oscillator =
+      ctx.createOscillator();
+
+
+    const gain =
+      ctx.createGain();
+
+
+    oscillator.type =
+      type;
+
+
+    oscillator.frequency.value =
+      frequency;
+
+
+    gain.gain.setValueAtTime(
+      0.0001,
+      ctx.currentTime +
+      delay
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      volume,
+      ctx.currentTime +
+      delay +
+      0.01
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.0001,
+      ctx.currentTime +
+      delay +
+      duration
+    );
+
+
+    oscillator.connect(
+      gain
+    );
+
+
+    gain.connect(
+      ctx.destination
+    );
+
+
+    oscillator.start(
+      ctx.currentTime +
+      delay
+    );
+
+
+    oscillator.stop(
+      ctx.currentTime +
+      delay +
+      duration +
+      0.03
+    );
+
+
+  }
+
+  catch (error) {}
+
+}
+
+
+/* =================================================
+   CHECK SOUND
+================================================= */
+
+function playCheckSound() {
+
+
+  playTone(
+    660,
+    .08,
+    "sine",
+    .035,
+    0
+  );
+
+
+  playTone(
+    880,
+    .12,
+    "sine",
+    .03,
+    .07
+  );
+
+}
+
+
+/* =================================================
+   UNCHECK SOUND
+================================================= */
+
+function playUncheckSound() {
+
+
+  playTone(
+    330,
+    .08,
+    "sine",
+    .025,
+    0
+  );
+
+}
+
+
+/* =================================================
+   COMPLETE SOUND
+================================================= */
+
+function playCompleteSound() {
+
+
+  [
+
+    523,
+    659,
+    784,
+    1047
+
+  ]
+  .forEach(
+    function(
+      frequency,
+      index
+    ) {
+
+
+      playTone(
+        frequency,
+        .16,
+        "sine",
+        .045,
+        index * .11
+      );
+
+
+    }
+  );
+
+}
+
+
+/* =================================================
+   HTML ESCAPE
+================================================= */
+
+function escapeHTML(
+  text
+) {
+
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+
+  div.textContent =
+    text;
+
+
+  return div.innerHTML;
+
+}
+
+
+</script>
+
+</body>
+</html>
+
