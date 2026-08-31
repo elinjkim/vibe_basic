@@ -1498,7 +1498,7 @@ function renderSchedule(){
 
                         <tr>
 
-                            <td>${x.date}</td>
+                            <td>${String(x.date).substring(0,10)}</td>
 
                             <td><strong>${x.title}</strong></td>
 
@@ -1595,22 +1595,59 @@ async function addSchedule(){
 }
 
 
-function changeScheduleStatus(id,value){
-    const item=schedules.find(x=>x.id===id);
-    if(item){
-        item.status=value;
-        saveAll();
-    }
-}
+async function changeScheduleStatus(id, value){
 
-function deleteSchedule(id){
-    if(confirm("이 일정을 삭제할까요?")){
-        schedules=schedules.filter(x=>x.id!==id);
-        saveAll();
+    const item = schedules.find(x => x.id === id);
+
+    if(!item){
+        return;
+    }
+
+    const result = await postGASData(
+        "updateSchedule",
+        {
+            id: id,
+            status: value
+        }
+    );
+
+    if(!result){
+        // 저장 실패하면 기존 화면 상태로 되돌림
         renderSchedule();
+        return;
     }
+
+    // 화면 데이터도 변경
+    item.status = value;
+
+    console.log("📅 일정 상태 변경 완료:", id, value);
+
 }
 
+async function deleteSchedule(id){
+
+    if(!confirm("이 일정을 삭제할까요?")){
+        return;
+    }
+
+    const result = await postGASData(
+        "deleteSchedule",
+        {
+            id: id
+        }
+    );
+
+    if(!result){
+        return;
+    }
+
+    // 화면에서도 삭제
+    schedules = schedules.filter(x => x.id !== id);
+
+    renderSchedule();
+
+    alert("일정이 삭제되었습니다.");
+}
 
 /* =========================================================
    MISSIONS
