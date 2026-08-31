@@ -1557,29 +1557,43 @@ function openScheduleModal(){
     `);
 }
 
-function addSchedule(){
+async function addSchedule(){
 
-    const date=document.getElementById("scheduleDate").value;
-    const title=document.getElementById("scheduleTitle").value;
-    const manager=document.getElementById("scheduleManager").value;
+    const date = document.getElementById("scheduleDate").value;
+    const title = document.getElementById("scheduleTitle").value;
+    const manager = document.getElementById("scheduleManager").value;
 
     if(!date || !title){
         alert("날짜와 일정명을 입력해주세요.");
         return;
     }
 
-    schedules.push({
-        id:Date.now(),
-        date,
-        title,
-        manager:manager||"미정",
-        status:"예정"
-    });
+    const newSchedule = {
+        date: date,
+        title: title,
+        manager: manager || "미정",
+        status: "예정"
+    };
 
-    saveAll();
+    const result = await postGASData(
+        "addSchedule",
+        newSchedule
+    );
+
+    if(!result){
+        return;
+    }
+
     closeModal();
+
+    // Google Sheets에서 최신 데이터를 다시 가져옵니다.
+    await loadGASData();
+
     renderSchedule();
+
+    alert("일정이 Google Sheets에 저장되었습니다.");
 }
+
 
 function changeScheduleStatus(id,value){
     const item=schedules.find(x=>x.id===id);
