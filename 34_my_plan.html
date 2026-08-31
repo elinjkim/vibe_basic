@@ -1,11 +1,18 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>SW·AI 교육기획자 12주 성장 로드맵</title>
 
 <style>
+
+/* =====================================================
+   기본 설정
+===================================================== */
+
 * {
     box-sizing: border-box;
 }
@@ -20,6 +27,7 @@ body {
         "Malgun Gothic",
         Arial,
         sans-serif;
+
     font-size: 14px;
     line-height: 1.65;
 }
@@ -29,65 +37,76 @@ body {
     margin: 0 auto;
 }
 
-/* -----------------------------
+
+/* =====================================================
    HEADER
------------------------------ */
+===================================================== */
 
 header {
-    border-bottom: 1px solid #e5e7eb;
     padding: 42px 0 30px;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .eyebrow {
     color: #2563eb;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.04em;
-    margin-bottom: 7px;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
 }
 
 h1 {
-    font-size: 28px;
     margin: 0 0 8px;
     color: #1f2937;
+    font-size: 28px;
     letter-spacing: -0.04em;
 }
 
 .subtitle {
-    color: #6b7280;
     margin: 0;
+    color: #6b7280;
     font-size: 14px;
 }
 
-/* -----------------------------
-   GOAL BOX
------------------------------ */
+
+/* =====================================================
+   GOAL
+===================================================== */
 
 .goal-box {
     margin: 28px 0;
-    border: 1px solid #dbe5f5;
-    background: #f8fbff;
-    border-radius: 10px;
     padding: 22px 24px;
+
+    border: 1px solid #dbe5f5;
+    border-radius: 10px;
+
+    background: #f8fbff;
 }
 
 .goal-title {
+    margin-bottom: 6px;
+
     color: #2563eb;
     font-weight: 700;
-    font-size: 15px;
-    margin-bottom: 8px;
+    font-size: 14px;
 }
 
 .goal-main {
+    margin-bottom: 12px;
+
+    color: #1e3a8a;
     font-size: 18px;
     font-weight: 700;
-    color: #1e3a8a;
-    margin-bottom: 12px;
 }
 
 .goal-box p {
     margin: 5px 0;
 }
+
+
+/* =====================================================
+   HIGHLIGHT
+===================================================== */
 
 .highlight-blue {
     color: #2563eb;
@@ -104,60 +123,70 @@ h1 {
     font-weight: 600;
 }
 
-/* -----------------------------
-   CAREER TARGET
------------------------------ */
+
+/* =====================================================
+   TARGET
+===================================================== */
 
 .target-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
+
     margin-bottom: 30px;
 }
 
 .target-card {
+    padding: 17px;
+
     border: 1px solid #e5e7eb;
     border-radius: 8px;
-    padding: 17px;
-    background: #fff;
+
+    background: #ffffff;
 }
 
 .target-card .num {
     color: #2563eb;
-    font-weight: 700;
     font-size: 12px;
+    font-weight: 700;
 }
 
 .target-card h3 {
-    font-size: 15px;
     margin: 3px 0 5px;
+    font-size: 15px;
 }
 
 .target-card p {
-    color: #666;
     margin: 0;
+
+    color: #666666;
     font-size: 13px;
 }
 
-/* -----------------------------
+
+/* =====================================================
    SECTION
------------------------------ */
+===================================================== */
 
 .section {
     margin: 42px 0;
 }
 
 .section-title {
-    border-left: 4px solid #2563eb;
-    padding-left: 11px;
-    font-size: 19px;
-    color: #1f2937;
     margin-bottom: 16px;
+    padding-left: 11px;
+
+    border-left: 4px solid #2563eb;
+
+    color: #1f2937;
+    font-size: 19px;
+    font-weight: 700;
 }
 
-/* -----------------------------
-   PRINCIPLES
------------------------------ */
+
+/* =====================================================
+   CORE COMPETENCY
+===================================================== */
 
 .principles {
     display: grid;
@@ -166,43 +195,47 @@ h1 {
 }
 
 .principle {
+    padding: 15px;
+
     border: 1px solid #e5e7eb;
     border-radius: 8px;
-    padding: 15px;
 }
 
 .principle strong {
     display: block;
     margin-bottom: 4px;
-    color: #374151;
 }
 
 .principle span {
-    font-size: 13px;
     color: #6b7280;
+    font-size: 13px;
 }
 
-/* -----------------------------
-   ROADMAP
------------------------------ */
+
+/* =====================================================
+   ROADMAP TABLE
+===================================================== */
 
 .roadmap {
     width: 100%;
+
     border-collapse: collapse;
-    margin-top: 12px;
 }
 
 .roadmap th,
 .roadmap td {
-    border: 1px solid #e5e7eb;
     padding: 10px 9px;
+
+    border: 1px solid #e5e7eb;
+
     vertical-align: middle;
 }
 
 .roadmap th {
     background: #f3f4f6;
-    font-size: 12px;
+
     color: #4b5563;
+    font-size: 12px;
 }
 
 .roadmap td {
@@ -224,59 +257,75 @@ h1 {
     font-weight: 700;
 }
 
-/* -----------------------------
+
+/* =====================================================
    PROGRESS
------------------------------ */
+===================================================== */
 
 .progress-wrap {
-    margin: 20px 0;
     padding: 16px;
-    background: #f9fafb;
+
     border: 1px solid #e5e7eb;
     border-radius: 8px;
+
+    background: #f9fafb;
 }
 
 .progress-top {
     display: flex;
     justify-content: space-between;
+
     margin-bottom: 7px;
+
     font-size: 13px;
 }
 
 .progress-bar {
     height: 8px;
-    background: #e5e7eb;
-    border-radius: 20px;
+
     overflow: hidden;
+
+    border-radius: 20px;
+
+    background: #e5e7eb;
 }
 
 .progress-fill {
-    height: 100%;
     width: 0%;
+    height: 100%;
+
     background: #2563eb;
+
     transition: width 0.3s ease;
 }
 
-/* -----------------------------
+
+/* =====================================================
    WEEK CARD
------------------------------ */
+===================================================== */
 
 .week-card {
+    margin-bottom: 10px;
+
+    overflow: hidden;
+
     border: 1px solid #e5e7eb;
     border-radius: 9px;
-    margin-bottom: 10px;
-    overflow: hidden;
-    background: #fff;
+
+    background: #ffffff;
 }
 
 .week-card summary {
-    cursor: pointer;
-    list-style: none;
-    padding: 15px 17px;
     display: grid;
-    grid-template-columns: 65px 1fr 230px 28px;
+    grid-template-columns: 65px 1fr 250px 28px;
     gap: 12px;
     align-items: center;
+
+    padding: 15px 17px;
+
+    cursor: pointer;
+
+    list-style: none;
 }
 
 .week-card summary::-webkit-details-marker {
@@ -288,14 +337,14 @@ h1 {
 }
 
 .week-number {
-    font-size: 12px;
     color: #2563eb;
+    font-size: 12px;
     font-weight: 700;
 }
 
 .week-title {
-    font-weight: 700;
     color: #1f2937;
+    font-weight: 700;
 }
 
 .week-summary {
@@ -305,6 +354,7 @@ h1 {
 
 .arrow {
     color: #9ca3af;
+
     transition: transform 0.2s;
 }
 
@@ -313,14 +363,17 @@ h1 {
 }
 
 .week-detail {
-    border-top: 1px solid #e5e7eb;
     padding: 22px;
+
+    border-top: 1px solid #e5e7eb;
+
     background: #fcfcfd;
 }
 
-/* -----------------------------
-   DETAIL
------------------------------ */
+
+/* =====================================================
+   DETAIL GRID
+===================================================== */
 
 .detail-grid {
     display: grid;
@@ -329,10 +382,12 @@ h1 {
 }
 
 .detail-box {
-    background: #fff;
+    padding: 16px;
+
     border: 1px solid #e5e7eb;
     border-radius: 7px;
-    padding: 16px;
+
+    background: #ffffff;
 }
 
 .detail-box.full {
@@ -341,11 +396,13 @@ h1 {
 
 .detail-box h4 {
     margin: 0 0 9px;
-    font-size: 14px;
+
     color: #374151;
+    font-size: 14px;
 }
 
-.detail-box ul {
+.detail-box ul,
+.detail-box ol {
     margin: 5px 0 0;
     padding-left: 19px;
 }
@@ -354,33 +411,135 @@ h1 {
     margin: 3px 0;
 }
 
-/* -----------------------------
+
+/* =====================================================
+   STUDY MATERIALS
+===================================================== */
+
+.study-materials {
+    padding: 16px;
+
+    border: 1px solid #dbe5f5;
+    border-radius: 8px;
+
+    background: #f8fbff;
+}
+
+.study-title {
+    margin-bottom: 10px;
+
+    color: #2563eb;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.study-table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.study-table th,
+.study-table td {
+    padding: 9px 8px;
+
+    border: 1px solid #e5e7eb;
+
+    text-align: left;
+    vertical-align: middle;
+
+    font-size: 12px;
+}
+
+.study-table th {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.study-table td a {
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.study-table td a:hover {
+    text-decoration: underline;
+}
+
+.material-essential {
+    color: #dc2626;
+    font-weight: 700;
+}
+
+.material-recommended {
+    color: #2563eb;
+    font-weight: 700;
+}
+
+.material-reference {
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.study-note {
+    margin-top: 10px;
+    padding: 10px 12px;
+
+    border-left: 3px solid #2563eb;
+
+    background: #ffffff;
+
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.study-action {
+    margin-top: 10px;
+    padding: 10px 12px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+
+    background: #ffffff;
+
+    font-size: 12px;
+}
+
+
+/* =====================================================
    OUTPUT
------------------------------ */
+===================================================== */
 
 .output-box {
-    border: 1px solid #fecaca;
-    background: #fffafa;
-    border-radius: 8px;
     padding: 16px;
+
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+
+    background: #fffafa;
 }
 
 .output-title {
+    margin-bottom: 7px;
+
     color: #dc2626;
     font-weight: 700;
-    margin-bottom: 7px;
 }
 
 .output-table {
     width: 100%;
+
     border-collapse: collapse;
 }
 
 .output-table th,
 .output-table td {
-    border: 1px solid #e5e7eb;
     padding: 8px;
+
+    border: 1px solid #e5e7eb;
+
     text-align: left;
+
     font-size: 12px;
 }
 
@@ -388,24 +547,28 @@ h1 {
     background: #f3f4f6;
 }
 
-/* -----------------------------
+
+/* =====================================================
    PORTFOLIO
------------------------------ */
+===================================================== */
 
 .portfolio {
-    border: 1px solid #dbe5f5;
-    background: #f8fbff;
-    border-radius: 8px;
     padding: 15px;
+
+    border: 1px solid #dbe5f5;
+    border-radius: 8px;
+
+    background: #f8fbff;
 }
 
 .portfolio strong {
     color: #2563eb;
 }
 
-/* -----------------------------
-   CHECK
------------------------------ */
+
+/* =====================================================
+   CHECKLIST
+===================================================== */
 
 .check-list {
     display: grid;
@@ -416,45 +579,54 @@ h1 {
     display: flex;
     align-items: flex-start;
     gap: 8px;
+
     font-size: 13px;
 }
 
 .check-item input {
     margin-top: 5px;
+
     accent-color: #2563eb;
 }
 
-/* -----------------------------
+
+/* =====================================================
    FINAL
------------------------------ */
+===================================================== */
 
 .final-box {
     margin: 40px 0 60px;
     padding: 25px;
-    border-radius: 10px;
-    background: #f9fafb;
+
     border: 1px solid #e5e7eb;
+    border-radius: 10px;
+
+    background: #f9fafb;
 }
 
 .final-box h2 {
-    font-size: 19px;
     margin-top: 0;
+
+    font-size: 19px;
 }
 
 .final-message {
-    padding: 18px;
-    background: #fff;
-    border-left: 4px solid #2563eb;
     margin-top: 15px;
+    padding: 18px;
+
+    border-left: 4px solid #2563eb;
+
+    background: #ffffff;
 }
 
 .final-message strong {
     color: #1e3a8a;
 }
 
-/* -----------------------------
+
+/* =====================================================
    MOBILE
------------------------------ */
+===================================================== */
 
 @media (max-width: 800px) {
 
@@ -488,13 +660,21 @@ h1 {
     .roadmap td:nth-child(4) {
         display: none;
     }
+
+    .study-table th:nth-child(3),
+    .study-table td:nth-child(3) {
+        display: none;
+    }
 }
+
 </style>
 </head>
+
 
 <body>
 
 <div class="container">
+
 
 <!-- =====================================================
      HEADER
@@ -532,7 +712,7 @@ h1 {
     </div>
 
     <p>
-        개발자 경험 + 초등 SW 교육 경험을 바탕으로
+        개발자 경험과 초등 SW 교육 경험을 바탕으로
         <span class="highlight-blue">
             SW·AI 교육 콘텐츠와 교육과정을 설계할 수 있는 사람
         </span>
@@ -543,8 +723,10 @@ h1 {
         <span class="highlight-red">
             자격증을 모으는 것이 목표가 아니다.
         </span>
-        실제 교육과정을 만들고, 적용하고, 개선하여
-        취업 포트폴리오로 증명한다.
+
+        실제 교육과정을 만들고,
+        적용하고,
+        개선하여 취업 포트폴리오로 증명한다.
     </p>
 
 </div>
@@ -563,19 +745,38 @@ h1 {
     <div class="target-grid">
 
         <div class="target-card">
-            <div class="num">TARGET 01</div>
-            <h3>SW·AI 교육 콘텐츠 기획자</h3>
+
+            <div class="num">
+                TARGET 01
+            </div>
+
+            <h3>
+                SW·AI 교육 콘텐츠 기획자
+            </h3>
+
             <p>
-                교육 콘텐츠의 기획, 구성, 개발, 검수 및 개선
+                교육 콘텐츠의 기획, 구성, 개발,
+                검수 및 개선
             </p>
+
         </div>
 
+
         <div class="target-card">
-            <div class="num">TARGET 02</div>
-            <h3>초등 SW·AI 교육과정 기획자</h3>
+
+            <div class="num">
+                TARGET 02
+            </div>
+
+            <h3>
+                초등 SW·AI 교육과정 기획자
+            </h3>
+
             <p>
-                초등 학습자를 위한 교육과정·차시·교수학습·평가 설계
+                초등 학습자를 위한 교육과정,
+                차시, 교수학습, 평가 설계
             </p>
+
         </div>
 
     </div>
@@ -598,39 +799,45 @@ h1 {
         <div class="principle">
             <strong>① 교육학·교수설계</strong>
             <span>
-                교육과정, 학습자, 교육목표, 교수설계, 평가
+                교육과정, 학습자, 교육목표,
+                교수설계, 평가
             </span>
         </div>
 
         <div class="principle">
             <strong>② SW·AI 전문성</strong>
             <span>
-                컴퓨팅 사고, SW, 데이터, AI, 생성형 AI, AI 윤리
+                컴퓨팅 사고, SW, 데이터,
+                AI, 생성형 AI, AI 윤리
             </span>
         </div>
 
         <div class="principle">
             <strong>③ 교육 콘텐츠 제작</strong>
             <span>
-                지도안, 활동지, PPT, 디지털 콘텐츠, 교사용 자료
+                지도안, 활동지, PPT,
+                디지털 콘텐츠, 교사용 자료
             </span>
         </div>
 
     </div>
+
 
     <div style="margin-top:10px;" class="principles">
 
         <div class="principle">
             <strong>④ 현장 적용·검증</strong>
             <span>
-                파일럿 수업, 학생 반응, 피드백, 교육과정 개선
+                파일럿 수업, 학생 반응,
+                피드백, 교육과정 개선
             </span>
         </div>
 
         <div class="principle">
             <strong>핵심 전략</strong>
             <span>
-                공부 40% + 실습 60% → 점차 실무 비중 확대
+                공부 40% + 실습 60%
+                → 점차 실무 비중 확대
             </span>
         </div>
 
@@ -656,16 +863,20 @@ h1 {
         12주 전체 로드맵
     </div>
 
+
     <table class="roadmap">
 
         <thead>
+
             <tr>
                 <th>주차</th>
                 <th>주제</th>
                 <th>핵심 질문</th>
                 <th>주요 산출물</th>
             </tr>
+
         </thead>
+
 
         <tbody>
 
@@ -769,12 +980,24 @@ h1 {
     <div class="progress-wrap">
 
         <div class="progress-top">
-            <span>전체 12주 진행률</span>
-            <strong id="progressText">0%</strong>
+
+            <span>
+                전체 학습 진행률
+            </span>
+
+            <strong id="progressText">
+                0%
+            </strong>
+
         </div>
 
         <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
+
+            <div
+                class="progress-fill"
+                id="progressFill">
+            </div>
+
         </div>
 
     </div>
@@ -783,23 +1006,27 @@ h1 {
 
 
 <!-- =====================================================
-     WEEK 01
+     MONTH 1
 ===================================================== -->
 
 <section class="section">
 
-    <div class="section-title">
-        1개월차 · 교육을 설계하는 사람의 사고방식
-    </div>
+<div class="section-title">
+1개월차 · 교육을 설계하는 사람의 사고방식
+</div>
 
 
-<!-- WEEK 1 -->
+<!-- =====================================================
+     WEEK 01
+===================================================== -->
 
 <details class="week-card">
 
 <summary>
 
-    <div class="week-number">WEEK 01</div>
+    <div class="week-number">
+        WEEK 01
+    </div>
 
     <div class="week-title">
         교육과정 이해
@@ -809,13 +1036,17 @@ h1 {
         국가 교육과정과 디지털 교육의 변화 이해
     </div>
 
-    <div class="arrow">▼</div>
+    <div class="arrow">
+        ▼
+    </div>
 
 </summary>
+
 
 <div class="week-detail">
 
 <div class="detail-grid">
+
 
 <div class="detail-box">
 
@@ -847,6 +1078,157 @@ h1 {
 </div>
 
 
+<!-- STUDY MATERIAL -->
+
+<div class="detail-box full">
+
+<div class="study-materials">
+
+<div class="study-title">
+📖 이번 주 공부자료
+</div>
+
+
+<table class="study-table">
+
+<thead>
+
+<tr>
+<th>구분</th>
+<th>자료</th>
+<th>공부 방법</th>
+</tr>
+
+</thead>
+
+
+<tbody>
+
+
+<tr>
+
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+
+<a
+href="https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=141&boardSeq=93458&lev=0"
+target="_blank">
+
+교육부 · 2022 개정 교육과정 총론 및 각론
+
+</a>
+
+</td>
+
+<td>
+총론 중심으로 읽기
+</td>
+
+</tr>
+
+
+<tr>
+
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+
+<a
+href="https://www.moe.go.kr"
+target="_blank">
+
+교육부 · 국가교육과정정보센터 및 교육과정 자료
+
+</a>
+
+</td>
+
+<td>
+교육과정 구조 파악
+</td>
+
+</tr>
+
+
+<tr>
+
+<td class="material-recommended">
+추천
+</td>
+
+<td>
+2022 개정 교육과정 주요사항 및 해설자료
+</td>
+
+<td>
+개정 방향 파악
+</td>
+
+</tr>
+
+
+<tr>
+
+<td class="material-reference">
+참고
+</td>
+
+<td>
+실제 초등학교 정보·SW 관련 교육자료
+</td>
+
+<td>
+현장 모습 확인
+</td>
+
+</tr>
+
+
+</tbody>
+
+</table>
+
+
+<div class="study-note">
+
+💡 <strong>읽는 방법</strong><br>
+
+처음부터 정독하지 않는다.
+
+<strong>
+디지털 기초소양 / 정보교육 / 핵심역량 /
+학생 주도성 / 탐구 / 학교 교육과정
+</strong>
+
+등의 키워드를 중심으로 읽는다.
+
+</div>
+
+
+<div class="study-action">
+
+<strong>이번 주 공부 후 반드시 할 것 →</strong>
+
+자료를 읽은 뒤 자신의 말로
+
+<span class="highlight-blue">
+"왜 초등 SW·AI 교육이 필요한가?"
+</span>
+
+를 A4 1~2쪽으로 작성한다.
+
+</div>
+
+</div>
+
+</div>
+
+
 <div class="detail-box">
 
 <h4>❓ 핵심 질문</h4>
@@ -858,7 +1240,10 @@ h1 {
 </p>
 
 <p class="highlight-gray">
-단순한 개인 의견이 아니라 교육과정과 교육환경 변화에 근거하여 설명한다.
+
+개인의 의견이 아니라
+교육과정과 교육환경 변화에 근거하여 설명한다.
+
 </p>
 
 </div>
@@ -894,7 +1279,7 @@ h1 {
 </tr>
 
 <tr>
-<td>2022 개정 교육과정 분석</td>
+<td>교육과정 분석</td>
 <td>2~3쪽</td>
 <td>디지털·정보교육·역량 변화 분석</td>
 </tr>
@@ -906,9 +1291,9 @@ h1 {
 </tr>
 
 <tr>
-<td>SW·AI 핵심역량</td>
+<td>핵심역량 정의</td>
 <td>1쪽</td>
-<td>필요한 핵심역량 5~7개 정의</td>
+<td>필요한 역량 5~7개 정의</td>
 </tr>
 
 </table>
@@ -924,10 +1309,13 @@ h1 {
 
 <div class="portfolio">
 
-<strong>PART 01 · 교육환경 및 문제 분석</strong>
+<strong>
+PART 01 · 교육환경 및 문제 분석
+</strong>
 
 <p>
-"왜 지금 초등 SW·AI 교육이 필요한가?"를 근거를 가지고 설명하는 첫 번째 포트폴리오 챕터가 된다.
+"왜 지금 초등 SW·AI 교육이 필요한가?"를
+근거를 가지고 설명하는 첫 번째 포트폴리오 챕터가 된다.
 </p>
 
 </div>
@@ -943,7 +1331,7 @@ h1 {
 
 <label class="check-item">
 <input type="checkbox" class="progress-check">
-2022 개정 교육과정 자료를 읽었다.
+교육과정 자료를 읽었다.
 </label>
 
 <label class="check-item">
@@ -953,7 +1341,7 @@ SW·AI 교육의 필요성을 정리했다.
 
 <label class="check-item">
 <input type="checkbox" class="progress-check">
-3개의 산출물을 완성했다.
+핵심 산출물을 완성했다.
 </label>
 
 </div>
@@ -967,32 +1355,55 @@ SW·AI 교육의 필요성을 정리했다.
 </details>
 
 
-<!-- WEEK 2 -->
+<!-- =====================================================
+     WEEK 02
+===================================================== -->
 
 <details class="week-card">
 
 <summary>
-<div class="week-number">WEEK 02</div>
-<div class="week-title">학습자 분석</div>
-<div class="week-summary">초등학생을 이해하고 학습자를 정의하기</div>
-<div class="arrow">▼</div>
+
+<div class="week-number">
+WEEK 02
+</div>
+
+<div class="week-title">
+학습자 분석
+</div>
+
+<div class="week-summary">
+초등학생을 이해하고 학습자를 정의하기
+</div>
+
+<div class="arrow">
+▼
+</div>
+
 </summary>
+
 
 <div class="week-detail">
 
 <div class="detail-grid">
 
+
 <div class="detail-box">
+
 <h4>🎯 학습 목표</h4>
+
 <ul>
 <li>초등학생의 발달 특성을 이해한다.</li>
 <li>학년군에 따른 학습 차이를 분석한다.</li>
 <li>교육과정 설계를 위한 학습자 페르소나를 만든다.</li>
 </ul>
+
 </div>
 
+
 <div class="detail-box">
+
 <h4>📚 공부할 내용</h4>
+
 <ul>
 <li>아동 발달</li>
 <li>인지발달</li>
@@ -1001,109 +1412,241 @@ SW·AI 교육의 필요성을 정리했다.
 <li>학습자 요구분석</li>
 <li>학습자 페르소나</li>
 </ul>
+
 </div>
 
-<div class="detail-box">
-<h4>❓ 핵심 질문</h4>
-<p><strong>초등 3학년과 6학년에게 같은 AI 교육을 해도 될까?</strong></p>
-</div>
-
-<div class="detail-box">
-<h4>🛠 실습</h4>
-<ul>
-<li>초등 3~4학년 분석</li>
-<li>초등 5~6학년 분석</li>
-<li>AI 교육 경험 수준 비교</li>
-</ul>
-</div>
 
 <div class="detail-box full">
-<div class="output-box">
-<div class="output-title">📝 산출물</div>
 
-<table class="output-table">
+<div class="study-materials">
+
+<div class="study-title">
+📖 이번 주 공부자료
+</div>
+
+<table class="study-table">
+
 <tr>
-<th>산출물</th>
-<th>내용</th>
+<th>구분</th>
+<th>자료</th>
+<th>공부 방법</th>
 </tr>
+
 <tr>
-<td>학습자 분석표</td>
-<td>3~4학년 / 5~6학년 비교</td>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+초등학생 발달 및 학습 특성 자료
+</td>
+
+<td>
+발달 특성 중심
+</td>
 </tr>
+
 <tr>
-<td>학습자 페르소나 A</td>
-<td>초등 3~4학년 가상 학습자</td>
+<td class="material-recommended">
+추천
+</td>
+
+<td>
+학습자 요구분석 및 페르소나 설계 자료
+</td>
+
+<td>
+실습과 함께 보기
+</td>
 </tr>
+
 <tr>
-<td>학습자 페르소나 B</td>
-<td>초등 5~6학년 가상 학습자</td>
+<td class="material-reference">
+참고
+</td>
+
+<td>
+초등 SW·AI 교육 대상자 사례
+</td>
+
+<td>
+현장 사례 분석
+</td>
 </tr>
+
 </table>
 
-</div>
+<div class="study-action">
+
+<strong>이번 주 공부 후 →</strong>
+
+"내가 만드는 교육과정의 학생은 누구인가?"
+
+를 한 문장으로 정의한다.
+
 </div>
 
+</div>
+
+</div>
+
+
+<div class="detail-box">
+
+<h4>❓ 핵심 질문</h4>
+
+<p>
+<strong>
+초등 3학년과 6학년에게
+같은 AI 교육을 해도 될까?
+</strong>
+</p>
+
+</div>
+
+
+<div class="detail-box">
+
+<h4>🛠 실습</h4>
+
+<ul>
+<li>3~4학년 학습자 분석</li>
+<li>5~6학년 학습자 분석</li>
+<li>AI 교육 경험 수준 비교</li>
+</ul>
+
+</div>
+
+
 <div class="detail-box full">
-<h4>📁 포트폴리오 연결</h4>
+
+<div class="output-box">
+
+<div class="output-title">
+📝 산출물
+</div>
+
+<ul>
+
+<li>
+학습자 분석표
+</li>
+
+<li>
+초등 3~4학년 페르소나
+</li>
+
+<li>
+초등 5~6학년 페르소나
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+<div class="detail-box full">
+
+<h4>
+📁 포트폴리오 연결
+</h4>
+
 <div class="portfolio">
-<strong>PART 02 · 학습자 분석</strong>
-</div>
+
+<strong>
+PART 02 · 학습자 분석
+</strong>
+
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>☑ 완료 체크</h4>
+
+<h4>
+☑ 완료 체크
+</h4>
 
 <div class="check-list">
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
-초등 학년군별 특성을 정리했다.
+학년군별 특성을 정리했다.
 </label>
 
 <label class="check-item">
 <input type="checkbox" class="progress-check">
-학습자 페르소나 2개를 만들었다.
+페르소나 2개를 만들었다.
 </label>
 
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 학습자 분석 결과를 교육설계에 연결했다.
 </label>
-</div>
 
 </div>
 
 </div>
+
+</div>
+
 </div>
 
 </details>
 
 
-<!-- WEEK 3 -->
+<!-- =====================================================
+     WEEK 03
+===================================================== -->
 
 <details class="week-card">
 
 <summary>
-<div class="week-number">WEEK 03</div>
-<div class="week-title">교육목표와 핵심역량</div>
-<div class="week-summary">무엇을 배우게 할 것인지 정의하기</div>
-<div class="arrow">▼</div>
+
+<div class="week-number">
+WEEK 03
+</div>
+
+<div class="week-title">
+교육목표와 핵심역량
+</div>
+
+<div class="week-summary">
+무엇을 배우게 할 것인지 정의하기
+</div>
+
+<div class="arrow">
+▼
+</div>
+
 </summary>
+
 
 <div class="week-detail">
 
 <div class="detail-grid">
 
+
 <div class="detail-box">
+
 <h4>🎯 학습 목표</h4>
+
 <ul>
 <li>교육목표와 학습목표를 구분한다.</li>
 <li>Bloom 교육목표분류를 이해한다.</li>
 <li>관찰 가능한 학습성과를 작성한다.</li>
 </ul>
+
 </div>
 
+
 <div class="detail-box">
+
 <h4>📚 공부할 내용</h4>
+
 <ul>
 <li>교육목표</li>
 <li>학습목표</li>
@@ -1112,88 +1655,228 @@ SW·AI 교육의 필요성을 정리했다.
 <li>지식·기능·태도</li>
 <li>역량 기반 교육</li>
 </ul>
+
 </div>
 
-<div class="detail-box">
-<h4>❓ 핵심 질문</h4>
-<p><strong>교육이 끝난 뒤 학생이 무엇을 할 수 있어야 하는가?</strong></p>
-</div>
-
-<div class="detail-box">
-<h4>🛠 실습</h4>
-<p>
-"AI를 이해한다"와 같은 추상적인 표현을 관찰 가능한 행동으로 바꾼다.
-</p>
-</div>
 
 <div class="detail-box full">
+
+<div class="study-materials">
+
+<div class="study-title">
+📖 이번 주 공부자료
+</div>
+
+<table class="study-table">
+
+<tr>
+<th>구분</th>
+<th>자료</th>
+<th>공부 방법</th>
+</tr>
+
+<tr>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+Bloom의 교육목표분류체계
+</td>
+
+<td>
+분류체계 이해
+</td>
+</tr>
+
+<tr>
+<td class="material-recommended">
+추천
+</td>
+
+<td>
+학습목표 작성법 및 성취기준 설계
+</td>
+
+<td>
+예시 비교
+</td>
+</tr>
+
+<tr>
+<td class="material-reference">
+참고
+</td>
+
+<td>
+역량 기반 교육과정 사례
+</td>
+
+<td>
+필요할 때 참고
+</td>
+</tr>
+
+</table>
+
+<div class="study-action">
+
+<strong>연습 →</strong>
+
+"AI를 이해한다"라는 표현을
+학생이 실제로 행동할 수 있는 문장으로
+10개 이상 바꿔본다.
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="detail-box">
+
+<h4>❓ 핵심 질문</h4>
+
+<p>
+<strong>
+교육이 끝난 뒤 학생이
+무엇을 할 수 있어야 하는가?
+</strong>
+</p>
+
+</div>
+
+
+<div class="detail-box">
+
+<h4>🛠 실습</h4>
+
+<p>
+추상적인 교육목표를
+관찰 가능한 행동으로 변환한다.
+</p>
+
+</div>
+
+
+<div class="detail-box full">
+
 <div class="output-box">
-<div class="output-title">📝 산출물</div>
+
+<div class="output-title">
+📝 산출물
+</div>
+
 <ul>
 <li>초등 SW·AI 핵심역량 체계</li>
 <li>학습목표 15~20개</li>
 <li>교육목표 작성 연습표</li>
 </ul>
-</div>
+
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>📁 포트폴리오 연결</h4>
+
+<h4>
+📁 포트폴리오 연결
+</h4>
+
 <div class="portfolio">
-<strong>PART 03 · 교육목표 및 핵심역량</strong>
-</div>
+<strong>
+PART 03 · 교육목표 및 핵심역량
+</strong>
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>☑ 완료 체크</h4>
+
+<h4>
+☑ 완료 체크
+</h4>
+
 <div class="check-list">
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 핵심역량을 정의했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 학습목표 15개 이상을 작성했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
-학습목표가 관찰 가능한 행동으로 작성되었는지 검토했다.
+학습목표를 행동 중심으로 작성했다.
 </label>
-</div>
+
 </div>
 
 </div>
+
+</div>
+
 </div>
 
 </details>
 
 
-<!-- WEEK 4 -->
+<!-- =====================================================
+     WEEK 04
+===================================================== -->
 
 <details class="week-card">
 
 <summary>
-<div class="week-number">WEEK 04</div>
-<div class="week-title">교수설계</div>
-<div class="week-summary">ADDIE를 활용해 교육과정의 뼈대 만들기</div>
-<div class="arrow">▼</div>
+
+<div class="week-number">
+WEEK 04
+</div>
+
+<div class="week-title">
+교수설계
+</div>
+
+<div class="week-summary">
+ADDIE를 활용해 교육과정의 뼈대 만들기
+</div>
+
+<div class="arrow">
+▼
+</div>
+
 </summary>
+
 
 <div class="week-detail">
 
 <div class="detail-grid">
 
+
 <div class="detail-box">
+
 <h4>🎯 학습 목표</h4>
+
 <ul>
 <li>교수설계의 기본 개념을 이해한다.</li>
 <li>ADDIE의 각 단계를 이해한다.</li>
 <li>교육과정을 거꾸로 설계한다.</li>
 </ul>
+
 </div>
 
+
 <div class="detail-box">
+
 <h4>📚 공부할 내용</h4>
+
 <ul>
 <li>교수설계</li>
 <li>ADDIE</li>
@@ -1204,25 +1887,125 @@ SW·AI 교육의 필요성을 정리했다.
 <li>평가</li>
 <li>Backward Design</li>
 </ul>
+
 </div>
 
-<div class="detail-box">
-<h4>❓ 핵심 질문</h4>
-<p><strong>교육목표에서 실제 수업까지 어떻게 연결할 것인가?</strong></p>
-</div>
-
-<div class="detail-box">
-<h4>🛠 실습</h4>
-<p>
-초등 AI 교육 프로그램 하나를 선택하고 ADDIE 전체 과정을 적용한다.
-</p>
-</div>
 
 <div class="detail-box full">
+
+<div class="study-materials">
+
+<div class="study-title">
+📖 이번 주 공부자료
+</div>
+
+<table class="study-table">
+
+<tr>
+<th>구분</th>
+<th>자료</th>
+<th>공부 방법</th>
+</tr>
+
+<tr>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+ADDIE 교수설계 모형
+</td>
+
+<td>
+각 단계 이해
+</td>
+</tr>
+
+<tr>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+Backward Design
+</td>
+
+<td>
+역설계 방식 이해
+</td>
+</tr>
+
+<tr>
+<td class="material-recommended">
+추천
+</td>
+
+<td>
+교수설계 사례
+</td>
+
+<td>
+실제 사례 분석
+</td>
+</tr>
+
+</table>
+
+<div class="study-action">
+
+<strong>이번 주 핵심 →</strong>
+
+교육목표에서 출발하여
+"학생 활동 → 평가"까지
+거꾸로 연결한다.
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="detail-box">
+
+<h4>❓ 핵심 질문</h4>
+
+<p>
+<strong>
+교육목표에서 실제 수업까지
+어떻게 연결할 것인가?
+</strong>
+</p>
+
+</div>
+
+
+<div class="detail-box">
+
+<h4>🛠 실습</h4>
+
+<p>
+초등 AI 교육 프로그램 하나를 선택하여
+ADDIE 전체 과정을 적용한다.
+</p>
+
+</div>
+
+
+<div class="detail-box full">
+
 <div class="output-box">
-<div class="output-title">📝 산출물</div>
-<p><strong>초등 AI 교육 프로그램 교수설계안</strong></p>
+
+<div class="output-title">
+📝 산출물
+</div>
+
+<strong>
+초등 AI 교육 프로그램 교수설계안
+</strong>
+
 <ul>
+
 <li>교육 배경</li>
 <li>학습자 분석</li>
 <li>교육목표</li>
@@ -1232,36 +2015,60 @@ SW·AI 교육의 필요성을 정리했다.
 <li>평가</li>
 <li>교육환경</li>
 <li>예상 문제 및 개선방안</li>
+
 </ul>
-</div>
+
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>📁 포트폴리오 연결</h4>
+
+<h4>
+📁 포트폴리오 연결
+</h4>
+
 <div class="portfolio">
-<strong>PART 04 · 교수설계</strong>
-</div>
+
+<strong>
+PART 04 · 교수설계
+</strong>
+
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>☑ 완료 체크</h4>
+
+<h4>
+☑ 완료 체크
+</h4>
+
 <div class="check-list">
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
-ADDIE의 각 단계를 설명할 수 있다.
+ADDIE 각 단계를 설명할 수 있다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 교수설계안을 완성했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
-목표-활동-평가가 연결되어 있는지 검토했다.
+목표-활동-평가의 연결을 검토했다.
 </label>
-</div>
+
 </div>
 
 </div>
+
+</div>
+
 </div>
 
 </details>
@@ -1280,31 +2087,42 @@ ADDIE의 각 단계를 설명할 수 있다.
 </div>
 
 
-<!-- WEEK 5 -->
+<!-- =====================================================
+     WEEK 05
+===================================================== -->
 
 <details class="week-card">
 
 <summary>
-<div class="week-number">WEEK 05</div>
-<div class="week-title">교수·학습방법</div>
-<div class="week-summary">학생에게 어떤 학습경험을 제공할 것인가?</div>
-<div class="arrow">▼</div>
+
+<div class="week-number">
+WEEK 05
+</div>
+
+<div class="week-title">
+교수·학습방법
+</div>
+
+<div class="week-summary">
+학생에게 어떤 학습경험을 제공할 것인가?
+</div>
+
+<div class="arrow">
+▼
+</div>
+
 </summary>
+
 
 <div class="week-detail">
 
 <div class="detail-grid">
 
-<div class="detail-box">
-<h4>🎯 학습 목표</h4>
-<ul>
-<li>주요 교수학습방법을 이해한다.</li>
-<li>SW·AI 교육에 적합한 방법을 선택한다.</li>
-</ul>
-</div>
 
 <div class="detail-box">
+
 <h4>📚 공부할 내용</h4>
+
 <ul>
 <li>직접교수</li>
 <li>탐구학습</li>
@@ -1313,83 +2131,193 @@ ADDIE의 각 단계를 설명할 수 있다.
 <li>협동학습</li>
 <li>토의·토론</li>
 </ul>
+
 </div>
 
+
 <div class="detail-box">
+
 <h4>❓ 핵심 질문</h4>
-<p><strong>SW·AI 교육에서는 어떤 학습경험이 효과적인가?</strong></p>
-</div>
 
-<div class="detail-box">
-<h4>🛠 실습</h4>
 <p>
-하나의 AI 주제를 서로 다른 교수학습방법으로 설계하고 비교한다.
+<strong>
+SW·AI 교육에서는
+어떤 학습경험이 효과적인가?
+</strong>
 </p>
+
 </div>
 
+
 <div class="detail-box full">
+
+<div class="study-materials">
+
+<div class="study-title">
+📖 이번 주 공부자료
+</div>
+
+<table class="study-table">
+
+<tr>
+<th>구분</th>
+<th>자료</th>
+<th>공부 방법</th>
+</tr>
+
+<tr>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+프로젝트 기반 학습(PBL)
+</td>
+
+<td>
+구조 이해
+</td>
+</tr>
+
+<tr>
+<td class="material-recommended">
+추천
+</td>
+
+<td>
+문제 기반 학습·협동학습 사례
+</td>
+
+<td>
+SW교육 사례 중심
+</td>
+</tr>
+
+<tr>
+<td class="material-reference">
+참고
+</td>
+
+<td>
+초등 SW·AI 프로젝트 수업 사례
+</td>
+
+<td>
+아이디어 수집
+</td>
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div class="detail-box full">
+
 <div class="output-box">
-<div class="output-title">📝 산출물</div>
-<strong>SW·AI 교수학습방법 비교·선정 보고서</strong>
-</div>
+
+<div class="output-title">
+📝 산출물
 </div>
 
-<div class="detail-box full">
-<h4>📁 포트폴리오 연결</h4>
-<div class="portfolio">
-<strong>PART 05 · 교수학습 설계</strong>
-</div>
+<strong>
+SW·AI 교수학습방법 비교·선정 보고서
+</strong>
+
+<p>
+하나의 AI 주제를 서로 다른 교수방법으로
+설계하고 어떤 방법이 적합한지 비교한다.
+</p>
+
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>☑ 완료 체크</h4>
+
+<h4>
+☑ 완료 체크
+</h4>
+
 <div class="check-list">
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 교수학습방법 5개 이상을 이해했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 SW·AI 교육에 적합한 방법을 선택했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 선정 이유를 설명할 수 있다.
 </label>
-</div>
+
 </div>
 
 </div>
+
+</div>
+
 </div>
 
 </details>
 
 
-<!-- WEEK 6 -->
+<!-- =====================================================
+     WEEK 06
+===================================================== -->
 
 <details class="week-card">
 
 <summary>
-<div class="week-number">WEEK 06</div>
-<div class="week-title">초등 SW·AI 교육내용 체계</div>
-<div class="week-summary">무엇을 어디까지 가르칠 것인가?</div>
-<div class="arrow">▼</div>
+
+<div class="week-number">
+WEEK 06
+</div>
+
+<div class="week-title">
+초등 SW·AI 교육내용 체계
+</div>
+
+<div class="week-summary">
+무엇을 어디까지 가르칠 것인가?
+</div>
+
+<div class="arrow">
+▼
+</div>
+
 </summary>
+
 
 <div class="week-detail">
 
 <div class="detail-grid">
 
+
 <div class="detail-box">
+
 <h4>🎯 학습 목표</h4>
+
 <ul>
 <li>초등 SW·AI 교육의 핵심 내용을 정리한다.</li>
 <li>학년군에 맞게 교육내용을 배치한다.</li>
 </ul>
+
 </div>
 
+
 <div class="detail-box">
+
 <h4>📚 공부할 내용</h4>
+
 <ul>
 <li>컴퓨팅 사고</li>
 <li>알고리즘</li>
@@ -1400,86 +2328,247 @@ SW·AI 교육에 적합한 방법을 선택했다.
 <li>AI 리터러시</li>
 <li>AI 윤리</li>
 </ul>
+
 </div>
 
-<div class="detail-box">
-<h4>❓ 핵심 질문</h4>
-<p><strong>초등학생에게 AI를 가르친다면 무엇을 어디까지 가르쳐야 하는가?</strong></p>
-</div>
-
-<div class="detail-box">
-<h4>🛠 실습</h4>
-<p>
-3~4학년 / 5~6학년 교육내용을 각각 구성한다.
-</p>
-</div>
 
 <div class="detail-box full">
+
+<div class="study-materials">
+
+<div class="study-title">
+📖 이번 주 공부자료
+</div>
+
+<table class="study-table">
+
+<tr>
+<th>구분</th>
+<th>자료</th>
+<th>공부 방법</th>
+</tr>
+
+<tr>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+초등 SW·정보교육 교육과정
+</td>
+
+<td>
+성취기준 중심
+</td>
+</tr>
+
+<tr>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+컴퓨팅 사고력(Computational Thinking)
+</td>
+
+<td>
+개념과 사례
+</td>
+</tr>
+
+<tr>
+<td class="material-recommended">
+추천
+</td>
+
+<td>
+AI 리터러시 교육 사례
+</td>
+
+<td>
+교육내용 분석
+</td>
+</tr>
+
+<tr>
+<td class="material-reference">
+참고
+</td>
+
+<td>
+초등 AI 교육 프로그램 사례
+</td>
+
+<td>
+아이디어 수집
+</td>
+</tr>
+
+</table>
+
+<div class="study-note">
+
+💡 이 주차부터는
+"AI 기술 자체를 공부하는 것"보다
+<strong>
+"이 내용을 초등학생에게 어떻게 가르칠 것인가"
+</strong>
+를 중심으로 생각한다.
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="detail-box">
+
+<h4>❓ 핵심 질문</h4>
+
+<p>
+<strong>
+초등학생에게 AI를 가르친다면
+무엇을 어디까지 가르쳐야 하는가?
+</strong>
+</p>
+
+</div>
+
+
+<div class="detail-box">
+
+<h4>🛠 실습</h4>
+
+<p>
+3~4학년 / 5~6학년
+교육내용을 각각 구성한다.
+</p>
+
+</div>
+
+
+<div class="detail-box full">
+
 <div class="output-box">
-<div class="output-title">📝 산출물</div>
-<strong>초등 SW·AI 교육내용 체계도</strong>
+
+<div class="output-title">
+📝 산출물
+</div>
+
+<strong>
+초등 SW·AI 교육내용 체계도
+</strong>
+
 <p>
 학년군 × 역량 × 지식 × 기능 × 태도로 구성한다.
 </p>
-</div>
+
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>📁 포트폴리오 연결</h4>
+
+<h4>
+📁 포트폴리오 연결
+</h4>
+
 <div class="portfolio">
-<strong>PART 06 · SW·AI 교육내용 체계</strong>
-</div>
+<strong>
+PART 06 · SW·AI 교육내용 체계
+</strong>
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>☑ 완료 체크</h4>
+
+<h4>
+☑ 완료 체크
+</h4>
+
 <div class="check-list">
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 SW 영역의 핵심내용을 정리했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 AI 영역의 핵심내용을 정리했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 학년군별 교육내용 체계를 만들었다.
 </label>
-</div>
+
 </div>
 
 </div>
+
+</div>
+
 </div>
 
 </details>
 
 
-<!-- WEEK 7 -->
+<!-- =====================================================
+     WEEK 07
+===================================================== -->
 
 <details class="week-card">
 
 <summary>
-<div class="week-number">WEEK 07</div>
-<div class="week-title">12차시 교육과정 설계</div>
-<div class="week-summary">첫 번째 실제 교육과정 만들기</div>
-<div class="arrow">▼</div>
+
+<div class="week-number">
+WEEK 07
+</div>
+
+<div class="week-title">
+12차시 교육과정 설계
+</div>
+
+<div class="week-summary">
+첫 번째 실제 교육과정 만들기
+</div>
+
+<div class="arrow">
+▼
+</div>
+
 </summary>
+
 
 <div class="week-detail">
 
 <div class="detail-grid">
 
-<div class="detail-box">
-<h4>🎯 프로젝트</h4>
-<p>
-<strong>초등 5~6학년 AI 리터러시 12차시</strong>
-</p>
-</div>
 
 <div class="detail-box">
+
+<h4>🎯 프로젝트</h4>
+
+<p>
+<strong>
+초등 5~6학년 AI 리터러시 12차시
+</strong>
+</p>
+
+</div>
+
+
+<div class="detail-box">
+
 <h4>📚 구성 예시</h4>
+
 <ol>
+
 <li>AI는 무엇일까?</li>
 <li>우리 주변의 AI</li>
 <li>AI는 어떻게 판단할까?</li>
@@ -1492,11 +2581,93 @@ AI 영역의 핵심내용을 정리했다.
 <li>AI로 문제 해결하기</li>
 <li>AI 프로젝트</li>
 <li>AI 시대의 나</li>
+
 </ol>
+
 </div>
 
+
 <div class="detail-box full">
-<h4>🛠 각 차시에 반드시 포함할 것</h4>
+
+<div class="study-materials">
+
+<div class="study-title">
+📖 이번 주 공부자료
+</div>
+
+<table class="study-table">
+
+<tr>
+<th>구분</th>
+<th>자료</th>
+<th>공부 방법</th>
+</tr>
+
+<tr>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+기존 초등 AI 교육과정 사례 2~3개
+</td>
+
+<td>
+구성 비교
+</td>
+</tr>
+
+<tr>
+<td class="material-recommended">
+추천
+</td>
+
+<td>
+공공기관 SW·AI 교육 프로그램
+</td>
+
+<td>
+차시 구성 분석
+</td>
+</tr>
+
+<tr>
+<td class="material-reference">
+참고
+</td>
+
+<td>
+민간 교육기업 AI 교육 프로그램
+</td>
+
+<td>
+콘텐츠 구성 참고
+</td>
+</tr>
+
+</table>
+
+<div class="study-action">
+
+<strong>
+이번 주에는 "따라 만들기"가 허용된다.
+</strong>
+
+좋은 교육과정을 여러 개 분석하고
+공통 구조를 찾아 나만의 과정으로 재설계한다.
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="detail-box full">
+
+<h4>
+🛠 각 차시에 반드시 포함할 것
+</h4>
 
 <table class="output-table">
 
@@ -1539,68 +2710,121 @@ AI 영역의 핵심내용을 정리했다.
 
 </div>
 
+
 <div class="detail-box full">
+
 <div class="output-box">
-<div class="output-title">📝 산출물</div>
-<strong>초등 AI 리터러시 12차시 교육과정</strong>
-</div>
+
+<div class="output-title">
+📝 산출물
 </div>
 
+<strong>
+초등 AI 리터러시 12차시 교육과정
+</strong>
+
+</div>
+
+</div>
+
+
 <div class="detail-box full">
-<h4>📁 포트폴리오 연결</h4>
+
+<h4>
+📁 포트폴리오 연결
+</h4>
+
 <div class="portfolio">
-<strong>PART 07 · 교육과정 설계</strong>
-</div>
+<strong>
+PART 07 · 교육과정 설계
+</strong>
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>☑ 완료 체크</h4>
+
+<h4>
+☑ 완료 체크
+</h4>
+
 <div class="check-list">
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 12차시 주제를 구성했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 각 차시의 학습목표를 작성했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 활동과 평가를 연결했다.
 </label>
-</div>
+
 </div>
 
 </div>
+
+</div>
+
 </div>
 
 </details>
 
 
-<!-- WEEK 8 -->
+<!-- =====================================================
+     WEEK 08
+===================================================== -->
 
 <details class="week-card">
 
 <summary>
-<div class="week-number">WEEK 08</div>
-<div class="week-title">교육 콘텐츠 개발</div>
-<div class="week-summary">교육과정을 실제 수업자료로 변환하기</div>
-<div class="arrow">▼</div>
+
+<div class="week-number">
+WEEK 08
+</div>
+
+<div class="week-title">
+교육 콘텐츠 개발
+</div>
+
+<div class="week-summary">
+교육과정을 실제 수업자료로 변환하기
+</div>
+
+<div class="arrow">
+▼
+</div>
+
 </summary>
+
 
 <div class="week-detail">
 
 <div class="detail-grid">
 
-<div class="detail-box">
-<h4>🎯 목표</h4>
-<p>
-12차시 중 최소 3차시를 실제 사용할 수 있는 수준으로 개발한다.
-</p>
-</div>
 
 <div class="detail-box">
+
+<h4>🎯 목표</h4>
+
+<p>
+12차시 중 최소 3차시를
+실제로 사용할 수 있는 수준으로 개발한다.
+</p>
+
+</div>
+
+
+<div class="detail-box">
+
 <h4>🛠 제작물</h4>
+
 <ul>
 <li>교사용 지도안</li>
 <li>학생 활동지</li>
@@ -1609,59 +2833,163 @@ AI 영역의 핵심내용을 정리했다.
 <li>학생 산출물</li>
 <li>교사용 운영 가이드</li>
 </ul>
+
 </div>
 
-<div class="detail-box">
-<h4>❓ 핵심 질문</h4>
-<p><strong>교육과정을 실제 수업 콘텐츠로 어떻게 변환할 것인가?</strong></p>
-</div>
-
-<div class="detail-box">
-<h4 class="highlight-red">⚠ 중요</h4>
-<p>
-예쁘게 만드는 것보다
-<strong>교육목표 → 활동 → 평가</strong>의 연결이 중요하다.
-</p>
-</div>
 
 <div class="detail-box full">
+
+<div class="study-materials">
+
+<div class="study-title">
+📖 이번 주 공부자료
+</div>
+
+<table class="study-table">
+
+<tr>
+<th>구분</th>
+<th>자료</th>
+<th>공부 방법</th>
+</tr>
+
+<tr>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+초등 수업지도안 작성 사례
+</td>
+
+<td>
+구조 분석
+</td>
+</tr>
+
+<tr>
+<td class="material-recommended">
+추천
+</td>
+
+<td>
+학생 활동지·워크시트 사례
+</td>
+
+<td>
+활동 구조 분석
+</td>
+</tr>
+
+<tr>
+<td class="material-reference">
+참고
+</td>
+
+<td>
+교육용 PPT·디지털 콘텐츠 사례
+</td>
+
+<td>
+디자인 참고
+</td>
+</tr>
+
+</table>
+
+<div class="study-note">
+
+⚠️ 예쁘게 만드는 것이 목표가 아니다.
+
+<strong>
+교육목표 → 활동 → 학생 산출물 → 평가
+</strong>
+
+가 자연스럽게 연결되는지가 가장 중요하다.
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="detail-box">
+
+<h4>❓ 핵심 질문</h4>
+
+<p>
+<strong>
+교육과정을 실제 수업 콘텐츠로
+어떻게 변환할 것인가?
+</strong>
+</p>
+
+</div>
+
+
+<div class="detail-box">
+
+<h4>📝 산출물</h4>
+
 <div class="output-box">
-<div class="output-title">📝 산출물</div>
+
 <ul>
 <li>상세 지도안 3개 이상</li>
 <li>학생 활동지</li>
 <li>수업 PPT</li>
 <li>교사용 운영 가이드</li>
 </ul>
-</div>
+
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>📁 포트폴리오 연결</h4>
+
+<h4>
+📁 포트폴리오 연결
+</h4>
+
 <div class="portfolio">
-<strong>PART 08 · 교육 콘텐츠 개발</strong>
-</div>
+<strong>
+PART 08 · 교육 콘텐츠 개발
+</strong>
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>☑ 완료 체크</h4>
+
+<h4>
+☑ 완료 체크
+</h4>
+
 <div class="check-list">
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 상세 지도안 3개를 만들었다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 학생 활동지를 만들었다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 PPT를 만들었다.
 </label>
-</div>
+
 </div>
 
 </div>
+
+</div>
+
 </div>
 
 </details>
@@ -1680,23 +3008,42 @@ PPT를 만들었다.
 </div>
 
 
-<!-- WEEK 9 -->
+<!-- =====================================================
+     WEEK 09
+===================================================== -->
 
 <details class="week-card">
 
 <summary>
-<div class="week-number">WEEK 09</div>
-<div class="week-title">평가 설계</div>
-<div class="week-summary">학생이 실제로 배웠는지 확인하기</div>
-<div class="arrow">▼</div>
+
+<div class="week-number">
+WEEK 09
+</div>
+
+<div class="week-title">
+평가 설계
+</div>
+
+<div class="week-summary">
+학생이 실제로 배웠는지 확인하기
+</div>
+
+<div class="arrow">
+▼
+</div>
+
 </summary>
+
 
 <div class="week-detail">
 
 <div class="detail-grid">
 
+
 <div class="detail-box">
+
 <h4>📚 공부할 내용</h4>
+
 <ul>
 <li>진단평가</li>
 <li>형성평가</li>
@@ -1705,81 +3052,223 @@ PPT를 만들었다.
 <li>과정중심평가</li>
 <li>루브릭</li>
 </ul>
+
 </div>
+
 
 <div class="detail-box">
+
 <h4>❓ 핵심 질문</h4>
-<p><strong>가르쳤다는 것을 어떻게 확인할 것인가?</strong></p>
+
+<p>
+<strong>
+가르쳤다는 것을
+어떻게 확인할 것인가?
+</strong>
+</p>
+
 </div>
 
+
 <div class="detail-box full">
+
+<div class="study-materials">
+
+<div class="study-title">
+📖 이번 주 공부자료
+</div>
+
+<table class="study-table">
+
+<tr>
+<th>구분</th>
+<th>자료</th>
+<th>공부 방법</th>
+</tr>
+
+<tr>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+교육평가 기본 개념
+</td>
+
+<td>
+평가 유형 구분
+</td>
+</tr>
+
+<tr>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+수행평가 및 루브릭
+</td>
+
+<td>
+실제 루브릭 분석
+</td>
+</tr>
+
+<tr>
+<td class="material-recommended">
+추천
+</td>
+
+<td>
+과정중심평가 사례
+</td>
+
+<td>
+초등 사례 중심
+</td>
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div class="detail-box full">
+
 <div class="output-box">
-<div class="output-title">📝 산출물</div>
+
+<div class="output-title">
+📝 산출물
+</div>
+
 <ul>
-<li>초등 AI 교육 평가계획</li>
-<li>차시별 형성평가</li>
-<li>AI 프로젝트 평가 루브릭</li>
-<li>학생 자기평가지</li>
+
+<li>
+초등 AI 교육 평가계획
+</li>
+
+<li>
+차시별 형성평가
+</li>
+
+<li>
+AI 프로젝트 평가 루브릭
+</li>
+
+<li>
+학생 자기평가지
+</li>
+
 </ul>
-</div>
+
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>📁 포트폴리오 연결</h4>
+
+<h4>
+📁 포트폴리오 연결
+</h4>
+
 <div class="portfolio">
-<strong>PART 09 · 평가 설계</strong>
-</div>
+<strong>
+PART 09 · 평가 설계
+</strong>
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>☑ 완료 체크</h4>
+
+<h4>
+☑ 완료 체크
+</h4>
+
 <div class="check-list">
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 평가계획을 완성했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 루브릭을 만들었다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
-학습목표와 평가의 연결을 검토했다.
+학습목표와 평가를 연결했다.
 </label>
-</div>
+
 </div>
 
 </div>
+
+</div>
+
 </div>
 
 </details>
 
 
-<!-- WEEK 10 -->
+<!-- =====================================================
+     WEEK 10
+===================================================== -->
 
 <details class="week-card">
 
 <summary>
-<div class="week-number">WEEK 10</div>
-<div class="week-title">교육과정 개발 프로젝트</div>
-<div class="week-summary">지금까지 만든 것을 하나의 완성된 프로그램으로 통합</div>
-<div class="arrow">▼</div>
+
+<div class="week-number">
+WEEK 10
+</div>
+
+<div class="week-title">
+교육과정 개발 프로젝트
+</div>
+
+<div class="week-summary">
+지금까지 만든 것을 하나의 완성된 프로그램으로 통합
+</div>
+
+<div class="arrow">
+▼
+</div>
+
 </summary>
+
 
 <div class="week-detail">
 
 <div class="detail-grid">
 
-<div class="detail-box">
-<h4>🎯 프로젝트</h4>
-<p>
-<strong>초등 5~6학년을 위한 AI 리터러시 교육과정 개발</strong>
-</p>
-</div>
 
 <div class="detail-box">
+
+<h4>🎯 프로젝트</h4>
+
+<p>
+<strong>
+초등 5~6학년을 위한
+AI 리터러시 교육과정 개발
+</strong>
+</p>
+
+</div>
+
+
+<div class="detail-box">
+
 <h4>📚 개발서 구성</h4>
+
 <ul>
+
 <li>개발 배경</li>
 <li>교육환경 분석</li>
 <li>학습자 분석</li>
@@ -1790,79 +3279,202 @@ PPT를 만들었다.
 <li>교수학습방법</li>
 <li>12차시 교육과정</li>
 <li>평가계획</li>
+
 </ul>
+
 </div>
 
+
 <div class="detail-box full">
+
+<div class="study-materials">
+
+<div class="study-title">
+📖 이번 주 공부자료
+</div>
+
+<table class="study-table">
+
+<tr>
+<th>구분</th>
+<th>자료</th>
+<th>공부 방법</th>
+</tr>
+
+<tr>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+교육과정 개발 사례
+</td>
+
+<td>
+개발서 구조 분석
+</td>
+</tr>
+
+<tr>
+<td class="material-recommended">
+추천
+</td>
+
+<td>
+공공기관 교육 프로그램 개발 사례
+</td>
+
+<td>
+구성요소 비교
+</td>
+</tr>
+
+<tr>
+<td class="material-reference">
+참고
+</td>
+
+<td>
+교육기업 프로그램 소개서
+</td>
+
+<td>
+현업 표현 참고
+</td>
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div class="detail-box full">
+
 <div class="output-box">
-<div class="output-title">📝 핵심 산출물</div>
-<strong>교육과정 개발서</strong>
+
+<div class="output-title">
+📝 핵심 산출물
+</div>
+
+<strong>
+교육과정 개발서
+</strong>
 
 <p>
 권장 분량: 약 15~30쪽
 </p>
 
 <p>
-지금까지 만든 산출물을 하나의 논리적인 교육과정 개발 프로젝트로 통합한다.
+지금까지 만든 산출물을
+하나의 논리적인 교육과정 개발 프로젝트로 통합한다.
 </p>
-</div>
+
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>📁 포트폴리오 연결</h4>
+
+<h4>
+📁 포트폴리오 연결
+</h4>
+
 <div class="portfolio">
-<strong>핵심 프로젝트 · 교육과정 개발</strong>
-</div>
+
+<strong>
+핵심 프로젝트 · 교육과정 개발
+</strong>
+
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>☑ 완료 체크</h4>
+
+<h4>
+☑ 완료 체크
+</h4>
+
 <div class="check-list">
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
-교육과정 개발서를 하나로 통합했다.
+교육과정 개발서를 통합했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
-교육목표-활동-평가의 연결을 검토했다.
+교육목표-활동-평가를 검토했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 제3자가 읽어도 프로젝트 흐름을 이해할 수 있다.
 </label>
-</div>
+
 </div>
 
 </div>
+
+</div>
+
 </div>
 
 </details>
 
 
-<!-- WEEK 11 -->
+<!-- =====================================================
+     WEEK 11
+===================================================== -->
 
 <details class="week-card">
 
 <summary>
-<div class="week-number">WEEK 11</div>
-<div class="week-title">파일럿 수업과 개선</div>
-<div class="week-summary">실제로 적용하고 피드백을 통해 개선하기</div>
-<div class="arrow">▼</div>
+
+<div class="week-number">
+WEEK 11
+</div>
+
+<div class="week-title">
+파일럿 수업과 개선
+</div>
+
+<div class="week-summary">
+실제로 적용하고 피드백을 통해 개선하기
+</div>
+
+<div class="arrow">
+▼
+</div>
+
 </summary>
+
 
 <div class="week-detail">
 
 <div class="detail-grid">
 
-<div class="detail-box">
-<h4>🎯 목표</h4>
-<p>
-가능하다면 실제 초등학생을 대상으로 1~2차시를 파일럿한다.
-</p>
-</div>
 
 <div class="detail-box">
+
+<h4>🎯 목표</h4>
+
+<p>
+가능하다면 실제 초등학생을 대상으로
+1~2차시를 파일럿한다.
+</p>
+
+</div>
+
+
+<div class="detail-box">
+
 <h4>🔎 관찰 항목</h4>
+
 <ul>
 <li>학생 이해도</li>
 <li>활동 시간</li>
@@ -1871,10 +3483,79 @@ PPT를 만들었다.
 <li>학생 결과물</li>
 <li>학습목표 달성 여부</li>
 </ul>
+
 </div>
 
+
+<div class="detail-box full">
+
+<div class="study-materials">
+
+<div class="study-title">
+📖 이번 주 공부자료
+</div>
+
+<table class="study-table">
+
+<tr>
+<th>구분</th>
+<th>자료</th>
+<th>공부 방법</th>
+</tr>
+
+<tr>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+수업 관찰 및 학습자 피드백 방법
+</td>
+
+<td>
+관찰 항목 설계
+</td>
+</tr>
+
+<tr>
+<td class="material-recommended">
+추천
+</td>
+
+<td>
+교육과정 개선 사례
+</td>
+
+<td>
+Before/After 분석
+</td>
+</tr>
+
+</table>
+
+<div class="study-action">
+
+<strong>
+핵심 사고방식 →
+</strong>
+
+"수업이 잘 됐다"가 아니라
+<strong>
+어떤 데이터를 통해 무엇을 개선했는가?
+</strong>
+를 기록한다.
+
+</div>
+
+</div>
+
+</div>
+
+
 <div class="detail-box">
+
 <h4>📊 수집할 데이터</h4>
+
 <ul>
 <li>학생 만족도</li>
 <li>수업 관찰 기록</li>
@@ -1882,84 +3563,170 @@ PPT를 만들었다.
 <li>교사·보호자 의견</li>
 <li>학습 전·후 변화</li>
 </ul>
+
 </div>
+
 
 <div class="detail-box">
+
 <h4>❓ 핵심 질문</h4>
-<p><strong>실제 학생에게 적용했을 때 무엇이 달라지는가?</strong></p>
+
+<p>
+<strong>
+실제 학생에게 적용했을 때
+무엇이 달라지는가?
+</strong>
+</p>
+
 </div>
 
+
 <div class="detail-box full">
+
 <div class="output-box">
-<div class="output-title">📝 산출물</div>
+
+<div class="output-title">
+📝 산출물
+</div>
+
 <ul>
-<li>파일럿 수업 결과 보고서</li>
-<li>학생 피드백 분석</li>
-<li>문제점 분석</li>
-<li>교육과정 개선안</li>
+
+<li>
+파일럿 수업 결과 보고서
+</li>
+
+<li>
+학생 피드백 분석
+</li>
+
+<li>
+문제점 분석
+</li>
+
+<li>
+교육과정 개선안
+</li>
+
 </ul>
-</div>
+
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>📁 포트폴리오 연결</h4>
+
+<h4>
+📁 포트폴리오 연결
+</h4>
+
 <div class="portfolio">
-<strong>PART 10 · 현장 적용 및 개선</strong>
+
+<strong>
+PART 10 · 현장 적용 및 개선
+</strong>
+
 <br>
-"설계 → 실행 → 데이터 → 개선"의 경험을 증명하는 핵심 파트
-</div>
+
+"설계 → 실행 → 데이터 → 개선"의 경험을
+증명하는 핵심 파트
+
 </div>
 
+</div>
+
+
 <div class="detail-box full">
-<h4>☑ 완료 체크</h4>
+
+<h4>
+☑ 완료 체크
+</h4>
+
 <div class="check-list">
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 파일럿 수업을 실시했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 학생 반응을 기록했다.
 </label>
+
 <label class="check-item">
 <input type="checkbox" class="progress-check">
 개선안을 만들었다.
 </label>
-</div>
+
 </div>
 
 </div>
+
+</div>
+
 </div>
 
 </details>
 
 
-<!-- WEEK 12 -->
+<!-- =====================================================
+     WEEK 12
+===================================================== -->
 
 <details class="week-card">
 
 <summary>
-<div class="week-number">WEEK 12</div>
-<div class="week-title">취업 포트폴리오 완성</div>
-<div class="week-summary">12주간의 결과를 하나의 직무 포트폴리오로 전환</div>
-<div class="arrow">▼</div>
+
+<div class="week-number">
+WEEK 12
+</div>
+
+<div class="week-title">
+취업 포트폴리오 완성
+</div>
+
+<div class="week-summary">
+12주간의 결과를 하나의 직무 포트폴리오로 전환
+</div>
+
+<div class="arrow">
+▼
+</div>
+
 </summary>
+
 
 <div class="week-detail">
 
 <div class="detail-grid">
 
-<div class="detail-box">
-<h4>🎯 최종 목표</h4>
-<p>
-"공부했다"가 아니라
-<strong>"교육과정을 설계할 수 있다"</strong>를 증명한다.
-</p>
-</div>
 
 <div class="detail-box">
+
+<h4>🎯 최종 목표</h4>
+
+<p>
+
+"공부했다"가 아니라
+
+<strong>
+"교육과정을 설계할 수 있다"
+</strong>
+
+를 증명한다.
+
+</p>
+
+</div>
+
+
+<div class="detail-box">
+
 <h4>📁 포트폴리오 구성</h4>
+
 <ul>
+
 <li>ABOUT ME</li>
 <li>교육환경 분석</li>
 <li>학습자 분석</li>
@@ -1971,12 +3738,98 @@ PPT를 만들었다.
 <li>평가</li>
 <li>파일럿</li>
 <li>개선</li>
+
 </ul>
+
 </div>
 
+
 <div class="detail-box full">
+
+<div class="study-materials">
+
+<div class="study-title">
+📖 이번 주 공부자료
+</div>
+
+<table class="study-table">
+
+<tr>
+<th>구분</th>
+<th>자료</th>
+<th>공부 방법</th>
+</tr>
+
+<tr>
+<td class="material-essential">
+★ 필수
+</td>
+
+<td>
+교육 콘텐츠 기획자 포트폴리오 사례
+</td>
+
+<td>
+구성 분석
+</td>
+
+</tr>
+
+<tr>
+<td class="material-recommended">
+추천
+</td>
+
+<td>
+교육기획·콘텐츠기획 직무 채용공고
+</td>
+
+<td>
+기업 요구역량 분석
+</td>
+
+</tr>
+
+<tr>
+<td class="material-recommended">
+추천
+</td>
+
+<td>
+SW·AI 교육기업 채용공고
+</td>
+
+<td>
+직무 키워드 추출
+</td>
+
+</tr>
+
+</table>
+
+<div class="study-note">
+
+💡 채용공고를 읽으면서
+<strong>
+"기업이 교육기획자에게 무엇을 요구하는가?"
+</strong>
+를 역으로 분석한다.
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="detail-box full">
+
 <div class="output-box">
-<div class="output-title">📝 최종 산출물</div>
+
+<div class="output-title">
+📝 최종 산출물
+</div>
+
 
 <table class="output-table">
 
@@ -1987,78 +3840,113 @@ PPT를 만들었다.
 
 <tr>
 <td>교육과정 분석</td>
-<td>2022 개정 교육과정 및 SW·AI 교육 필요성 분석</td>
+<td>
+2022 개정 교육과정 및 SW·AI 교육 필요성 분석
+</td>
 </tr>
 
 <tr>
 <td>학습자</td>
-<td>초등 학년군 분석 및 페르소나</td>
+<td>
+초등 학년군 분석 및 페르소나
+</td>
 </tr>
 
 <tr>
 <td>교육목표</td>
-<td>SW·AI 핵심역량 및 학습목표</td>
+<td>
+SW·AI 핵심역량 및 학습목표
+</td>
 </tr>
 
 <tr>
 <td>교수설계</td>
-<td>ADDIE 기반 교수설계안</td>
+<td>
+ADDIE 기반 교수설계안
+</td>
 </tr>
 
 <tr>
 <td>교육과정</td>
-<td>12차시 AI 리터러시 교육과정</td>
+<td>
+12차시 AI 리터러시 과정
+</td>
 </tr>
 
 <tr>
 <td>콘텐츠</td>
-<td>지도안·활동지·PPT·교사용 가이드</td>
+<td>
+지도안·활동지·PPT·교사용 가이드
+</td>
 </tr>
 
 <tr>
 <td>평가</td>
-<td>평가계획·루브릭</td>
+<td>
+평가계획·루브릭
+</td>
 </tr>
 
 <tr>
 <td>현장검증</td>
-<td>파일럿 수업·피드백·개선안</td>
+<td>
+파일럿·피드백·개선안
+</td>
 </tr>
 
 <tr>
 <td>최종</td>
-<td><strong>취업용 교육기획 포트폴리오</strong></td>
+<td>
+<strong>
+취업용 교육기획 포트폴리오
+</strong>
+</td>
 </tr>
 
 </table>
 
 </div>
+
 </div>
 
+
 <div class="detail-box full">
-<h4>💼 면접에서 전달할 핵심 메시지</h4>
+
+<h4>
+💼 면접에서 전달할 핵심 메시지
+</h4>
 
 <div class="portfolio">
 
 <p>
+
 <strong>
 "개발자 경험과 초등 SW 교육 경험을 바탕으로
 초등학생 대상 SW·AI 교육과정을 직접 설계했습니다."
 </strong>
+
 </p>
 
 <p>
-학습자 분석부터 교육목표, 교수설계, 차시 구성,
-콘텐츠 개발, 평가, 파일럿 및 개선까지
+
+학습자 분석부터 교육목표,
+교수설계, 차시 구성,
+콘텐츠 개발, 평가,
+파일럿 및 개선까지
 하나의 교육과정 개발 프로세스를 경험했습니다.
+
 </p>
 
 </div>
 
 </div>
 
+
 <div class="detail-box full">
-<h4>☑ 최종 체크</h4>
+
+<h4>
+☑ 최종 체크
+</h4>
 
 <div class="check-list">
 
@@ -2082,6 +3970,7 @@ PPT를 만들었다.
 </div>
 
 </div>
+
 </div>
 
 </details>
@@ -2090,7 +3979,7 @@ PPT를 만들었다.
 
 
 <!-- =====================================================
-     PORTFOLIO MASTER LIST
+     FINAL PORTFOLIO
 ===================================================== -->
 
 <section class="section">
@@ -2099,16 +3988,20 @@ PPT를 만들었다.
 최종 포트폴리오 산출물 목록
 </div>
 
+
 <table class="roadmap">
 
 <thead>
+
 <tr>
 <th>번호</th>
-<th>포트폴리오 영역</th>
+<th>영역</th>
 <th>산출물</th>
 <th>완성 주차</th>
 </tr>
+
 </thead>
+
 
 <tbody>
 
@@ -2211,7 +4104,7 @@ PPT를 만들었다.
 
 
 <!-- =====================================================
-     FINAL
+     FINAL MESSAGE
 ===================================================== -->
 
 <div class="final-box">
@@ -2223,6 +4116,7 @@ PPT를 만들었다.
 <p>
 교육학을 많이 아는 사람이 되는 것이 목표가 아니다.
 </p>
+
 
 <div class="final-message">
 
@@ -2282,10 +4176,16 @@ SW·AI 교육내용을 선정하고,
 
 </div>
 
+
 <p style="margin-top:18px;">
+
 <span class="highlight-blue">
-이것이 내가 3개월 동안 만들어갈 새로운 직무 정체성이다.
+
+이것이 내가 3개월 동안 만들어갈
+새로운 직무 정체성이다.
+
 </span>
+
 </p>
 
 </div>
@@ -2300,19 +4200,29 @@ SW·AI 교육내용을 선정하고,
 
 <script>
 
-/* ---------------------------------------------
-   체크박스 저장
---------------------------------------------- */
 
-const checks = document.querySelectorAll(".progress-check");
+/* =====================================================
+   체크박스 상태 저장
+===================================================== */
+
+const checks =
+    document.querySelectorAll(".progress-check");
+
 
 checks.forEach((check, index) => {
 
-    const saved = localStorage.getItem("sw_ai_check_" + index);
+    const saved =
+        localStorage.getItem(
+            "sw_ai_check_" + index
+        );
+
 
     if (saved === "true") {
+
         check.checked = true;
+
     }
+
 
     check.addEventListener("change", () => {
 
@@ -2328,9 +4238,9 @@ checks.forEach((check, index) => {
 });
 
 
-/* ---------------------------------------------
+/* =====================================================
    진행률 계산
---------------------------------------------- */
+===================================================== */
 
 function updateProgress() {
 
@@ -2338,63 +4248,87 @@ function updateProgress() {
 
     let completed = 0;
 
+
     checks.forEach(check => {
 
         if (check.checked) {
+
             completed++;
+
         }
 
     });
+
 
     const percent =
         total === 0
         ? 0
-        : Math.round((completed / total) * 100);
+        : Math.round(
+            (completed / total) * 100
+        );
 
-    document.getElementById("progressFill").style.width =
-        percent + "%";
 
-    document.getElementById("progressText").textContent =
-        percent + "%";
+    document.getElementById(
+        "progressFill"
+    ).style.width = percent + "%";
+
+
+    document.getElementById(
+        "progressText"
+    ).textContent = percent + "%";
 
 }
+
 
 updateProgress();
 
 
-/* ---------------------------------------------
-   하나의 주차만 열어도 되지만
-   여러 주차를 동시에 열 수 있도록 기본 설정
---------------------------------------------- */
+/* =====================================================
+   주차 열었을 때 위치 보정
+===================================================== */
 
-document.querySelectorAll(".week-card").forEach(card => {
+document
+    .querySelectorAll(".week-card")
+    .forEach(card => {
 
-    card.addEventListener("toggle", () => {
+        card.addEventListener(
+            "toggle",
+            () => {
 
-        if (card.open) {
+                if (card.open) {
 
-            setTimeout(() => {
+                    setTimeout(() => {
 
-                const rect = card.getBoundingClientRect();
+                        const rect =
+                            card.getBoundingClientRect();
 
-                if (rect.top < 80) {
 
-                    window.scrollBy({
-                        top: rect.top - 90,
-                        behavior: "smooth"
-                    });
+                        if (rect.top < 80) {
+
+                            window.scrollBy({
+
+                                top:
+                                    rect.top - 90,
+
+                                behavior:
+                                    "smooth"
+
+                            });
+
+                        }
+
+                    }, 50);
 
                 }
 
-            }, 50);
-
-        }
+            }
+        );
 
     });
 
-});
-
 </script>
+
 
 </body>
 </html>
+
